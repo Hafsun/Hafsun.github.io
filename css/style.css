@@ -3072,6 +3072,7 @@ body[data-mode="dark"] .search-container {
   text-align: center;
   font-size: 1.05rem;
   color: var(--font-color-light-1);
+  white-space: pre-line;
 }
 .site-statistic {
   width: 100%;
@@ -3227,6 +3228,31 @@ body[data-mode="dark"] .social .icon {
   color: var(--link-hover-font-color);
   background-color: var(--theme-color-light-2);
   padding-left: 0.6rem;
+}
+.sidebar-archives {
+  margin: 0.5rem 0;
+  padding: 0;
+}
+.sidebar-archives li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.9rem;
+}
+.sidebar-archives .archive-list-link {
+  color: var(--font-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 2rem);
+}
+.sidebar-archives .archive-list-link:hover {
+  color: var(--theme-color);
+}
+.sidebar-archives .archive-list-count {
+  color: var(--font-color-light-1);
+  font-size: 0.85rem;
 }
 @media (max-width: 900px) {
   #home-sidebar {

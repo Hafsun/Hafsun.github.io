@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>vibecoding项目迭代</title>
+    <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上创业课太无聊了，我居然点进了哔站刷视频，于是乎就看到这么个视频【小白AI编程进阶：不写一行代码，教你Vibecoding项目完美升级！】<a href="https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e%E3%80%82%E5%94%89%EF%BC%8Cvibecoding%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E4%B8%8D%E8%B7%9F%E4%B8%8A%E5%8E%BB%E5%AD%A6%E4%B8%80%E5%AD%A6%EF%BC%8C%E8%B7%AF%E8%BE%B9%E7%9A%84%E5%A4%A7%E7%88%B7%E5%BE%85%E4%BC%9A%E9%83%BD%E6%AF%94%E6%88%91%E6%9B%B4%E4%BC%9A%E7%BC%96%E7%A8%8B%E4%BA%86%E3%80%82">https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e。唉，vibecoding的时代，不跟上去学一学，路边的大爷待会都比我更会编程了。</a></p>
+<p>我将把这个视频所传知识化为己有。</p>
+<p>懒得仔细看就直接看最后的总结图片。</p>
+<h1 id="小改"><a href="#小改" class="headerlink" title="小改"></a>小改</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210329014.png"  alt="image-20260408210328987"></p>
+<p>如上图，直接截图告诉它就行，改完后看效果，不满意再改。</p>
+<h1 id="大改"><a href="#大改" class="headerlink" title="大改"></a>大改</h1><h3 id="1、存档"><a href="#1、存档" class="headerlink" title="1、存档"></a>1、存档</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210349026.png"  alt="image-20260408210348995"></p>
+<p>用如上图的方式让AI帮打包，或者用github进行版本管理。</p>
+<h3 id="2、写迭代文档PRD"><a href="#2、写迭代文档PRD" class="headerlink" title="2、写迭代文档PRD"></a>2、写迭代文档PRD</h3><p>找到一个厉害点的大模型，告诉它：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210410691.png"  alt="image-20260408210410652"></p>
+<p>如果有不满意的地方，截图丢回去让它改，如下图</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://gitee.com/han-fangfang/blogs_picture/raw/master/20260408201828383.png"  alt="image-20260408201828348"></p>
+<p>最终，我们应该得到了一份满意的迭代PRD</p>
+<h3 id="3、IDE内行动"><a href="#3、IDE内行动" class="headerlink" title="3、IDE内行动"></a>3、IDE内行动</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210458951.png"  alt="image-20260408210458859"></p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210512601.png"  alt="image-20260408210512578"></p>
+<p>建立这样的文件结构，前面大模型给的迭代prd和迭代html代码就放在迭代2.0这样的目录下。</p>
+<p>然后把迭代2.0目录右击，添加到对话，就像这样：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210539600.png"  alt="image-20260408210539578"></p>
+<p>然后切换到plan模式，并：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210552887.png"  alt="image-20260408210552859"></p>
+<p>完了之后点击计划给出的build按钮，也就是开始编码</p>
+<h3 id="4、备忘"><a href="#4、备忘" class="headerlink" title="4、备忘"></a>4、备忘</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210601648.png"  alt="image-20260408210601618"></p>
+<p>也就是总结一下这次迭代都干了些啥</p>
+<h1 id="总结图片"><a href="#总结图片" class="headerlink" title="总结图片"></a>总结图片</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210611798.png"  alt="image-20260408210611675"></p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>vibecoding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于Vue3和Spring Boot的模糊记忆</title>
+    <url>/2026/04/03/%E5%85%B3%E4%BA%8EVue3%E5%92%8CSpringBoot%E7%9A%84%E6%A8%A1%E7%B3%8A%E8%AE%B0%E5%BF%86/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>因为我根本没认真学这俩框架，说是入门都有点过了，所以本篇主要记录对这俩东西的最大程度记忆（大概率以后也不会学，那么此时就是记得最清楚的时候—_—）,防止以后回忆时屁都不知道。</p>
+<h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><p>首先是环境，java不需要像python那样配置虚拟环境，而是把依赖项全部写在.xml文件中，然后maven一下就好了。此时要注意maven版本、jdk版本都要匹配，同时这俩也分全局配置和项目配置。</p>
+<p>然后怎么初始化一个springboot项目呢，当然是借助工具Spring Initializr。 它会帮我们搭好基本的文件结构.</p>
+<p>java业务逻辑和python类似，都是面向对象，分离接口模块及实现模块，但是会有更规范的文件结构，文件结构例如以下图。</p>
+<p>response是一个统一返回结果类。通常用于封装 API 返回给前端的 JSON 数据格式（例如：包含 code, message, data 等字段），确保所有接口的返回都长这样；</p>
+<p>controller是接口层，负责直接与前端交互：接收 HTTP 请求（GET, POST 等），获取参数，调用 Service 层处理业务，最后将结果返回给前端；</p>
+<p>service 是业务逻辑层，<strong><code>StudentService</code></strong> (接口): 定义了业务功能的规范（比如“添加学生”、“删除学生”），<strong><code>StudentServiceImpl</code></strong> (实现类): 真正写业务逻辑的地方；</p>
+<p>dao(或者说repository&#x2F;mapper)是数据访问层，对接数据库，student实现类与数据库中的student表一一对应。<strong><code>StudentRepository</code></strong>: 这是一个接口类，负责操作数据库（增删改查）；</p>
+<p>dto是数据传输对象，用于在不同层之间传输数据，比如，前端传来的参数可能和数据库表结构不一样，或者数据库表里有敏感字段（如密码）不能返回给前端。这时就会创建 <code>StudentDTO</code> 或 <code>StudentVO</code> 来专门用于数据传递，而不是直接暴露 <code>Student</code> 实体类；</p>
+<p>总结一个完整的请求流程：Controller收到请求 -&gt; Controller调用Service -&gt; Service处理业务逻辑，然后调用dao -&gt; dao去数据库查询数据，返回entity(实体) -&gt; 可能会有个convert操作 -&gt;  Controller将dto包装进Response对象，返回给前端。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214449900.png"  alt="image-20260408214442840"></p>
+<h1 id="Vue3"><a href="#Vue3" class="headerlink" title="Vue3"></a>Vue3</h1><p>Vue3是基于Node.js环境运行的，然后构建工具用的是Vite。至于如何初始化一个Vue3项目，问问AI应该没啥问题。</p>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>my-vue-app&#x2F;<br>├── node_modules&#x2F;       # 项目依赖的第三方库<br>├── public&#x2F;             # 静态资源文件夹<br>│   ├── index.html      # 应用的 HTML 模板<br>│   └── …             # 其他静态资源（如图片、字体等）<br>├── src&#x2F;                # 项目源代码<br>│   ├── assets&#x2F;         # 静态资源（如图片、字体等）<br>│   ├── components&#x2F;     # 可复用的 Vue 组件<br>│   ├── views&#x2F;          # 页面级组件<br>│   ├── App.vue         # 根组件<br>│   ├── main.js         # 项目入口文件<br>│   ├── router.js       # 路由配置<br>│   ├── store.js        # Vuex 状态管理配置<br>│   └── …             # 其他配置和资源<br>├── package.json        # 项目配置和依赖管理<br>├── package-lock.json   # 依赖的精确版本锁定文件<br>└── README.md           # 项目说明文档</p>
+<p>然后Vue3有个生命周期，这个和前端的运转有关，比较复杂，不宜深究。</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>Vue3</tag>
+        <tag>Spring boot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于是否考研的想法</title>
+    <url>/2026/04/10/%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%80%83%E7%A0%94%E7%9A%84%E6%83%B3%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
+<p>因为每次看到别人为了论证自己所说的是正确的时，我总觉得很有道理，大概因为我是个认同型人格吧。直到今晚与中科院吴博士交流了一下······</p>
+<h1 id="选就业？"><a href="#选就业？" class="headerlink" title="选就业？"></a>选就业？</h1><p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
+<p>我觉得我是个能适应社会的人，也许是因为我还没真正经历社会摧残的原因吧，我有股想闯荡社会的冲动。</p>
+<p>优势：早点自己挣钱，不拖累父母；代码能力还可以，大一大二两年培养了较强的工程能力；有点小奖，简历上有的写；符合我的少年心气。</p>
+<p>劣势：薪资估计高不了，也没法根本改变家里的局面；可能这辈子都达不到研究生学历了。</p>
+<h1 id="考研？"><a href="#考研？" class="headerlink" title="考研？"></a>考研？</h1><p>目前还是选择的这条路，毕竟论文还在搞着。</p>
+<p>优势：起薪高，这一学历用一辈子，也是我提升阶级的唯一机会。我英语也算还好，不偏科。</p>
+<p>劣势：二战风险，难度大，辛苦，再吃几年父母的。（这里有个思考：工作三年也并不能为父母带来什么改变，三年的工作时间在一生中只是天地之蜉蝣，三年投资带来的成功是三年工作经验比不了的。而且就那几年研究生能花多少钱）</p>
+<h1 id="吴博士所言"><a href="#吴博士所言" class="headerlink" title="吴博士所言"></a>吴博士所言</h1><p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
+<p>公司选人的本质依然是看一个人的能力。技术好、学历高等等都是一个人能力强的证明，二者缺一都是有所缺陷的，不必花心思纠结在二者择一的问题上，而是把二者都当作提升自己的思路，提升自己，才叫做直击企业用人核心。</p>
+<p>对于AI取代程序员，这是不可能的。之前一人耕一亩地，现在一人耕十亩地，但终究需要人来耕地，而且随着效率提升，需求也会随之提升。自古以来，从不会因为工具过于强大而行业崩塌的说法。这是人类社会的进步。</p>
+<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>迟来的个人博客</title>
+    <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
+<p>感觉像一名顶尖、可爱的黑客成长史，我们总说学过的东西容易忘，那这样记下来不就好了。但又说忘了当场查就行，但仔细想了下，其实博客不一定当备忘录用，也可以当笔记本、日记本，总之当我仔细地去看下别人的博客时，总能感受到这博客大有用处，每次点进一个博客网站，像是走进了别人的赛博家园，而我也想有这么一个家。</p>
+<p>学了快两年计算机了才开始搭博客，我难道要把学过的东西全整理上来？这么一想有点为时已晚的感觉，但<strong>当我感觉是否晚了的时候，恰好是最早的时候</strong>，那么说干就干吧！</p>
+<h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
+<p>主要卡在上传到github然后公网访问时，图片没渲染出来，原来是执行hexo g时未成功生成，因为图片路径的处理问题，和AI拉扯半天，说的越多它越发癫，最后新开了个会话成功解决。</p>
+<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214621930.png"  alt="image-20260408214621485"></p>
+<h1 id="之后写一篇博客并完成上传的流程"><a href="#之后写一篇博客并完成上传的流程" class="headerlink" title="之后写一篇博客并完成上传的流程"></a>之后写一篇博客并完成上传的流程</h1><ol>
+<li><p>在blog目录下开终端</p>
+</li>
+<li><p>执行hexo new “文件名（我喜欢用标题）”</p>
+</li>
+<li><p>打开新生成的.md文件，开始编写，写完后记得保存</p>
+</li>
+<li><p>回到终端依次执行<br>hexo clean    （清理缓存）<br>hexo g    (生成静态页面)<br>hexo d    （上传到github仓库）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>小技能</category>
+      </categories>
+      <tags>
+        <tag>框架使用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安顺一游</title>
+    <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
+<p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
+<h1 id="旁边的阿姨"><a href="#旁边的阿姨" class="headerlink" title="旁边的阿姨"></a>旁边的阿姨</h1><p>上老爸的客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
+<p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
+<p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
+<h1 id="没钱打车"><a href="#没钱打车" class="headerlink" title="没钱打车"></a>没钱打车</h1><p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
+<p>随眼看了下交通，打顺风车还挺划算的。</p>
+<p>（到车站）没有去黄果树的车了；顺风车打不到了；公交车没有去那儿的；打滴怎么要八十啊？我可是去附近的景点玩，凭啥啊。算了，我似乎也不太擅长一个人看山看水，不如今晚去小吃街爽吃算了。</p>
+<p>其实如果有个人陪我我也不用太在意这些了，人多还能A车费。</p>
+<p>去旅行一定要看风景吗？我更想爽吃各种特色小吃。</p>
+<p>（傍晚）总算到顾府街了，大吃特吃时间到。</p>
+<p>额，我突然发现由于感冒，我的嗅觉丧失，味觉丧失了一半，所以我的美食体验会折扣50%  TvT  但是，来都来了。。。</p>
+<h1 id="彻夜长谈"><a href="#彻夜长谈" class="headerlink" title="彻夜长谈"></a>彻夜长谈</h1><p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
+<p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
+<p>我的最低目标是以后赚的不能比老爸少。</p>
+<p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
+<p>他是一个很强硬的人，很男人的人。我觉得我也有他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，该强硬时我当仁不让，但平时在学校我应该算是偏文静的的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+  </entry>
+</search>
