@@ -49,8 +49,49 @@
 <p>总结一个完整的请求流程：Controller收到请求 -&gt; Controller调用Service -&gt; Service处理业务逻辑，然后调用dao -&gt; dao去数据库查询数据，返回entity(实体) -&gt; 可能会有个convert操作 -&gt;  Controller将dto包装进Response对象，返回给前端。</p>
 <p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214449900.png"  alt="image-20260408214442840"></p>
 <h1 id="Vue3"><a href="#Vue3" class="headerlink" title="Vue3"></a>Vue3</h1><p>Vue3是基于Node.js环境运行的，然后构建工具用的是Vite。至于如何初始化一个Vue3项目，问问AI应该没啥问题。</p>
-<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>my-vue-app&#x2F;<br>├── node_modules&#x2F;       # 项目依赖的第三方库<br>├── public&#x2F;             # 静态资源文件夹<br>│   ├── index.html      # 应用的 HTML 模板<br>│   └── …             # 其他静态资源（如图片、字体等）<br>├── src&#x2F;                # 项目源代码<br>│   ├── assets&#x2F;         # 静态资源（如图片、字体等）<br>│   ├── components&#x2F;     # 可复用的 Vue 组件<br>│   ├── views&#x2F;          # 页面级组件<br>│   ├── App.vue         # 根组件<br>│   ├── main.js         # 项目入口文件<br>│   ├── router.js       # 路由配置<br>│   ├── store.js        # Vuex 状态管理配置<br>│   └── …             # 其他配置和资源<br>├── package.json        # 项目配置和依赖管理<br>├── package-lock.json   # 依赖的精确版本锁定文件<br>└── README.md           # 项目说明文档</p>
-<p>然后Vue3有个生命周期，这个和前端的运转有关，比较复杂，不宜深究。</p>
+<h1 id="Vue基础（2026-4-20更新）"><a href="#Vue基础（2026-4-20更新）" class="headerlink" title="Vue基础（2026.4.20更新）"></a>Vue基础（2026.4.20更新）</h1><h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>uni-app是用Vue框架作为基础，所以我们在做uni-app项目之前，有必要学会如何基于Vue框架做开发。一个<code>vue</code>文件由以下三个模块组成：</p>
+<ul>
+<li><code>template</code>：基于HTML语法的模板代码。</li>
+<li><code>script</code>：基于JavaScript的逻辑代码。</li>
+<li><code>style</code>：基于CSS的样式代码。</li>
+</ul>
+<p>其中<code>script</code>模块中，有两种实现方式，分别是<code>vue 2.0</code>中遗留的选项式API和<code>vue 3.0</code>中推荐的组合式API，这里我们使用组合式API。一个<code>vue</code>文件结构类似为：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">	       </span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h2 id="二、template"><a href="#二、template" class="headerlink" title="二、template"></a>二、template</h2><p><code>vue</code>文件中模板语法非常多，这里我们围绕变量引用、事件绑定、双向绑定、if语句、for循环来进行讲解。其他的高级用法，我们暂时先不用，或者用到了再跟大家说。</p>
+<h3 id="1-变量引用"><a href="#1-变量引用" class="headerlink" title="1. 变量引用"></a>1. 变量引用</h3><p>在script标签中，我们可以用JavaScript语法定义变量，而在模板中，则可以通过的形式引用script中定义的变量。比如用户名username，不同用户登录后，显示的用户名都不一样，就可以在显示用户名的地方使用变量，然后在script标签中，根据从服务器获取到的用户信息，动态赋值usenrname的值。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;div&gt;&#123;&#123;username&#125;&#125;&lt;/div&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref&#125; from &quot;vue&quot;;</span><br><span class="line">	let username = ref(&quot;&quot;);</span><br><span class="line">	username.value = &quot;张三&quot;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="2-事件绑定"><a href="#2-事件绑定" class="headerlink" title="2. 事件绑定"></a>2. 事件绑定</h3><p>假设在<code>template</code>中有一个按钮，在点击按钮后要进行某种操作，那么就可以给这个按钮绑定一个点击事件。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;button @click=&quot;onLogin&quot;&gt;登录&lt;/button&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	const onLogin = () =&gt; &#123;</span><br><span class="line">		console.log(&quot;点击了登录按钮！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="3-双向绑定"><a href="#3-双向绑定" class="headerlink" title="3. 双向绑定"></a>3. 双向绑定</h3><p>变量引用仅仅是<code>template</code>从<code>script</code>中引用变量，但有些情况需要在<code>script</code>中引用<code>template</code>，比如我们在<code>script</code>中实时读取表单输入框中输入的内容，那么就可以使用双向绑定。双向绑定示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;input type=&quot;text&quot; v-model=&quot;username&quot; placeholder=&quot;请输入用户名&quot;&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref, watch&#125; from &quot;vue&quot;;</span><br><span class="line">	let username = ref(&quot;&quot;);</span><br><span class="line">	watch(username, (value, oldValue) =&gt; &#123;</span><br><span class="line">		console.log(&quot;value: &quot;+value);</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="4-if语句"><a href="#4-if语句" class="headerlink" title="4. if语句"></a>4. if语句</h3><p>在vue中，可以通过<code>v-if</code>来根据条件渲染不同的组件。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;view v-if=&quot;weather==&#x27;晴&#x27;&quot;&gt;今天出公园玩&lt;/view&gt;</span><br><span class="line">		&lt;view v-else-if=&quot;weather==&#x27;阴&#x27;&quot;&gt;今天去图书馆&lt;/view&gt;</span><br><span class="line">		&lt;view v-else&gt;今天待在家里&lt;/view&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref, watch&#125; from &quot;vue&quot;;</span><br><span class="line">	let weather = ref(&quot;雨&quot;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="5-for循环"><a href="#5-for循环" class="headerlink" title="5. for循环"></a>5. for循环</h3><p>在vue中，可以通过<code>v-for</code>来渲染列表。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;table&gt;</span><br><span class="line">			&lt;tbody&gt;</span><br><span class="line">				&lt;tr v-for=&quot;(book, index) in books&quot; v-key=&quot;index&quot;&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;index+1&#125;&#125;&lt;/td&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;book.name&#125;&#125;&lt;/td&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;book.author&#125;&#125;&lt;/td&gt;</span><br><span class="line">				&lt;/tr&gt;</span><br><span class="line">			&lt;/tbody&gt;</span><br><span class="line">		&lt;/table&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref, watch&#125; from &quot;vue&quot;;</span><br><span class="line">	let books = ref([&#123;</span><br><span class="line">		&quot;name&quot;: &quot;三国演义&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;罗贯中&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;name&quot;: &quot;水浒传&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;施耐庵&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;name&quot;: &quot;红楼梦&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;曹雪芹&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;name&quot;: &quot;西游记&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;吴承恩&quot;</span><br><span class="line">	&#125;])</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h2 id="三、script"><a href="#三、script" class="headerlink" title="三、script"></a>三、script</h2><p>在script中，我们围绕<code>ref</code>、<code>reactive</code>和生命周期方法进行讲解。</p>
+<h3 id="1-ref变量"><a href="#1-ref变量" class="headerlink" title="1. ref变量"></a>1. ref变量</h3><p>普通类型的<code>javascript</code>变量可以在<code>template</code>中使用，但是一旦该变量发生改变，无法即时同步到模板中，为了实现这个需求，需要将变量定义成<code>ref</code>或<code>reactive</code>类型。</p>
+<p>针对普通数据类型，比如字符串、数值、布尔类型，以及数组类型，我们通常定义成<code>ref</code>类型的。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;view&gt;点击数：&#123;&#123;count&#125;&#125;&lt;/view&gt;</span><br><span class="line">		&lt;button @click=&quot;onClick&quot;&gt;点我&lt;/button&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref&#125; from &quot;vue&quot;;</span><br><span class="line">	let count = ref(0)</span><br><span class="line">	const onClick = () =&gt; &#123;</span><br><span class="line">		count.value += 1;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>需要注意的是，在<code>script</code>中想使用<code>ref</code>定义的变量，必须通过<code>.value</code>属性来实现。</p>
+<h3 id="2-reactive"><a href="#2-reactive" class="headerlink" title="2. reactive"></a>2. reactive</h3><p>对象类型的变量，通常定义成<code>reactive</code>类型。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;ul&gt;</span><br><span class="line">			&lt;li&gt;姓名：&#123;&#123;person.name&#125;&#125;&lt;/li&gt;</span><br><span class="line">			&lt;li&gt;年龄：&#123;&#123;person.age&#125;&#125;&lt;/li&gt;</span><br><span class="line">		&lt;/ul&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;reactive&#125; from &quot;vue&quot;;</span><br><span class="line">	let person = reactive(&#123;</span><br><span class="line">		&quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">		&quot;age&quot;: 18</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="3-生命周期方法"><a href="#3-生命周期方法" class="headerlink" title="3. 生命周期方法"></a>3. 生命周期方法</h3><p>vue中，可以把一个.vue文件理解为一个组件，然后浏览器界面就是一个或多个组件组合而成。在每个界面显现时，组件们都会经历<strong>创建 → 挂载到页面 → 响应数据变化 → 最终被销毁</strong>的整个过程，每个过程由钩子（生命周期函数）控制，它给了你一个“钩住”这些关键时刻的机会，让你可以插入自己的代码。</p>
+<p>其中用得最多的就是<code>onMounted</code>生命周函数，代表该组件被挂载到父组件后的执行的代码。示例代码如下：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		用户名：&#123;&#123;username&#125;&#125;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123; onMounted, ref &#125; from &#x27;vue&#x27;;</span><br><span class="line">	</span><br><span class="line">	let username = ref(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">	onMounted(() =&gt; &#123;</span><br><span class="line">		username.value = &quot;张三&quot;;</span><br><span class="line">		console.log(&quot;onMounted生命周期方法！&quot;);</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+
+
+
+
+<h2 id="标准项目结构"><a href="#标准项目结构" class="headerlink" title="标准项目结构"></a>标准项目结构</h2><p>my-vue-app&#x2F;<br>├── node_modules&#x2F;       # 项目依赖的第三方库<br>├── public&#x2F;             # 静态资源文件夹<br>│   ├── index.html      # 应用的 HTML 模板<br>│   └── …             # 其他静态资源（如图片、字体等）<br>├── src&#x2F;                # 项目源代码<br>│   ├── assets&#x2F;         # 静态资源（如图片、字体等）<br>│   ├── components&#x2F;     # 可复用的 Vue 组件<br>│   ├── views&#x2F;          # 页面级组件<br>│   ├── App.vue         # 根组件<br>│   ├── main.js         # 项目入口文件<br>│   ├── router.js       # 路由配置<br>│   ├── store.js        # Vuex 状态管理配置<br>│   └── …             # 其他配置和资源<br>├── package.json        # 项目配置和依赖管理<br>├── package-lock.json   # 依赖的精确版本锁定文件<br>└── README.md           # 项目说明文档</p>
 ]]></content>
       <categories>
         <category>开发</category>
@@ -59,6 +100,28 @@
         <tag>Vue3</tag>
         <tag>Spring boot</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>关于是否考研的想法</title>
+    <url>/2026/04/10/%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%80%83%E7%A0%94%E7%9A%84%E6%83%B3%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
+<p>因为每次看到别人为了论证自己所说的是正确的时，我总觉得很有道理，大概因为我是个认同型人格吧。直到今晚与中科院吴博士交流了一下······</p>
+<h1 id="选就业？"><a href="#选就业？" class="headerlink" title="选就业？"></a>选就业？</h1><p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
+<p>我觉得我是个能适应社会的人，也许是因为我还没真正经历社会摧残的原因吧，我有股想闯荡社会的冲动。</p>
+<p>优势：早点自己挣钱，不拖累父母；代码能力还可以，大一大二两年培养了较强的工程能力；有点小奖，简历上有的写；符合我的少年心气。</p>
+<p>劣势：薪资估计高不了，也没法根本改变家里的局面；可能这辈子都达不到研究生学历了。</p>
+<h1 id="考研？"><a href="#考研？" class="headerlink" title="考研？"></a>考研？</h1><p>目前还是选择的这条路，毕竟论文还在搞着。</p>
+<p>优势：起薪高，这一学历用一辈子，也是我提升阶级的唯一机会。我英语也算还好，不偏科。</p>
+<p>劣势：二战风险，难度大，辛苦，再吃几年父母的。（这里有个思考：工作三年也并不能为父母带来什么改变，三年的工作时间在一生中只是天地之蜉蝣，三年投资带来的成功是三年工作经验比不了的。而且就那几年研究生能花多少钱）</p>
+<h1 id="吴博士所言"><a href="#吴博士所言" class="headerlink" title="吴博士所言"></a>吴博士所言</h1><p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
+<p>公司选人的本质依然是看一个人的能力。技术好、学历高等等都是一个人能力强的证明，二者缺一都是有所缺陷的，不必花心思纠结在二者择一的问题上，而是把二者都当作提升自己的思路，提升自己，才叫做直击企业用人核心。</p>
+<p>对于AI取代程序员，这是不可能的。之前一人耕一亩地，现在一人耕十亩地，但终究需要人来耕地，而且随着效率提升，需求也会随之提升。自古以来，从不会因为工具过于强大而行业崩塌的说法。这是人类社会的进步。</p>
+<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+        <category>加密</category>
+      </categories>
   </entry>
   <entry>
     <title>安顺一游</title>
@@ -83,28 +146,6 @@
 ]]></content>
       <categories>
         <category>杂谈</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>关于是否考研的想法</title>
-    <url>/2026/04/10/%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%80%83%E7%A0%94%E7%9A%84%E6%83%B3%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
-<p>因为每次看到别人为了论证自己所说的是正确的时，我总觉得很有道理，大概因为我是个认同型人格吧。直到今晚与中科院吴博士交流了一下······</p>
-<h1 id="选就业？"><a href="#选就业？" class="headerlink" title="选就业？"></a>选就业？</h1><p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
-<p>我觉得我是个能适应社会的人，也许是因为我还没真正经历社会摧残的原因吧，我有股想闯荡社会的冲动。</p>
-<p>优势：早点自己挣钱，不拖累父母；代码能力还可以，大一大二两年培养了较强的工程能力；有点小奖，简历上有的写；符合我的少年心气。</p>
-<p>劣势：薪资估计高不了，也没法根本改变家里的局面；可能这辈子都达不到研究生学历了。</p>
-<h1 id="考研？"><a href="#考研？" class="headerlink" title="考研？"></a>考研？</h1><p>目前还是选择的这条路，毕竟论文还在搞着。</p>
-<p>优势：起薪高，这一学历用一辈子，也是我提升阶级的唯一机会。我英语也算还好，不偏科。</p>
-<p>劣势：二战风险，难度大，辛苦，再吃几年父母的。（这里有个思考：工作三年也并不能为父母带来什么改变，三年的工作时间在一生中只是天地之蜉蝣，三年投资带来的成功是三年工作经验比不了的。而且就那几年研究生能花多少钱）</p>
-<h1 id="吴博士所言"><a href="#吴博士所言" class="headerlink" title="吴博士所言"></a>吴博士所言</h1><p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
-<p>公司选人的本质依然是看一个人的能力。技术好、学历高等等都是一个人能力强的证明，二者缺一都是有所缺陷的，不必花心思纠结在二者择一的问题上，而是把二者都当作提升自己的思路，提升自己，才叫做直击企业用人核心。</p>
-<p>对于AI取代程序员，这是不可能的。之前一人耕一亩地，现在一人耕十亩地，但终究需要人来耕地，而且随着效率提升，需求也会随之提升。自古以来，从不会因为工具过于强大而行业崩塌的说法。这是人类社会的进步。</p>
-<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-        <category>加密</category>
       </categories>
   </entry>
   <entry>
@@ -138,7 +179,8 @@
   <entry>
     <title>适用于python的数据库框架sqlalchemy</title>
     <url>/2026/04/18/%E9%80%82%E7%94%A8%E4%BA%8Epython%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6sqlalchemy/</url>
-    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在python中，我们常使用ORM（Object Relationship Mapping）框架来操作数据库，然后在众多ORM框架中，最主流的是SQLALchemy,它经常与fastapi搭配食用，因为都支持异步。</p>
+    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用</a></p>
+<p>在python中，我们常使用ORM（Object Relationship Mapping）框架来操作数据库，然后在众多ORM框架中，最主流的是SQLALchemy,它经常与fastapi搭配食用，因为都支持异步。</p>
 <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>写此篇时，我是看fastapi+sqlalchemy+vue的教程，所以主要记录的是异步版本的sqlalchemy(见下)，安装之后还得安装驱动，安装时注意也要安装异步的，详细安装步骤临时搜即可。</p>
 <div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip install <span class="string">&quot;sqlalchemy[asyncio]&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
 
@@ -181,6 +223,60 @@
       </categories>
       <tags>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>uni-app初学</title>
+    <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
+<p>现在是大二下册中期，到现在做的项目几乎全都是web开发，还没接触过小程序呢。但学习小程序肯定是作为一个程序员必不可少的，那么就先从一个简单的小程序开发框架开始。（它也能开发APP）</p>
+<p>小程序开发框架主要解决一套代码在多个平台（如微信、支付宝、H5等）运行的问题。</p>
+<p><strong>uni-app</strong></p>
+<ul>
+<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信&#x2F;支付宝&#x2F;百度&#x2F;头条&#x2F;飞书&#x2F;QQ&#x2F;快手&#x2F;钉钉&#x2F;淘宝）、快应用等多个平台。</li>
+<li><strong>优点：</strong> 学习成本低（尤其对Vue开发者），插件市场资源丰富，跨端覆盖最广。</li>
+<li><strong>适用场景：</strong> 中小团队希望以最低成本快速覆盖多端，尤其是小程序生态</li>
+<li>教程源码在桌面资料里的fast-api教程的uniapp-demo下</li>
+</ul>
+<h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h3 id="1、开发工具"><a href="#1、开发工具" class="headerlink" title="1、开发工具"></a>1、开发工具</h3><p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
+<h3 id="2、项目结构介绍"><a href="#2、项目结构介绍" class="headerlink" title="2、项目结构介绍"></a>2、项目结构介绍</h3><p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260420214114194.png"  alt="image-20260420214107103"></p>
+<ul>
+<li><code>pages.json</code>：对<code>uni-app</code>项目进行全局配置，决定页面文件的路径、窗口样式、导航条、底部的tabbar等。</li>
+<li><code>manifest.json</code>：应用的配置文件，用于指定应用的名称、图标、权限等。</li>
+<li><code>App.vue</code>：根组件，是整个程序的入口页面，所有其他页面都是它的子页面。</li>
+<li><code>main.js</code>：项目入口文件，用于初始化<code>vue</code>实例对象，并配置相关的插件。</li>
+<li><code>uni.scss</code>：预置了一些<code>scss</code>样式变量，如有需要可直接导入使用。（不管）</li>
+<li><code>unpackage</code>：打包目录，包括在各个平台的打包文件。</li>
+<li><code>pages</code>：所有的页面，一般一个页面文件用一个文件夹存放。</li>
+<li><code>static</code>：所有的静态文件，比如图片，字体等，但是不要存放<code>css/sass/less</code>和<code>js</code>等文件。</li>
+</ul>
+<p>为了实现多端兼容，综合考虑编译速度、运行性能等因素，<code>uni-app</code> 约定了如下开发规范：</p>
+<ul>
+<li>页面文件遵循 <a href="https://vue-loader.vuejs.org/zh/spec.html">Vue 单文件组件 (SFC) 规范</a></li>
+<li>组件标签靠近小程序规范，详见<a href="https://uniapp.dcloud.io/component/README">uni-app 组件规范</a></li>
+<li>接口能力（JS API）靠近微信小程序规范，但需将前缀 <code>wx</code> 替换为 <code>uni</code>，详见<a href="https://uniapp.dcloud.io/api/README">uni-app接口规范</a></li>
+<li>数据绑定及事件处理同 <code>Vue.js</code> 规范，同时补充了App及页面的生命周期</li>
+<li>为兼容多端运行，建议使用flex布局进行开发</li>
+</ul>
+<h3 id="3、运行项目"><a href="#3、运行项目" class="headerlink" title="3、运行项目"></a>3、运行项目</h3><h3 id="1）-运行在网页"><a href="#1）-运行在网页" class="headerlink" title="1） 运行在网页"></a>1） 运行在网页</h3><p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
+<h3 id="2）-运行在微信小程序"><a href="#2）-运行在微信小程序" class="headerlink" title="2） 运行在微信小程序"></a>2） 运行在微信小程序</h3><ul>
+<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-%3E%E5%B7%A5%E5%85%B7-%3E%E8%AE%BE%E7%BD%AE-%3E%E8%BF%90%E8%A1%8C%E8%AE%BE%E7%BD%AE-%3E%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%85%8D%E7%BD%AE%60%EF%BC%8C%E6%89%BE%E5%88%B0%60%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E8%B7%AF%E5%BE%84%60%EF%BC%8C%E5%B0%86%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E7%9A%84%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84%E8%AE%BE%E7%BD%AE%E5%A5%BD%E3%80%82">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置`，找到`微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</a></li>
+<li>设置测试号：打开微信小程序开发者工具，然后创建项目，点击获取<code>测试号</code>。然后在<code>HBuilderX</code>的项目中，找到<code>manifest.json</code>文件，然后找到<code>微信小程序配置</code>，将从微信开发者工具中获取到的测试号设置到<code>微信小程序AppID</code>中。</li>
+<li>运行：在<code>运行-&gt;运行到小程序-&gt;微信开发者工具</code>，即可在微信小程序中运行项目。</li>
+</ul>
+<h3 id="3）-作为APP运行在安卓真机"><a href="#3）-作为APP运行在安卓真机" class="headerlink" title="3） 作为APP运行在安卓真机"></a>3） 作为APP运行在安卓真机</h3><p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
+<ul>
+<li>在安卓手机上开启：开发者选项，开启USB调试，允许USB安装应用，然后用<strong>数据线</strong>连接电脑。</li>
+<li>在HBuilderX上：设置合适的adb。设置方式为在<code>运行-&gt;运行手机或模拟器-&gt;设置adb路径</code>。<code>HBuilderX</code>自带的<code>adb</code>路径在：<code>HBuilderX\plugins\launcher-tools\tools\adbs</code>。</li>
+</ul>
+<p>然后点击HBuilderX的<code>运行-&gt;运行手机或模拟器</code>即可启动。</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>框架使用</tag>
       </tags>
   </entry>
 </search>
