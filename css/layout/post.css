@@ -149,4 +149,42 @@
   font-size: 1.2rem;
   margin: 2rem 0;
 }
+.encrypted-post-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+.encrypted-post-form p {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.encrypted-post-form input#post-password {
+  padding: 0.8rem 1.2rem;
+  font-size: 1.2rem;
+  border: 1px solid var(--font-color-light-3);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  width: 80%;
+  max-width: 300px;
+}
+.encrypted-post-form button#submit-password {
+  padding: 0.8rem 2rem;
+  font-size: 1.2rem;
+  background-color: var(--theme-color);
+  color: var(--background-color-page);
+  border: 1px solid var(--theme-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.encrypted-post-form button#submit-password:hover {
+  opacity: 0.8;
+}
+.encrypted-post-form #password-message {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
 meow-smallscreen()
