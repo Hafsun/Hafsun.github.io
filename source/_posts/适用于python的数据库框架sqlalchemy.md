@@ -9,6 +9,8 @@ categories:
 
 # 简介
 
+本博客借鉴于https://www.yuque.com/hynever/rd5ufc?#，可搭配食用
+
 在python中，我们常使用ORM（Object Relationship Mapping）框架来操作数据库，然后在众多ORM框架中，最主流的是SQLALchemy,它经常与fastapi搭配食用，因为都支持异步。
 
 # 安装
