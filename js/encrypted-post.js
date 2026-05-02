@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         encryptedContent.style.display = 'block';
         encryptedForm.style.display = 'none';
         passwordMessage.textContent = '';
+        const tocDiv = document.getElementById('toc-div');
+        if (tocDiv) tocDiv.classList.remove('is-toc-locked');
       } else {
         passwordMessage.textContent = '密码错误，请重试。';
       }

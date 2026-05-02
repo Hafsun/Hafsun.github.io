@@ -200,7 +200,7 @@ class LocalSearch {
 
   getResultItems(keywords) {
     const resultItems = [];
-    this.datas.forEach(({ title, content, url }) => {
+    this.datas.forEach(({ title, content, url, locked }) => {
       // The number of different keywords included in the article.
       const [indexOfTitle, keysOfTitle] = this.getIndexByWord(keywords, title);
       const [indexOfContent, keysOfContent] = this.getIndexByWord(keywords, content);
@@ -252,9 +252,13 @@ class LocalSearch {
         resultItem += `<li><a href="${url.href}" class="search-result-title">${title}</a>`;
       }
 
-      slicesOfContent.forEach(slice => {
-        resultItem += `<a href="${url.href}"><p class="search-result">${this.highlightKeyword(content, slice)}...</p></a>`;
-      });
+      if (locked && slicesOfContent.length > 0) {
+        resultItem += `<a href="${url.href}"><p class="search-result search-result--locked">加密文章，内容摘要不显示</p></a>`;
+      } else {
+        slicesOfContent.forEach(slice => {
+          resultItem += `<a href="${url.href}"><p class="search-result">${this.highlightKeyword(content, slice)}...</p></a>`;
+        });
+      }
 
       resultItem += '</li>';
       resultItems.push({
@@ -274,11 +278,20 @@ class LocalSearch {
       .then(res => {
         // Get the contents from search data
         this.isfetched = true;
-        this.datas = isXml ? [...new DOMParser().parseFromString(res, 'text/xml').querySelectorAll('entry')].map(element => ({
-          title: element.querySelector('title').textContent,
-          content: element.querySelector('content').textContent,
-          url: element.querySelector('url').textContent
-        })) : JSON.parse(res);
+        this.datas = isXml
+          ? [...new DOMParser().parseFromString(res, 'text/xml').querySelectorAll('entry')].map(element => {
+            const lockedEl = element.querySelector('locked');
+            return {
+              title: element.querySelector('title').textContent,
+              content: element.querySelector('content').textContent,
+              url: element.querySelector('url').textContent,
+              locked: lockedEl ? lockedEl.textContent.trim() === '1' : false
+            };
+          })
+          : JSON.parse(res).map(item => ({
+            ...item,
+            locked: item.locked === true || item.locked === 1 || item.locked === '1'
+          }));
         // Only match articles with non-empty titles
         this.datas = this.datas.filter(data => data.title).map(data => {
           data.title = data.title.trim();

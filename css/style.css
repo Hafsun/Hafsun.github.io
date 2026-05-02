@@ -3017,6 +3017,13 @@ body[data-mode="dark"] .search-container {
 .search-result {
   color: var(--font-color-light-2);
 }
+.search-result--locked {
+  color: var(--font-color-light-2);
+  font-size: 0.95em;
+  filter: blur(0.2rem);
+  opacity: 0.75;
+  user-select: none;
+}
 .search-result-title {
   font-size: 1.1rem;
 }
@@ -3768,6 +3775,13 @@ body[data-mode="dark"] .toc-title .icon {
   overflow-x: hidden;
   padding-right: 1rem;
   font-size: 1.05rem;
+  transition: filter 0.28s ease, opacity 0.28s ease;
+}
+.toc-content.is-toc-locked {
+  filter: blur(0.55rem);
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
 }
 .toc-content ol {
   padding-left: 1rem;
