@@ -295,4 +295,38 @@
         <category>杂谈</category>
       </categories>
   </entry>
+  <entry>
+    <title>数据库大作业</title>
+    <url>/2026/05/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大作业是不可能自己手搓的，所以就打算用agent辅助，刚好探索下vibe writing。</p>
+<p>于是就进入了选题环节，她选的是17，肯定不能选一样的，那我脑子里就先冒出的13，互补为30嘛。感觉这个思想也许和她的1919好朋友，2828手拉手有相似之处。</p>
+<h1 id="cursor看不了word"><a href="#cursor看不了word" class="headerlink" title="cursor看不了word"></a>cursor看不了word</h1><p>除非转换为文本文件。因为word本质上是个压缩二进制文件，没法在cursor中解码。但是它是能看懂.md文件的。</p>
+<p>于是就有了个初步想法：把要操作的word都转化为md，然后让AI干完后转回word，反正通义是说这样行得通。那就开始吧。</p>
+<h1 id="它画的图没法转换"><a href="#它画的图没法转换" class="headerlink" title="它画的图没法转换"></a>它画的图没法转换</h1><p>cursor竟然把图也画出来了，但是最终转换得到的word中只能看到代码，所以我复制ER图的代码到画图软件中（用的draw），得到的图emm。一般吧。</p>
+<p>似乎navicat有直接生成ER图的功能，但我每次点击查看ER图或者查看数据关联图时，都闪退了？？？是因为我破解软件的原因吗？以后再探究一下。</p>
+<h1 id="调格式"><a href="#调格式" class="headerlink" title="调格式"></a>调格式</h1><p>没招，转换两次得到的word并不理想，但是内容是理想的，所以要开始调格式了。我就人机似的一段段复制粘贴，遇到图片就去网站转换。这样很蠢啊，但我为了赶时间也没有想其它办法。</p>
+<p>那么现在思考下有什么其它办法，能让我不那么傻逼的一段段调格式呢？</p>
+<p>1、用更好的转换格式的工具，这次我用的pandoc，通义推荐的工具，我已经把它下载到电脑并配置为mcp了，提一下配置MCP：我懒得学怎么配置了，于是先把pandoc工具下载到电脑，并配置了环境变量，然后命令cursor帮我配置，这简直太智能了，它的做法就是写了一个文件，文件中内容是类似json格式的各种配置，可以在cursor的mcp配置中查看。</p>
+<p>都说了mcp了，不得不提一下skill，skill可以理解为优化提示词的一种方法，就是把一个工作拆分为各个步骤，每次要做这个工作时都能让AI按部就班的做，先干啥，在干啥这样。</p>
+<p>2、吃完饭时刘恒说claude code可以直接写word，我有点不相信，虽然AI很吊，但一个word有那么多格式要求，这AI能理解并处理的来吗？下次试试看吧。</p>
+<p>3、之前记得打开豆包，豆包可以像个上帝视角那样看着我写文档，然后会有一个小窗口之类的东西，这样也许更方便了，但本质还不是一点点的复制粘贴嘛。应该再探索下有没有啥工具可以直接补全或者替换的。</p>
+<h1 id="初步体验claude"><a href="#初步体验claude" class="headerlink" title="初步体验claude"></a>初步体验claude</h1><p>这是后面更新的，因为想看看大家都吹上天的claude有多牛逼。</p>
+<p>先到claude官网上下载了claude，然后发现claude和claude code是两个东西，但是claude是可以写文档的（可直接下载word）</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260510154927321.png"  alt="image-20260510154927276"></p>
+<p>那我倒向试试claude写文档有多牛逼？，于是：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260510155013183.png"  alt="image-20260510155013110"></p>
+<p>我就这么命令它，它如果这样就把这大作业搞完了，那是不是有点太逆天了。我昨天复制粘贴那么久，这tm一句话干完了？？？</p>
+<p>现在还在等待中，所以我有时间写博客，那就先等着吧。。。</p>
+<p>牛逼，确实全部都写好了，但是有一些字体格式不对，还有封面有些不同。然后内容上大致全都正确，包括各个标题以及标题层级关系都对的上。总体上完成度很高，表格可以生成，但是图片不能，图片要自己弄。</p>
+<p>真要自己弄图片吗？于是我让他迭代一下文档，帮我画图并调整格式，但。。。tmd免费额度怎么没了。。。没招TVT。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>claude能不能画ER图还是个未知数，等下次再试试吧。</p>
+<p>此时就得到一个新的方法论：让claude写初步文档，然后自己调整格式以及图片，也是能节省很多劳动力的。</p>
+]]></content>
+      <categories>
+        <category>课程作业</category>
+      </categories>
+      <tags>
+        <tag>claude</tag>
+      </tags>
+  </entry>
 </search>
