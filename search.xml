@@ -1,66 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>vibecoding项目迭代</title>
-    <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>上创业课太无聊了，我居然点进了哔站刷视频，于是乎就看到这么个视频【小白AI编程进阶：不写一行代码，教你Vibecoding项目完美升级！】<a href="https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e%E3%80%82%E5%94%89%EF%BC%8Cvibecoding%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E4%B8%8D%E8%B7%9F%E4%B8%8A%E5%8E%BB%E5%AD%A6%E4%B8%80%E5%AD%A6%EF%BC%8C%E8%B7%AF%E8%BE%B9%E7%9A%84%E5%A4%A7%E7%88%B7%E5%BE%85%E4%BC%9A%E9%83%BD%E6%AF%94%E6%88%91%E6%9B%B4%E4%BC%9A%E7%BC%96%E7%A8%8B%E4%BA%86%E3%80%82">https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e。唉，vibecoding的时代，不跟上去学一学，路边的大爷待会都比我更会编程了。</a></p>
-<p>我将把这个视频所传知识化为己有。</p>
-<p>懒得仔细看就直接看最后的总结图片。</p>
-<h1>小改</h1>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210329014.png"  alt="image-20260408210328987"></p>
-<p>如上图，直接截图告诉它就行，改完后看效果，不满意再改。</p>
-<h1>大改</h1>
-<h3 id="1、存档">1、存档</h3>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210349026.png"  alt="image-20260408210348995"></p>
-<p>用如上图的方式让AI帮打包，或者用github进行版本管理。</p>
-<h3 id="2、写迭代文档PRD">2、写迭代文档PRD</h3>
-<p>找到一个厉害点的大模型，告诉它：</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210410691.png"  alt="image-20260408210410652"></p>
-<p>如果有不满意的地方，截图丢回去让它改，如下图</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://gitee.com/han-fangfang/blogs_picture/raw/master/20260408201828383.png"  alt="image-20260408201828348"></p>
-<p>最终，我们应该得到了一份满意的迭代PRD</p>
-<h3 id="3、IDE内行动">3、IDE内行动</h3>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210458951.png"  alt="image-20260408210458859"></p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210512601.png"  alt="image-20260408210512578"></p>
-<p>建立这样的文件结构，前面大模型给的迭代prd和迭代html代码就放在迭代2.0这样的目录下。</p>
-<p>然后把迭代2.0目录右击，添加到对话，就像这样：</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210539600.png"  alt="image-20260408210539578"></p>
-<p>然后切换到plan模式，并：</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210552887.png"  alt="image-20260408210552859"></p>
-<p>完了之后点击计划给出的build按钮，也就是开始编码</p>
-<h3 id="4、备忘">4、备忘</h3>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210601648.png"  alt="image-20260408210601618"></p>
-<p>也就是总结一下这次迭代都干了些啥</p>
-<h1>总结图片</h1>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210611798.png"  alt="image-20260408210611675"></p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>vibecoding</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>uni-app初学</title>
     <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc?#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
 <p>现在是大二下册中期，到现在做的项目几乎全都是web开发，还没接触过小程序呢。但学习小程序肯定是作为一个程序员必不可少的，那么就先从一个简单的小程序开发框架开始。（它也能开发APP）</p>
 <p>小程序开发框架主要解决一套代码在多个平台（如微信、支付宝、H5等）运行的问题。</p>
 <p><strong>uni-app</strong></p>
 <ul>
-<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信/支付宝/百度/头条/飞书/QQ/快手/钉钉/淘宝）、快应用等多个平台。</li>
+<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信&#x2F;支付宝&#x2F;百度&#x2F;头条&#x2F;飞书&#x2F;QQ&#x2F;快手&#x2F;钉钉&#x2F;淘宝）、快应用等多个平台。</li>
 <li><strong>优点：</strong> 学习成本低（尤其对Vue开发者），插件市场资源丰富，跨端覆盖最广。</li>
 <li><strong>适用场景：</strong> 中小团队希望以最低成本快速覆盖多端，尤其是小程序生态</li>
 <li>教程源码在桌面资料里的fast-api教程的uniapp-demo下</li>
 </ul>
-<h1>入门</h1>
-<h3 id="1、开发工具">1、开发工具</h3>
-<p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
-<h3 id="2、项目结构介绍">2、项目结构介绍</h3>
-<p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
+<h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h3 id="1、开发工具"><a href="#1、开发工具" class="headerlink" title="1、开发工具"></a>1、开发工具</h3><p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
+<h3 id="2、项目结构介绍"><a href="#2、项目结构介绍" class="headerlink" title="2、项目结构介绍"></a>2、项目结构介绍</h3><p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
 <p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260420214114194.png"  alt="image-20260420214107103"></p>
 <ul>
 <li><code>pages.json</code>：对<code>uni-app</code>项目进行全局配置，决定页面文件的路径、窗口样式、导航条、底部的tabbar等。</li>
@@ -80,17 +34,13 @@
 <li>数据绑定及事件处理同 <code>Vue.js</code> 规范，同时补充了App及页面的生命周期</li>
 <li>为兼容多端运行，建议使用flex布局进行开发</li>
 </ul>
-<h3 id="3、运行项目">3、运行项目</h3>
-<h3 id="1）-运行在网页">1） 运行在网页</h3>
-<p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
-<h3 id="2）-运行在微信小程序">2） 运行在微信小程序</h3>
-<ul>
-<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-</a>&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置<code>，找到</code>微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</li>
+<h3 id="3、运行项目"><a href="#3、运行项目" class="headerlink" title="3、运行项目"></a>3、运行项目</h3><h3 id="1）-运行在网页"><a href="#1）-运行在网页" class="headerlink" title="1） 运行在网页"></a>1） 运行在网页</h3><p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
+<h3 id="2）-运行在微信小程序"><a href="#2）-运行在微信小程序" class="headerlink" title="2） 运行在微信小程序"></a>2） 运行在微信小程序</h3><ul>
+<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-%3E%E5%B7%A5%E5%85%B7-%3E%E8%AE%BE%E7%BD%AE-%3E%E8%BF%90%E8%A1%8C%E8%AE%BE%E7%BD%AE-%3E%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%85%8D%E7%BD%AE%60%EF%BC%8C%E6%89%BE%E5%88%B0%60%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E8%B7%AF%E5%BE%84%60%EF%BC%8C%E5%B0%86%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E7%9A%84%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84%E8%AE%BE%E7%BD%AE%E5%A5%BD%E3%80%82">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置`，找到`微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</a></li>
 <li>设置测试号：打开微信小程序开发者工具，然后创建项目，点击获取<code>测试号</code>。然后在<code>HBuilderX</code>的项目中，找到<code>manifest.json</code>文件，然后找到<code>微信小程序配置</code>，将从微信开发者工具中获取到的测试号设置到<code>微信小程序AppID</code>中。</li>
 <li>运行：在<code>运行-&gt;运行到小程序-&gt;微信开发者工具</code>，即可在微信小程序中运行项目。</li>
 </ul>
-<h3 id="3）-作为APP运行在安卓真机">3） 作为APP运行在安卓真机</h3>
-<p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
+<h3 id="3）-作为APP运行在安卓真机"><a href="#3）-作为APP运行在安卓真机" class="headerlink" title="3） 作为APP运行在安卓真机"></a>3） 作为APP运行在安卓真机</h3><p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
 <ul>
 <li>在安卓手机上开启：开发者选项，开启USB调试，允许USB安装应用，然后用<strong>数据线</strong>连接电脑。</li>
 <li>在HBuilderX上：设置合适的adb。设置方式为在<code>运行-&gt;运行手机或模拟器-&gt;设置adb路径</code>。<code>HBuilderX</code>自带的<code>adb</code>路径在：<code>HBuilderX\plugins\launcher-tools\tools\adbs</code>。</li>
@@ -105,26 +55,55 @@
       </tags>
   </entry>
   <entry>
+    <title>vibecoding项目迭代</title>
+    <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上创业课太无聊了，我居然点进了哔站刷视频，于是乎就看到这么个视频【小白AI编程进阶：不写一行代码，教你Vibecoding项目完美升级！】<a href="https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e%E3%80%82%E5%94%89%EF%BC%8Cvibecoding%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E4%B8%8D%E8%B7%9F%E4%B8%8A%E5%8E%BB%E5%AD%A6%E4%B8%80%E5%AD%A6%EF%BC%8C%E8%B7%AF%E8%BE%B9%E7%9A%84%E5%A4%A7%E7%88%B7%E5%BE%85%E4%BC%9A%E9%83%BD%E6%AF%94%E6%88%91%E6%9B%B4%E4%BC%9A%E7%BC%96%E7%A8%8B%E4%BA%86%E3%80%82">https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e。唉，vibecoding的时代，不跟上去学一学，路边的大爷待会都比我更会编程了。</a></p>
+<p>我将把这个视频所传知识化为己有。</p>
+<p>懒得仔细看就直接看最后的总结图片。</p>
+<h1 id="小改"><a href="#小改" class="headerlink" title="小改"></a>小改</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210329014.png"  alt="image-20260408210328987"></p>
+<p>如上图，直接截图告诉它就行，改完后看效果，不满意再改。</p>
+<h1 id="大改"><a href="#大改" class="headerlink" title="大改"></a>大改</h1><h3 id="1、存档"><a href="#1、存档" class="headerlink" title="1、存档"></a>1、存档</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210349026.png"  alt="image-20260408210348995"></p>
+<p>用如上图的方式让AI帮打包，或者用github进行版本管理。</p>
+<h3 id="2、写迭代文档PRD"><a href="#2、写迭代文档PRD" class="headerlink" title="2、写迭代文档PRD"></a>2、写迭代文档PRD</h3><p>找到一个厉害点的大模型，告诉它：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210410691.png"  alt="image-20260408210410652"></p>
+<p>如果有不满意的地方，截图丢回去让它改，如下图</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://gitee.com/han-fangfang/blogs_picture/raw/master/20260408201828383.png"  alt="image-20260408201828348"></p>
+<p>最终，我们应该得到了一份满意的迭代PRD</p>
+<h3 id="3、IDE内行动"><a href="#3、IDE内行动" class="headerlink" title="3、IDE内行动"></a>3、IDE内行动</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210458951.png"  alt="image-20260408210458859"></p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210512601.png"  alt="image-20260408210512578"></p>
+<p>建立这样的文件结构，前面大模型给的迭代prd和迭代html代码就放在迭代2.0这样的目录下。</p>
+<p>然后把迭代2.0目录右击，添加到对话，就像这样：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210539600.png"  alt="image-20260408210539578"></p>
+<p>然后切换到plan模式，并：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210552887.png"  alt="image-20260408210552859"></p>
+<p>完了之后点击计划给出的build按钮，也就是开始编码</p>
+<h3 id="4、备忘"><a href="#4、备忘" class="headerlink" title="4、备忘"></a>4、备忘</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210601648.png"  alt="image-20260408210601618"></p>
+<p>也就是总结一下这次迭代都干了些啥</p>
+<h1 id="总结图片"><a href="#总结图片" class="headerlink" title="总结图片"></a>总结图片</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210611798.png"  alt="image-20260408210611675"></p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>vibecoding</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关于Vue3和Spring Boot的模糊记忆</title>
     <url>/2026/04/03/%E5%85%B3%E4%BA%8EVue3%E5%92%8CSpringBoot%E7%9A%84%E6%A8%A1%E7%B3%8A%E8%AE%B0%E5%BF%86/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>因为我根本没认真学这俩框架，说是入门都有点过了，所以本篇主要记录对这俩东西的最大程度记忆（大概率以后也不会学，那么此时就是记得最清楚的时候—_—）,防止以后回忆时屁都不知道。</p>
-<h1>Spring Boot</h1>
-<p>首先是环境，java不需要像python那样配置虚拟环境，而是把依赖项全部写在.xml文件中，然后maven一下就好了。此时要注意maven版本、jdk版本都要匹配，同时这俩也分全局配置和项目配置。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>因为我根本没认真学这俩框架，说是入门都有点过了，所以本篇主要记录对这俩东西的最大程度记忆（大概率以后也不会学，那么此时就是记得最清楚的时候—_—）,防止以后回忆时屁都不知道。</p>
+<h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><p>首先是环境，java不需要像python那样配置虚拟环境，而是把依赖项全部写在.xml文件中，然后maven一下就好了。此时要注意maven版本、jdk版本都要匹配，同时这俩也分全局配置和项目配置。</p>
 <p>然后怎么初始化一个springboot项目呢，当然是借助工具Spring Initializr。 它会帮我们搭好基本的文件结构.</p>
 <p>java业务逻辑和python类似，都是面向对象，分离接口模块及实现模块，但是会有更规范的文件结构，文件结构例如以下图。</p>
 <p>response是一个统一返回结果类。通常用于封装 API 返回给前端的 JSON 数据格式（例如：包含 code, message, data 等字段），确保所有接口的返回都长这样；</p>
 <p>controller是接口层，负责直接与前端交互：接收 HTTP 请求（GET, POST 等），获取参数，调用 Service 层处理业务，最后将结果返回给前端；</p>
 <p>service 是业务逻辑层，<strong><code>StudentService</code></strong> (接口): 定义了业务功能的规范（比如“添加学生”、“删除学生”），<strong><code>StudentServiceImpl</code></strong> (实现类): 真正写业务逻辑的地方；</p>
-<p>dao(或者说repository/mapper)是数据访问层，对接数据库，student实现类与数据库中的student表一一对应。<strong><code>StudentRepository</code></strong>: 这是一个接口类，负责操作数据库（增删改查）；</p>
+<p>dao(或者说repository&#x2F;mapper)是数据访问层，对接数据库，student实现类与数据库中的student表一一对应。<strong><code>StudentRepository</code></strong>: 这是一个接口类，负责操作数据库（增删改查）；</p>
 <p>dto是数据传输对象，用于在不同层之间传输数据，比如，前端传来的参数可能和数据库表结构不一样，或者数据库表里有敏感字段（如密码）不能返回给前端。这时就会创建 <code>StudentDTO</code> 或 <code>StudentVO</code> 来专门用于数据传递，而不是直接暴露 <code>Student</code> 实体类；</p>
 <p>总结一个完整的请求流程：Controller收到请求 -&gt; Controller调用Service -&gt; Service处理业务逻辑，然后调用dao -&gt; dao去数据库查询数据，返回entity(实体) -&gt; 可能会有个convert操作 -&gt;  Controller将dto包装进Response对象，返回给前端。</p>
 <p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214449900.png"  alt="image-20260408214442840"></p>
-<h1>Vue3</h1>
-<p>Vue3是基于Node.js环境运行的，然后构建工具用的是Vite。至于如何初始化一个Vue3项目，问问AI应该没啥问题。</p>
-<h1>Vue基础（2026.4.20更新）</h1>
-<h2 id="一、概述">一、概述</h2>
-<p>uni-app是用Vue框架作为基础，所以我们在做uni-app项目之前，有必要学会如何基于Vue框架做开发。一个<code>vue</code>文件由以下三个模块组成：</p>
+<h1 id="Vue3"><a href="#Vue3" class="headerlink" title="Vue3"></a>Vue3</h1><p>Vue3是基于Node.js环境运行的，然后构建工具用的是Vite。至于如何初始化一个Vue3项目，问问AI应该没啥问题。</p>
+<h1 id="Vue基础（2026-4-20更新）"><a href="#Vue基础（2026-4-20更新）" class="headerlink" title="Vue基础（2026.4.20更新）"></a>Vue基础（2026.4.20更新）</h1><h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>uni-app是用Vue框架作为基础，所以我们在做uni-app项目之前，有必要学会如何基于Vue框架做开发。一个<code>vue</code>文件由以下三个模块组成：</p>
 <ul>
 <li><code>template</code>：基于HTML语法的模板代码。</li>
 <li><code>script</code>：基于JavaScript的逻辑代码。</li>
@@ -132,55 +111,41 @@
 </ul>
 <p>其中<code>script</code>模块中，有两种实现方式，分别是<code>vue 2.0</code>中遗留的选项式API和<code>vue 3.0</code>中推荐的组合式API，这里我们使用组合式API。一个<code>vue</code>文件结构类似为：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">	       </span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h2 id="二、template">二、template</h2>
-<p><code>vue</code>文件中模板语法非常多，这里我们围绕变量引用、事件绑定、双向绑定、if语句、for循环来进行讲解。其他的高级用法，我们暂时先不用，或者用到了再跟大家说。</p>
-<h3 id="1-变量引用">1. 变量引用</h3>
-<p>在script标签中，我们可以用JavaScript语法定义变量，而在模板中，则可以通过的形式引用script中定义的变量。比如用户名username，不同用户登录后，显示的用户名都不一样，就可以在显示用户名的地方使用变量，然后在script标签中，根据从服务器获取到的用户信息，动态赋值usenrname的值。示例代码如下：</p>
+
+<h2 id="二、template"><a href="#二、template" class="headerlink" title="二、template"></a>二、template</h2><p><code>vue</code>文件中模板语法非常多，这里我们围绕变量引用、事件绑定、双向绑定、if语句、for循环来进行讲解。其他的高级用法，我们暂时先不用，或者用到了再跟大家说。</p>
+<h3 id="1-变量引用"><a href="#1-变量引用" class="headerlink" title="1. 变量引用"></a>1. 变量引用</h3><p>在script标签中，我们可以用JavaScript语法定义变量，而在模板中，则可以通过的形式引用script中定义的变量。比如用户名username，不同用户登录后，显示的用户名都不一样，就可以在显示用户名的地方使用变量，然后在script标签中，根据从服务器获取到的用户信息，动态赋值usenrname的值。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;div&gt;&#123;&#123;username&#125;&#125;&lt;/div&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref&#125; from &quot;vue&quot;;</span><br><span class="line">	let username = ref(&quot;&quot;);</span><br><span class="line">	username.value = &quot;张三&quot;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="2-事件绑定">2. 事件绑定</h3>
-<p>假设在<code>template</code>中有一个按钮，在点击按钮后要进行某种操作，那么就可以给这个按钮绑定一个点击事件。示例代码如下：</p>
+
+<h3 id="2-事件绑定"><a href="#2-事件绑定" class="headerlink" title="2. 事件绑定"></a>2. 事件绑定</h3><p>假设在<code>template</code>中有一个按钮，在点击按钮后要进行某种操作，那么就可以给这个按钮绑定一个点击事件。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;button @click=&quot;onLogin&quot;&gt;登录&lt;/button&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	const onLogin = () =&gt; &#123;</span><br><span class="line">		console.log(&quot;点击了登录按钮！&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="3-双向绑定">3. 双向绑定</h3>
-<p>变量引用仅仅是<code>template</code>从<code>script</code>中引用变量，但有些情况需要在<code>script</code>中引用<code>template</code>，比如我们在<code>script</code>中实时读取表单输入框中输入的内容，那么就可以使用双向绑定。双向绑定示例代码如下：</p>
+
+<h3 id="3-双向绑定"><a href="#3-双向绑定" class="headerlink" title="3. 双向绑定"></a>3. 双向绑定</h3><p>变量引用仅仅是<code>template</code>从<code>script</code>中引用变量，但有些情况需要在<code>script</code>中引用<code>template</code>，比如我们在<code>script</code>中实时读取表单输入框中输入的内容，那么就可以使用双向绑定。双向绑定示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;input type=&quot;text&quot; v-model=&quot;username&quot; placeholder=&quot;请输入用户名&quot;&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref, watch&#125; from &quot;vue&quot;;</span><br><span class="line">	let username = ref(&quot;&quot;);</span><br><span class="line">	watch(username, (value, oldValue) =&gt; &#123;</span><br><span class="line">		console.log(&quot;value: &quot;+value);</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="4-if语句">4. if语句</h3>
-<p>在vue中，可以通过<code>v-if</code>来根据条件渲染不同的组件。示例代码如下：</p>
+
+<h3 id="4-if语句"><a href="#4-if语句" class="headerlink" title="4. if语句"></a>4. if语句</h3><p>在vue中，可以通过<code>v-if</code>来根据条件渲染不同的组件。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;view v-if=&quot;weather==&#x27;晴&#x27;&quot;&gt;今天出公园玩&lt;/view&gt;</span><br><span class="line">		&lt;view v-else-if=&quot;weather==&#x27;阴&#x27;&quot;&gt;今天去图书馆&lt;/view&gt;</span><br><span class="line">		&lt;view v-else&gt;今天待在家里&lt;/view&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref, watch&#125; from &quot;vue&quot;;</span><br><span class="line">	let weather = ref(&quot;雨&quot;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="5-for循环">5. for循环</h3>
-<p>在vue中，可以通过<code>v-for</code>来渲染列表。示例代码如下：</p>
+
+<h3 id="5-for循环"><a href="#5-for循环" class="headerlink" title="5. for循环"></a>5. for循环</h3><p>在vue中，可以通过<code>v-for</code>来渲染列表。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;table&gt;</span><br><span class="line">			&lt;tbody&gt;</span><br><span class="line">				&lt;tr v-for=&quot;(book, index) in books&quot; v-key=&quot;index&quot;&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;index+1&#125;&#125;&lt;/td&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;book.name&#125;&#125;&lt;/td&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;book.author&#125;&#125;&lt;/td&gt;</span><br><span class="line">				&lt;/tr&gt;</span><br><span class="line">			&lt;/tbody&gt;</span><br><span class="line">		&lt;/table&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref, watch&#125; from &quot;vue&quot;;</span><br><span class="line">	let books = ref([&#123;</span><br><span class="line">		&quot;name&quot;: &quot;三国演义&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;罗贯中&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;name&quot;: &quot;水浒传&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;施耐庵&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;name&quot;: &quot;红楼梦&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;曹雪芹&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;name&quot;: &quot;西游记&quot;,</span><br><span class="line">		&quot;author&quot;: &quot;吴承恩&quot;</span><br><span class="line">	&#125;])</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h2 id="三、script">三、script</h2>
-<p>在script中，我们围绕<code>ref</code>、<code>reactive</code>和生命周期方法进行讲解。</p>
-<h3 id="1-ref变量">1. ref变量</h3>
-<p>普通类型的<code>javascript</code>变量可以在<code>template</code>中使用，但是一旦该变量发生改变，无法即时同步到模板中，为了实现这个需求，需要将变量定义成<code>ref</code>或<code>reactive</code>类型。</p>
+
+<h2 id="三、script"><a href="#三、script" class="headerlink" title="三、script"></a>三、script</h2><p>在script中，我们围绕<code>ref</code>、<code>reactive</code>和生命周期方法进行讲解。</p>
+<h3 id="1-ref变量"><a href="#1-ref变量" class="headerlink" title="1. ref变量"></a>1. ref变量</h3><p>普通类型的<code>javascript</code>变量可以在<code>template</code>中使用，但是一旦该变量发生改变，无法即时同步到模板中，为了实现这个需求，需要将变量定义成<code>ref</code>或<code>reactive</code>类型。</p>
 <p>针对普通数据类型，比如字符串、数值、布尔类型，以及数组类型，我们通常定义成<code>ref</code>类型的。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;view&gt;点击数：&#123;&#123;count&#125;&#125;&lt;/view&gt;</span><br><span class="line">		&lt;button @click=&quot;onClick&quot;&gt;点我&lt;/button&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;ref&#125; from &quot;vue&quot;;</span><br><span class="line">	let count = ref(0)</span><br><span class="line">	const onClick = () =&gt; &#123;</span><br><span class="line">		count.value += 1;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
 <p>需要注意的是，在<code>script</code>中想使用<code>ref</code>定义的变量，必须通过<code>.value</code>属性来实现。</p>
-<h3 id="2-reactive">2. reactive</h3>
-<p>对象类型的变量，通常定义成<code>reactive</code>类型。示例代码如下：</p>
+<h3 id="2-reactive"><a href="#2-reactive" class="headerlink" title="2. reactive"></a>2. reactive</h3><p>对象类型的变量，通常定义成<code>reactive</code>类型。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;ul&gt;</span><br><span class="line">			&lt;li&gt;姓名：&#123;&#123;person.name&#125;&#125;&lt;/li&gt;</span><br><span class="line">			&lt;li&gt;年龄：&#123;&#123;person.age&#125;&#125;&lt;/li&gt;</span><br><span class="line">		&lt;/ul&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123;reactive&#125; from &quot;vue&quot;;</span><br><span class="line">	let person = reactive(&#123;</span><br><span class="line">		&quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">		&quot;age&quot;: 18</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="3-生命周期方法">3. 生命周期方法</h3>
-<p>vue中，可以把一个.vue文件理解为一个组件，然后浏览器界面就是一个或多个组件组合而成。在每个界面显现时，组件们都会经历<strong>创建 → 挂载到页面 → 响应数据变化 → 最终被销毁</strong>的整个过程，每个过程由钩子（生命周期函数）控制，它给了你一个“钩住”这些关键时刻的机会，让你可以插入自己的代码。</p>
+
+<h3 id="3-生命周期方法"><a href="#3-生命周期方法" class="headerlink" title="3. 生命周期方法"></a>3. 生命周期方法</h3><p>vue中，可以把一个.vue文件理解为一个组件，然后浏览器界面就是一个或多个组件组合而成。在每个界面显现时，组件们都会经历<strong>创建 → 挂载到页面 → 响应数据变化 → 最终被销毁</strong>的整个过程，每个过程由钩子（生命周期函数）控制，它给了你一个“钩住”这些关键时刻的机会，让你可以插入自己的代码。</p>
 <p>其中用得最多的就是<code>onMounted</code>生命周函数，代表该组件被挂载到父组件后的执行的代码。示例代码如下：</p>
 <div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		用户名：&#123;&#123;username&#125;&#125;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">	import &#123; onMounted, ref &#125; from &#x27;vue&#x27;;</span><br><span class="line">	</span><br><span class="line">	let username = ref(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">	onMounted(() =&gt; &#123;</span><br><span class="line">		username.value = &quot;张三&quot;;</span><br><span class="line">		console.log(&quot;onMounted生命周期方法！&quot;);</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h2 id="标准项目结构">标准项目结构</h2>
-<p>my-vue-app/<br>
-├── node_modules/       # 项目依赖的第三方库<br>
-├── public/             # 静态资源文件夹<br>
-│   ├── index.html      # 应用的 HTML 模板<br>
-│   └── …             # 其他静态资源（如图片、字体等）<br>
-├── src/                # 项目源代码<br>
-│   ├── assets/         # 静态资源（如图片、字体等）<br>
-│   ├── components/     # 可复用的 Vue 组件<br>
-│   ├── views/          # 页面级组件<br>
-│   ├── App.vue         # 根组件<br>
-│   ├── main.js         # 项目入口文件<br>
-│   ├── router.js       # 路由配置<br>
-│   ├── store.js        # Vuex 状态管理配置<br>
-│   └── …             # 其他配置和资源<br>
-├── package.json        # 项目配置和依赖管理<br>
-├── package-lock.json   # 依赖的精确版本锁定文件<br>
-└── <a href="http://README.md">README.md</a>           # 项目说明文档</p>
+
+
+
+
+
+<h2 id="标准项目结构"><a href="#标准项目结构" class="headerlink" title="标准项目结构"></a>标准项目结构</h2><p>my-vue-app&#x2F;<br>├── node_modules&#x2F;       # 项目依赖的第三方库<br>├── public&#x2F;             # 静态资源文件夹<br>│   ├── index.html      # 应用的 HTML 模板<br>│   └── …             # 其他静态资源（如图片、字体等）<br>├── src&#x2F;                # 项目源代码<br>│   ├── assets&#x2F;         # 静态资源（如图片、字体等）<br>│   ├── components&#x2F;     # 可复用的 Vue 组件<br>│   ├── views&#x2F;          # 页面级组件<br>│   ├── App.vue         # 根组件<br>│   ├── main.js         # 项目入口文件<br>│   ├── router.js       # 路由配置<br>│   ├── store.js        # Vuex 状态管理配置<br>│   └── …             # 其他配置和资源<br>├── package.json        # 项目配置和依赖管理<br>├── package-lock.json   # 依赖的精确版本锁定文件<br>└── README.md           # 项目说明文档</p>
 ]]></content>
       <categories>
         <category>开发</category>
@@ -193,24 +158,19 @@
   <entry>
     <title>关于是否考研的想法</title>
     <url>/2026/04/10/%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%80%83%E7%A0%94%E7%9A%84%E6%83%B3%E6%B3%95/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
 <p>因为每次看到别人为了论证自己所说的是正确的时，我总觉得很有道理，大概因为我是个认同型人格吧。直到今晚与中科院吴博士交流了一下······</p>
-<h1>选就业？</h1>
-<p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
+<h1 id="选就业？"><a href="#选就业？" class="headerlink" title="选就业？"></a>选就业？</h1><p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
 <p>我觉得我是个能适应社会的人，也许是因为我还没真正经历社会摧残的原因吧，我有股想闯荡社会的冲动。</p>
 <p>优势：早点自己挣钱，不拖累父母；代码能力还可以，大一大二两年培养了较强的工程能力；有点小奖，简历上有的写；符合我的少年心气。</p>
 <p>劣势：薪资估计高不了，也没法根本改变家里的局面；可能这辈子都达不到研究生学历了。</p>
-<h1>考研？</h1>
-<p>目前还是选择的这条路，毕竟论文还在搞着。</p>
+<h1 id="考研？"><a href="#考研？" class="headerlink" title="考研？"></a>考研？</h1><p>目前还是选择的这条路，毕竟论文还在搞着。</p>
 <p>优势：起薪高，这一学历用一辈子，也是我提升阶级的唯一机会。我英语也算还好，不偏科。</p>
 <p>劣势：二战风险，难度大，辛苦，再吃几年父母的。（这里有个思考：工作三年也并不能为父母带来什么改变，三年的工作时间在一生中只是天地之蜉蝣，三年投资带来的成功是三年工作经验比不了的。而且就那几年研究生能花多少钱）</p>
-<h1>吴博士所言</h1>
-<p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
+<h1 id="吴博士所言"><a href="#吴博士所言" class="headerlink" title="吴博士所言"></a>吴博士所言</h1><p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
 <p>公司选人的本质依然是看一个人的能力。技术好、学历高等等都是一个人能力强的证明，二者缺一都是有所缺陷的，不必花心思纠结在二者择一的问题上，而是把二者都当作提升自己的思路，提升自己，才叫做直击企业用人核心。</p>
 <p>对于AI取代程序员，这是不可能的。之前一人耕一亩地，现在一人耕十亩地，但终究需要人来耕地，而且随着效率提升，需求也会随之提升。自古以来，从不会因为工具过于强大而行业崩塌的说法。这是人类社会的进步。</p>
-<h1>综上</h1>
-<p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
+<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
 ]]></content>
       <categories>
         <category>杂谈</category>
@@ -219,30 +179,22 @@
   <entry>
     <title>妹妹大金额充值事件</title>
     <url>/2026/05/07/%E5%A6%B9%E5%A6%B9%E5%A4%A7%E9%87%91%E9%A2%9D%E5%85%85%E5%80%BC%E4%BA%8B%E4%BB%B6/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>现在回家最主要的事情就是管一管我那不听话的妹妹了，这不五一假期又闹事。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>现在回家最主要的事情就是管一管我那不听话的妹妹了，这不五一假期又闹事。</p>
 <p>在放假之前就听到妈妈说玩蛋仔充值了三百多，我由于在学校没法多管，只叫她自己反省，可口头上的惩罚终究是无足轻重。</p>
-<h1>查手机</h1>
-<p>那天晚上妹妹玩完手机，我拿走想看看她微信余额，0？就很奇怪，再看下消费记录，这一看吓死人，满屏幕的-648,-128,-12的，我简直难以置信，虚幻而真实，仅仅是翻了几秒我就知道已经好几千了。</p>
+<h1 id="查手机"><a href="#查手机" class="headerlink" title="查手机"></a>查手机</h1><p>那天晚上妹妹玩完手机，我拿走想看看她微信余额，0？就很奇怪，再看下消费记录，这一看吓死人，满屏幕的-648,-128,-12的，我简直难以置信，虚幻而真实，仅仅是翻了几秒我就知道已经好几千了。</p>
 <p>忘了有多生气了，只知道身体开始发热，心跳在加快。于是我开始统计总金额。</p>
 <p>算出最后的结果让我很窒息，也很无奈，我以平静的语气告诉了妈妈，妹妹在旁边也许意识到被我发现了，站在一旁不敢说话。妈妈立马开始斥责妹妹，婆婆也走了过来，听到了所有。我似乎很多年没见到婆婆生这么大的气了，她走过去扭妹妹耳朵，那么一瞬间我怕婆婆会生气晕倒。</p>
-<h1>申诉</h1>
-<p>我知道得由我来处理退款流程了，我上楼拿下电脑，立马进入工作状态，各种材料提交，不知不觉干到了十一点。233乐园，这种公司存在的价值就是为了坑害小孩的钱吗？还把退费流程设置的这么复杂而苛刻，生怕家长们懂得如何退费是吗？好累，我第二天还得去南昌玩，该休息了。</p>
-<h1>睡不着</h1>
-<p>我想先放下这件事，尽早休息好，但我睡得很不好，我能睡着但似乎又没睡着，这件事情贯穿我一晚上。醒了又睡，醒了又睡。。。</p>
-<h1>我的想法</h1>
-<p>我其实没有因这么多金钱的白白流失而感到有多么生气、可惜。钱没了可以再挣，但可以给妹妹买个教训，不经历这么一下她难以懂得合理花钱的道理。希望妹妹可以更加懂事。</p>
-<h1>政府？</h1>
-<p>这么多退款材料和流程，家里只有我能看懂，但我不能一直待在家里，我得回学校啊。在学校我会尽我所能，但政府应该帮忙处理这件事情的，嘴里喊着为人民服务的那帮人应该帮我处理这件事的。不然政府里那些人一天到晚都在干些啥？如果他们不帮忙，我会很气愤，我会上诉。</p>
-<h1>更新一下</h1>
-<p>现在是被爸妈、阿伯都教训了一顿了。其实冷静下来思考一下，确实有我的不对，我请律师请的太急了。应该再等等结果，等实在没招了再动用法律手段的。</p>
+<h1 id="申诉"><a href="#申诉" class="headerlink" title="申诉"></a>申诉</h1><p>我知道得由我来处理退款流程了，我上楼拿下电脑，立马进入工作状态，各种材料提交，不知不觉干到了十一点。233乐园，这种公司存在的价值就是为了坑害小孩的钱吗？还把退费流程设置的这么复杂而苛刻，生怕家长们懂得如何退费是吗？好累，我第二天还得去南昌玩，该休息了。</p>
+<h1 id="睡不着"><a href="#睡不着" class="headerlink" title="睡不着"></a>睡不着</h1><p>我想先放下这件事，尽早休息好，但我睡得很不好，我能睡着但似乎又没睡着，这件事情贯穿我一晚上。醒了又睡，醒了又睡。。。</p>
+<h1 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h1><p>我其实没有因这么多金钱的白白流失而感到有多么生气、可惜。钱没了可以再挣，但可以给妹妹买个教训，不经历这么一下她难以懂得合理花钱的道理。希望妹妹可以更加懂事。</p>
+<h1 id="政府？"><a href="#政府？" class="headerlink" title="政府？"></a>政府？</h1><p>这么多退款材料和流程，家里只有我能看懂，但我不能一直待在家里，我得回学校啊。在学校我会尽我所能，但政府应该帮忙处理这件事情的，嘴里喊着为人民服务的那帮人应该帮我处理这件事的。不然政府里那些人一天到晚都在干些啥？如果他们不帮忙，我会很气愤，我会上诉。</p>
+<h1 id="更新一下"><a href="#更新一下" class="headerlink" title="更新一下"></a>更新一下</h1><p>现在是被爸妈、阿伯都教训了一顿了。其实冷静下来思考一下，确实有我的不对，我请律师请的太急了。应该再等等结果，等实在没招了再动用法律手段的。</p>
 <p>还有一点就是应该和父母商量这种消费上千的事情。也是没有冷静思考有没有必要去花费这个起诉费。</p>
 <p>回想一下昨天的情形。爸爸打电话过来，语气很重的说我不因该请律师的，说应该及时止损。我立马很生气，我觉得是他不懂得维权，主动放弃。于是和他大吵一架。我后面急急挂断了电话，吃完饭去了。吃完去西苑打球。打球中场休息时看到爸爸、阿伯都发了一大串语音过来，我不想听。继续打球，妈妈发了两千过来说是对我辛苦的补偿，我没收，我继续打球。打完球我喝着别人买的可乐，慢慢听着阿伯的语音。听完我也不想回，回实验室干活去吧。。。。</p>
 <p>后面也没啥要记叙的了。</p>
 <p>今天走在路上仔细想了一下事情经过。其实我明明可以先寻求政府帮助的，或者派出所，我完全没必要自己承担所有事情。</p>
 <p>总结就是一句话：<strong>三四而后行</strong>。</p>
-<h1>不无收获</h1>
-<p>虽然亏了挺多钱的，但是收获的是法律意识，维权意识；起诉流程，签合同，立案等体验感，对涉世未深的我还是大有益处的。</p>
+<h1 id="不无收获"><a href="#不无收获" class="headerlink" title="不无收获"></a>不无收获</h1><p>虽然亏了挺多钱的，但是收获的是法律意识，维权意识；起诉流程，签合同，立案等体验感，对涉世未深的我还是大有益处的。</p>
 ]]></content>
       <categories>
         <category>杂谈</category>
@@ -251,23 +203,19 @@
   <entry>
     <title>安顺一游</title>
     <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
 <p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
-<h1>旁边的阿姨</h1>
-<p>上老爸的客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
+<h1 id="旁边的阿姨"><a href="#旁边的阿姨" class="headerlink" title="旁边的阿姨"></a>旁边的阿姨</h1><p>上老爸的客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
 <p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
 <p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
-<h1>没钱打车</h1>
-<p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
+<h1 id="没钱打车"><a href="#没钱打车" class="headerlink" title="没钱打车"></a>没钱打车</h1><p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
 <p>随眼看了下交通，打顺风车还挺划算的。</p>
 <p>（到车站）没有去黄果树的车了；顺风车打不到了；公交车没有去那儿的；打滴怎么要八十啊？我可是去附近的景点玩，凭啥啊。算了，我似乎也不太擅长一个人看山看水，不如今晚去小吃街爽吃算了。</p>
 <p>其实如果有个人陪我我也不用太在意这些了，人多还能A车费。</p>
 <p>去旅行一定要看风景吗？我更想爽吃各种特色小吃。</p>
 <p>（傍晚）总算到顾府街了，大吃特吃时间到。</p>
 <p>额，我突然发现由于感冒，我的嗅觉丧失，味觉丧失了一半，所以我的美食体验会折扣50%  TvT  但是，来都来了。。。</p>
-<h1>彻夜长谈</h1>
-<p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
+<h1 id="彻夜长谈"><a href="#彻夜长谈" class="headerlink" title="彻夜长谈"></a>彻夜长谈</h1><p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
 <p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
 <p>我的最低目标是以后赚的不能比老爸少。</p>
 <p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
@@ -278,25 +226,44 @@
       </categories>
   </entry>
   <entry>
+    <title>智能体在给大学生们降智</title>
+    <url>/2026/05/27/%E6%99%BA%E8%83%BD%E4%BD%93%E5%9C%A8%E7%BB%99%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BB%AC%E9%99%8D%E6%99%BA/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是基于现在小车比赛搞成shit引发的思考。<br>距离比赛只剩三天了，七个队伍居然只有两个队伍的车是能跑的。这与去年相比未免有点离谱。<br>去年：<br>大家都初次开发，从零开始搞机器人比赛，遇到不会的只能问大模型，没有智能体。快比赛时我们已经想出了好几个改进点，并且可以进行模拟比赛，优化时间。<br>今年：<br>老万都因为搞小车比赛的事情召开过好几次由于积极性或者效果性不足的会议了。<br>这种对比明显就能看出来今年的新生的问题解决能力不如我们这一届，为什么呢？</p>
+<h1 id="早已有迹可循"><a href="#早已有迹可循" class="headerlink" title="早已有迹可循"></a>早已有迹可循</h1><p>就上次队名加载中去吃火锅时，丁亚华给我发消息说什么叫我赶紧回去他快不行了。我不排除是开玩笑的原因，但仅仅是用ai跑了几次，问题没解决就说要不行了，这不管是不是纯开玩笑，我都觉得他已经有一种自己的心理暗示，暗示他自己无法解决、没有信心解决。</p>
+<h1 id="剖析"><a href="#剖析" class="headerlink" title="剖析"></a>剖析</h1><p>去年我这届，依赖的是豆包、deepseek等大模型，只能通过对话的形式交流，而现在的智能体，能够接管整个项目，当一个人觉得智能体的技术远强于他的时候、能接管他的活的时候，他就把自己当成了产品经理（无脑而只看结果）。反观豆包，我们必须明确发送给豆包具体的代码，哪个模块出问题或者报错信息，此时的我们和豆包是平等的交流者，因为我必须时时跟上豆包的节奏才能用豆包辅助我。</p>
+<p>上面可以推出一个结论，智能体会激发人的惰性。相当于我明明可以直接把整个项目给它，问它哪里有问题然后去刷抖音等着它跑完，跑完一看还没解决就继续说还是有问题，继续让它跑。<br>那我怎么还会像和豆包交流那样仔细看它给我的返回呢？偷懒是人的天性，智能体给了我们一种我可以偷懒的假象，导致我们无法理解智能体的思考，也就无法真正利用了智能体来解决问题。</p>
+<p>我为何这么说也是因为看到丁亚华电脑在一边跑，他人已经跑到别处聊天去了，提问也是简单的告诉它小车运行不了或者到那就不动了。这种情况除非智能体是通天代，否则是无法解决根本问题的。</p>
+<h1 id="我们都没有错"><a href="#我们都没有错" class="headerlink" title="我们都没有错"></a>我们都没有错</h1><p>工具在进化，工具变强，人就会自发性的解放双手，不愿自主思考。这会导致一种结果：大学四年每次解决问题离不开智能体，等到面试时被问到了一个问题，先思考的是：我该怎么向智能体提问呢？此时旁边有个dan的智能体，那就只能祭祭了。</p>
+<p>然后就感慨：我大学四年似乎一直在忙（是的向智能体提了不少问），但好像啥也没学到，计算机真是第二个土木，我儿子要是以后学计算机先打断他双腿。</p>
+<h1 id="如何破局"><a href="#如何破局" class="headerlink" title="如何破局"></a>如何破局</h1><p>1、聪明的人自己会意识到过于依赖智能体会完蛋；<br>2、因为他人的一些言论而有所感悟；<br>3、半夜在网上看到别人的视频而醍醐灌顶。<br>不限于以上三种破局情况。而我不能呼吁所有人，别人也不一定听我的，我也不一定能有这影响力。</p>
+<h1 id="我该怎么办"><a href="#我该怎么办" class="headerlink" title="我该怎么办"></a>我该怎么办</h1><p>对于AI组的后代们，在有机会时我会直接告诉他们：你们这群菜鸟，一届不如一届，解决问题的能力实在是太差，条件比往届好这么多，结果遇到问题时总是需要来问学长们。然后在适当的时候语重心长的告诉他们不要丢失了自主思考的能力。</p>
+<p>如此嘲讽，会引发新生们的不满吗？<br>我不能保证对每个人都有效，但这种骂人式的激励对于我是有用的。因为去年时张粤湘也是这么说我们的，我们这届不如上一届，我听到后只想努力提升自己。</p>
+<p>我喜欢这种一针见血，不顾表达方式的引导。就像那时我因情感问题无法自拔时，我以为刘恒会稍稍安慰一下，结果他好像在骂我，我反而因此被骂醒了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>因为工具的强大而放松自己，在极限思想下，未来岂不是机器人领着人类巨婴生活？</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>AI时代</tag>
+        <tag>大学生</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据库大作业</title>
     <url>/2026/05/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>大作业是不可能自己手搓的，所以就打算用agent辅助，刚好探索下vibe writing。</p>
-<h1>cursor看不了word</h1>
-<p>除非转换为文本文件。因为word本质上是个压缩二进制文件，没法在cursor中解码。但是它是能看懂.md文件的。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大作业是不可能自己手搓的，所以就打算用agent辅助，刚好探索下vibe writing。</p>
+<h1 id="cursor看不了word"><a href="#cursor看不了word" class="headerlink" title="cursor看不了word"></a>cursor看不了word</h1><p>除非转换为文本文件。因为word本质上是个压缩二进制文件，没法在cursor中解码。但是它是能看懂.md文件的。</p>
 <p>于是就有了个初步想法：把要操作的word都转化为md，然后让AI干完后转回word，反正通义是说这样行得通。那就开始吧。</p>
-<h1>它画的图没法转换</h1>
-<p>cursor竟然把图也画出来了，但是最终转换得到的word中只能看到代码，所以我复制ER图的代码到画图软件中（用的draw），得到的图emm。一般吧。</p>
+<h1 id="它画的图没法转换"><a href="#它画的图没法转换" class="headerlink" title="它画的图没法转换"></a>它画的图没法转换</h1><p>cursor竟然把图也画出来了，但是最终转换得到的word中只能看到代码，所以我复制ER图的代码到画图软件中（用的draw），得到的图emm。一般吧。</p>
 <p>似乎navicat有直接生成ER图的功能，但我每次点击查看ER图或者查看数据关联图时，都闪退了？？？是因为我破解软件的原因吗？以后再探究一下。</p>
-<h1>调格式</h1>
-<p>没招，转换两次得到的word并不理想，但是内容是理想的，所以要开始调格式了。我就人机似的一段段复制粘贴，遇到图片就去网站转换。这样很蠢啊，但我为了赶时间也没有想其它办法。</p>
+<h1 id="调格式"><a href="#调格式" class="headerlink" title="调格式"></a>调格式</h1><p>没招，转换两次得到的word并不理想，但是内容是理想的，所以要开始调格式了。我就人机似的一段段复制粘贴，遇到图片就去网站转换。这样很蠢啊，但我为了赶时间也没有想其它办法。</p>
 <p>那么现在思考下有什么其它办法，能让我不那么傻逼的一段段调格式呢？</p>
 <p>1、用更好的转换格式的工具，这次我用的pandoc，通义推荐的工具，我已经把它下载到电脑并配置为mcp了，提一下配置MCP：我懒得学怎么配置了，于是先把pandoc工具下载到电脑，并配置了环境变量，然后命令cursor帮我配置，这简直太智能了，它的做法就是写了一个文件，文件中内容是类似json格式的各种配置，可以在cursor的mcp配置中查看。</p>
 <p>都说了mcp了，不得不提一下skill，skill可以理解为优化提示词的一种方法，就是把一个工作拆分为各个步骤，每次要做这个工作时都能让AI按部就班的做，先干啥，在干啥这样。</p>
 <p>2、吃完饭时刘恒说claude code可以直接写word，我有点不相信，虽然AI很吊，但一个word有那么多格式要求，这AI能理解并处理的来吗？下次试试看吧。</p>
 <p>3、之前记得打开豆包，豆包可以像个上帝视角那样看着我写文档，然后会有一个小窗口之类的东西，这样也许更方便了，但本质还不是一点点的复制粘贴嘛。应该再探索下有没有啥工具可以直接补全或者替换的。</p>
-<h1>初步体验claude</h1>
-<p>这是后面更新的，因为想看看大家都吹上天的claude有多牛逼。</p>
+<h1 id="初步体验claude"><a href="#初步体验claude" class="headerlink" title="初步体验claude"></a>初步体验claude</h1><p>这是后面更新的，因为想看看大家都吹上天的claude有多牛逼。</p>
 <p>先到claude官网上下载了claude，然后发现claude和claude code是两个东西，但是claude是可以写文档的（可直接下载word）</p>
 <p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260510154927321.png"  alt="image-20260510154927276"></p>
 <p>那我倒向试试claude写文档有多牛逼？，于是：</p>
@@ -305,8 +272,7 @@
 <p>现在还在等待中，所以我有时间写博客，那就先等着吧。。。</p>
 <p>牛逼，确实全部都写好了，但是有一些字体格式不对，还有封面有些不同。然后内容上大致全都正确，包括各个标题以及标题层级关系都对的上。总体上完成度很高，表格可以生成，但是图片不能，图片要自己弄。</p>
 <p>真要自己弄图片吗？于是我让他迭代一下文档，帮我画图并调整格式，但。。。tmd免费额度怎么没了。。。没招TVT。</p>
-<h1>总结</h1>
-<p>claude能不能画ER图还是个未知数，等下次再试试吧。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>claude能不能画ER图还是个未知数，等下次再试试吧。</p>
 <p>此时就得到一个新的方法论：让claude写初步文档，然后自己调整格式以及图片，也是能节省很多劳动力的。</p>
 ]]></content>
       <categories>
@@ -317,34 +283,93 @@
       </tags>
   </entry>
   <entry>
+    <title>服创未晋级思考</title>
+    <url>/2026/05/22/%E6%9C%8D%E5%88%9B%E6%9C%AA%E6%99%8B%E7%BA%A7%E6%80%9D%E8%80%83/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今年的服创比赛大概是我的最后一舞了（最后一次作为主力开发参赛），得了个省三，也是意料之中的事情。不难过，不高兴。</p>
+<h1 id="为什么只有省三"><a href="#为什么只有省三" class="headerlink" title="为什么只有省三"></a>为什么只有省三</h1><p>下面是评委的评论：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260523153547031.png"  alt="f38aac13beea6f49e5817a90851b261c"></p>
+<p>对于专家一：</p>
+<p>市场分析这块确实每咋下功夫，概要文档他也看出来不精炼了是让我哭笑不得，我真以为这些专家不会仔细看文档的，早知道不让lmk写概要文档了，他那AI的我一眼看出来了，确实是不够精炼。<br>PPT的话，我真不知道评委们喜欢啥样的PPT，我这和cyj他们的都是简约版的，古法手搓PPT，难道评委喜欢AI风的？好吧这个我暂时还想不通。</p>
+<p>对于专家二：</p>
+<p>说套话的一边去。。。不认真看我的作品我也不认真给你回复</p>
+<p>对于专家三：</p>
+<p>这是真认真看了的，对于他说不好看我一开始还是不认同的，但现在写了两天课设后我真心服口服了，我那界面确实AI味十足啊（原谅我和仝主任当时都不懂什么是AI味前端），毕竟这也是去年的项目来今年参赛了。唉，想想去年那个暑假，我还在手搓python后端，各种功能设计、实现逻辑都是我和仝主任靠两颗不如AI的大脑想的啊，在这智能体盛行的时代，去年的两个老艺术家也只能甘拜下风了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>缺乏创新点是最大的问题，要是有创新点的话，在概要文档、PPT以及实现中都可以重点拿出来说，也就不怕不精炼的问题了。<br>此时又能联想到不可替代性的那个说法了，<strong>只有你在一个领域或者一段关系中具有不可替代性，那你就不会失去重要性。</strong></p>
+<p>该退役了，打了两年竞赛我也乏了，收获的是一些不知道是否真有用的奖项和略超出平常人的工程能力，以及一些可靠的比赛经验，和一群同甘共苦过的人。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>AI时代</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>适用于python的数据库框架sqlalchemy</title>
+    <url>/2026/04/18/%E9%80%82%E7%94%A8%E4%BA%8Epython%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6sqlalchemy/</url>
+    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用</a></p>
+<p>在python中，我们常使用ORM（Object Relationship Mapping）框架来操作数据库，然后在众多ORM框架中，最主流的是SQLALchemy,它经常与fastapi搭配食用，因为都支持异步。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>写此篇时，我是看fastapi+sqlalchemy+vue的教程，所以主要记录的是异步版本的sqlalchemy(见下)，安装之后还得安装驱动，安装时注意也要安装异步的，详细安装步骤临时搜即可。</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip install <span class="string">&quot;sqlalchemy[asyncio]&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>注意初始化项目时，选择fastapi框架。每个框架的初始化都不同，每次从零自己新建文件夹有点蠢。</p>
+<h1 id="创建连接"><a href="#创建连接" class="headerlink" title="创建连接"></a>创建连接</h1><h3 id="1、配置连接参数"><a href="#1、配置连接参数" class="headerlink" title="1、配置连接参数"></a>1、配置连接参数</h3><p>使用<code>SQLAlchemy</code>连接数据库，是通过设置一个固定格式的字符串来实现的。<code>mysql+aiomysql</code>为例，那么其连接格式如下：（一般放在settings.py文件中）</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">DB_URI = <span class="string">&quot;mysql+aiomysql://用户名:密码@主机名:端口号/数据库名称?charset=utf8mb4&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>示例（本地）：</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">DB_URI = <span class="string">&quot;mysql+aiomysql://root:root@127.0.0.1:3306/book_db?charset=utf8mb4&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="2、创建Engine对象（管理连接用）"><a href="#2、创建Engine对象（管理连接用）" class="headerlink" title="2、创建Engine对象（管理连接用）"></a>2、创建Engine对象（管理连接用）</h3><p><code>SQLAlchemy</code>中的<code>Engine</code>对象，它负责管理数据库连接的创建（并不直接操作数据库）、连接池的维护、SQL语句的翻译等。<code>Engine</code>对象在整个程序中只能有一个。创建Engine对象代码如下：</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> create_async_engine</span><br><span class="line"></span><br><span class="line">engine = create_async_engine(</span><br><span class="line">    DB_URI,</span><br><span class="line">    <span class="comment"># 将输出所有执行SQL的日志（默认是关闭的）</span></span><br><span class="line">    echo=<span class="literal">True</span>,</span><br><span class="line">    <span class="comment"># 连接池大小（默认是5个）</span></span><br><span class="line">    pool_size=<span class="number">10</span>,</span><br><span class="line">    <span class="comment"># 允许连接池最大的连接数（默认是10个）</span></span><br><span class="line">    max_overflow=<span class="number">20</span>,</span><br><span class="line">    <span class="comment"># 获得连接超时时间（默认是30s）</span></span><br><span class="line">    pool_timeout=<span class="number">10</span>,</span><br><span class="line">    <span class="comment"># 连接回收时间（默认是-1，代表永不回收）</span></span><br><span class="line">    pool_recycle=<span class="number">3600</span>,</span><br><span class="line">    <span class="comment"># 连接前是否预检查（默认为False）</span></span><br><span class="line">    pool_pre_ping=<span class="literal">True</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+
+
+<h3 id="3、创建会话工厂"><a href="#3、创建会话工厂" class="headerlink" title="3、创建会话工厂"></a>3、创建会话工厂</h3><p>使用sqlalchemy.orm.sessionmaker类来创建会话工厂，这个会话工厂实际上就是Session或者它的子类，以后如果要操作数据库，那么就需要创建一个会话工厂的对象（即：Session类的对象），来完成相关操作。示例代码如下：</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"></span><br><span class="line">AsyncSessionFactory = sessionmaker(</span><br><span class="line">    <span class="comment"># Engine或者其子类对象（这里是AsyncEngine）</span></span><br><span class="line">    bind=engine,  <span class="comment"># 前面实例化的</span></span><br><span class="line">    <span class="comment"># Session类的代替（默认是Session类）</span></span><br><span class="line">    class_=AsyncSession,</span><br><span class="line">    <span class="comment"># 是否在查找之前执行flush操作（默认是True）</span></span><br><span class="line">    autoflush=<span class="literal">True</span>,</span><br><span class="line">    <span class="comment"># 是否在执行commit操作后Session就过期（默认是True）</span></span><br><span class="line">    expire_on_commit=<span class="literal">False</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h1 id="创建模型"><a href="#创建模型" class="headerlink" title="创建模型"></a>创建模型</h1><h3 id="1、定义Base类"><a href="#1、定义Base类" class="headerlink" title="1、定义Base类"></a>1、定义Base类</h3><p><code>Base</code>类是所有<code>ORM Model</code>类的父类，一个<code>ORM Model</code>类对应数据库中的一张表，<code>ORM Model</code>中的一个<code>Column</code>类属性对应数据库表中的一个字段。<code>Base</code>类的生成可以使用<code>sqlalchemy.ext.declarative.declarative_base</code>函数来实现，也可以继承<code>sqlalchemy.MetaData</code>类，实现自己的子类，并在子类中编写约束规范。示例代码如下：</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> MetaData</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义命名约定的Base类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span>(<span class="title class_ inherited__">DeclarativeBase</span>):</span><br><span class="line">    metadata = MetaData(naming_convention=&#123;</span><br><span class="line">        <span class="comment"># ix: index，索引。</span></span><br><span class="line">        <span class="string">&quot;ix&quot;</span>: <span class="string">&#x27;ix_%(column_0_label)s&#x27;</span>,</span><br><span class="line">        <span class="comment"># un：unique，唯一约束</span></span><br><span class="line">        <span class="string">&quot;uq&quot;</span>: <span class="string">&quot;uq_%(table_name)s_%(column_0_name)s&quot;</span>,</span><br><span class="line">        <span class="comment"># ck：Check，检查约束</span></span><br><span class="line">        <span class="string">&quot;ck&quot;</span>: <span class="string">&quot;ck_%(table_name)s_%(constraint_name)s&quot;</span>,</span><br><span class="line">        <span class="comment"># fk：Foreign Key，外键约束</span></span><br><span class="line">        <span class="string">&quot;fk&quot;</span>: <span class="string">&quot;fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s&quot;</span>,</span><br><span class="line">        <span class="comment"># pk：Primary Key，主键约束</span></span><br><span class="line">        <span class="string">&quot;pk&quot;</span>: <span class="string">&quot;pk_%(table_name)s&quot;</span></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="2、创建ORM模型"><a href="#2、创建ORM模型" class="headerlink" title="2、创建ORM模型"></a>2、创建ORM模型</h3><p>这里我们以创建一个User模型为例来说明模型的创建（每一个ORM模型对应数据库中的一张表）</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Integer, String, select</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> Mapped, mapped_column</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;user&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    email: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>),unique=<span class="literal">True</span>,index=<span class="literal">True</span>)</span><br><span class="line">    username: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    password: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">200</span>))</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h3 id="3、模型关系（各表关系）"><a href="#3、模型关系（各表关系）" class="headerlink" title="3、模型关系（各表关系）"></a>3、模型关系（各表关系）</h3><p>这里我们使用外键来实现一对一、一对多和多对多，示例代码如下：</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase, Mapped, mapped_column, relationship</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Integer, String, Text, ForeignKey</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;user&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    email: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>),unique=<span class="literal">True</span>,index=<span class="literal">True</span>)</span><br><span class="line">    username: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    password: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">200</span>))</span><br><span class="line"></span><br><span class="line">    user_extension: Mapped[<span class="string">&quot;UserExtension&quot;</span>] = relationship(back_populates=<span class="string">&quot;user&quot;</span>, uselist=<span class="literal">False</span>)</span><br><span class="line">    articles: Mapped[<span class="string">&#x27;Article&#x27;</span>] = relationship(back_populates=<span class="string">&quot;author&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 和User模型一对一关系</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UserExtension</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;user_extension&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    university: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    user_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&quot;user.id&quot;</span>))</span><br><span class="line">    user: Mapped[<span class="string">&quot;User&quot;</span>] = relationship(back_populates=<span class="string">&quot;user_extension&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 和Article是多对多关系</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tag</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;tag&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    name: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>), unique=<span class="literal">True</span>)</span><br><span class="line">    articles: Mapped[<span class="built_in">list</span>[<span class="string">&quot;Article&quot;</span>]] = relationship(<span class="string">&quot;Article&quot;</span>, secondary=<span class="string">&quot;article_tag&quot;</span>, back_populates=<span class="string">&#x27;tags&#x27;</span>, lazy=<span class="string">&#x27;dynamic&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 和User是一对多关系</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Article</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;article&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    title: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    content: Mapped[<span class="built_in">str</span>] = mapped_column(Text)</span><br><span class="line">    author_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&#x27;user.id&#x27;</span>))</span><br><span class="line">    author: Mapped[<span class="string">&quot;User&quot;</span>] = relationship(<span class="string">&quot;User&quot;</span>, back_populates=<span class="string">&#x27;articles&#x27;</span>)</span><br><span class="line">    tags: Mapped[<span class="built_in">list</span>[<span class="string">&quot;Tag&quot;</span>]] = relationship(<span class="string">&quot;Tag&quot;</span>, secondary=<span class="string">&quot;article_tag&quot;</span>, back_populates=<span class="string">&#x27;articles&#x27;</span>, lazy=<span class="string">&#x27;dynamic&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Article和Tag多对多关系的中间表</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ArticleTag</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&quot;article_tag&quot;</span></span><br><span class="line">    article_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&quot;article.id&quot;</span>), primary_key=<span class="literal">True</span>)</span><br><span class="line">    tag_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&quot;tag.id&quot;</span>), primary_key=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>看代码的话有点复杂，感觉很多时候也没必要理解各个表的关系，vibecoding时应该更不用管</p>
+<h1 id="模型迁移"><a href="#模型迁移" class="headerlink" title="模型迁移"></a>模型迁移</h1><p>模型定义好后，要将模型映射到数据库中生成表，或者是以后模型上的字段名、字段类型等发生改变了，可以非常方便的使用<code>alembic</code>来进行迁移。</p>
+<h3 id="迁移用的包"><a href="#迁移用的包" class="headerlink" title="迁移用的包"></a>迁移用的包</h3><div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip install alembic==1.13.2</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>吐槽：怎么干个啥动作都要安装一个包，就这玩意不能直接集成到sqlalchemy中吗？</p>
+<p>用法：和git差不多(也支持版本回退)，得先创建迁移仓库，然后生成迁移脚本（效果图如下），具体的问AI</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260418154157803.png"  alt="image-20260418154150494"></p>
+<h1 id="后续工作"><a href="#后续工作" class="headerlink" title="后续工作"></a>后续工作</h1><p>上面讲的是数据库模块细节，在项目中，它还是要与其它模块对接的。这个过程中，session作为中间人，在python端的main函数等模块和数据库之前起桥梁作用。</p>
+<h1 id="感言"><a href="#感言" class="headerlink" title="感言"></a>感言</h1><p>说实话专门拿一个框架来管理数据库还是有点麻烦，感觉不如直接去数据库中执行sql语句来的方便。但是在vibecoding中AI真的会告诉我应该怎么执行sql语句吗，在这个角度来看，应该还是用高级语言来写数据库方便点，也许是初学的原因，感觉有点复杂，或许以后可以试试其它轻量级的数据库框架？pysql?sqllite?</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>迟来的个人博客</title>
     <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
 <p>感觉像一名顶尖、可爱的黑客成长史，我们总说学过的东西容易忘，那这样记下来不就好了。但又说忘了当场查就行，但仔细想了下，其实博客不一定当备忘录用，也可以当笔记本、日记本，总之当我仔细地去看下别人的博客时，总能感受到这博客大有用处，每次点进一个博客网站，像是走进了别人的赛博家园，而我也想有这么一个家。</p>
 <p>学了快两年计算机了才开始搭博客，我难道要把学过的东西全整理上来？这么一想有点为时已晚的感觉，但<strong>当我感觉是否晚了的时候，恰好是最早的时候</strong>，那么说干就干吧！</p>
-<h1>hexo搭建个人博客</h1>
-<p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
+<h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
 <p>主要卡在上传到github然后公网访问时，图片没渲染出来，原来是执行hexo g时未成功生成，因为图片路径的处理问题，和AI拉扯半天，说的越多它越发癫，最后新开了个会话成功解决。</p>
-<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
+<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
 <p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214621930.png"  alt="image-20260408214621485"></p>
-<h1>之后写一篇博客并完成上传的流程</h1>
-<ol>
-<li>
-<p>在blog目录下开终端</p>
+<h1 id="之后写一篇博客并完成上传的流程"><a href="#之后写一篇博客并完成上传的流程" class="headerlink" title="之后写一篇博客并完成上传的流程"></a>之后写一篇博客并完成上传的流程</h1><ol>
+<li><p>在blog目录下开终端</p>
 </li>
-<li>
-<p>执行hexo new “文件名（我喜欢用标题）”</p>
+<li><p>执行hexo new “文件名（我喜欢用标题）”</p>
 </li>
-<li>
-<p>打开新生成的.md文件，开始编写，写完后记得保存</p>
+<li><p>打开新生成的.md文件，开始编写，写完后记得保存</p>
 </li>
-<li>
-<p>回到终端依次执行<br>
-hexo clean    （清理缓存）<br>
-hexo g    (生成静态页面)<br>
-hexo d    （上传到github仓库）</p>
+<li><p>回到终端依次执行<br>hexo clean    （清理缓存）<br>hexo g    (生成静态页面)<br>hexo d    （上传到github仓库）</p>
 </li>
 </ol>
 ]]></content>
@@ -353,58 +378,6 @@ hexo d    （上传到github仓库）</p>
       </categories>
       <tags>
         <tag>框架使用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>适用于python的数据库框架sqlalchemy</title>
-    <url>/2026/04/18/%E9%80%82%E7%94%A8%E4%BA%8Epython%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6sqlalchemy/</url>
-    <content><![CDATA[<h1>简介</h1>
-<p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc?#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用</a></p>
-<p>在python中，我们常使用ORM（Object Relationship Mapping）框架来操作数据库，然后在众多ORM框架中，最主流的是SQLALchemy,它经常与fastapi搭配食用，因为都支持异步。</p>
-<h1>安装</h1>
-<p>写此篇时，我是看fastapi+sqlalchemy+vue的教程，所以主要记录的是异步版本的sqlalchemy(见下)，安装之后还得安装驱动，安装时注意也要安装异步的，详细安装步骤临时搜即可。</p>
-<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip install <span class="string">&quot;sqlalchemy[asyncio]&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>注意初始化项目时，选择fastapi框架。每个框架的初始化都不同，每次从零自己新建文件夹有点蠢。</p>
-<h1>创建连接</h1>
-<h3 id="1、配置连接参数">1、配置连接参数</h3>
-<p>使用<code>SQLAlchemy</code>连接数据库，是通过设置一个固定格式的字符串来实现的。<code>mysql+aiomysql</code>为例，那么其连接格式如下：（一般放在settings.py文件中）</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">DB_URI = <span class="string">&quot;mysql+aiomysql://用户名:密码@主机名:端口号/数据库名称?charset=utf8mb4&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>示例（本地）：</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">DB_URI = <span class="string">&quot;mysql+aiomysql://root:root@127.0.0.1:3306/book_db?charset=utf8mb4&quot;</span></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="2、创建Engine对象（管理连接用）">2、创建Engine对象（管理连接用）</h3>
-<p><code>SQLAlchemy</code>中的<code>Engine</code>对象，它负责管理数据库连接的创建（并不直接操作数据库）、连接池的维护、SQL语句的翻译等。<code>Engine</code>对象在整个程序中只能有一个。创建Engine对象代码如下：</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> create_async_engine</span><br><span class="line"></span><br><span class="line">engine = create_async_engine(</span><br><span class="line">    DB_URI,</span><br><span class="line">    <span class="comment"># 将输出所有执行SQL的日志（默认是关闭的）</span></span><br><span class="line">    echo=<span class="literal">True</span>,</span><br><span class="line">    <span class="comment"># 连接池大小（默认是5个）</span></span><br><span class="line">    pool_size=<span class="number">10</span>,</span><br><span class="line">    <span class="comment"># 允许连接池最大的连接数（默认是10个）</span></span><br><span class="line">    max_overflow=<span class="number">20</span>,</span><br><span class="line">    <span class="comment"># 获得连接超时时间（默认是30s）</span></span><br><span class="line">    pool_timeout=<span class="number">10</span>,</span><br><span class="line">    <span class="comment"># 连接回收时间（默认是-1，代表永不回收）</span></span><br><span class="line">    pool_recycle=<span class="number">3600</span>,</span><br><span class="line">    <span class="comment"># 连接前是否预检查（默认为False）</span></span><br><span class="line">    pool_pre_ping=<span class="literal">True</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="3、创建会话工厂">3、创建会话工厂</h3>
-<p>使用sqlalchemy.orm.sessionmaker类来创建会话工厂，这个会话工厂实际上就是Session或者它的子类，以后如果要操作数据库，那么就需要创建一个会话工厂的对象（即：Session类的对象），来完成相关操作。示例代码如下：</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"></span><br><span class="line">AsyncSessionFactory = sessionmaker(</span><br><span class="line">    <span class="comment"># Engine或者其子类对象（这里是AsyncEngine）</span></span><br><span class="line">    bind=engine,  <span class="comment"># 前面实例化的</span></span><br><span class="line">    <span class="comment"># Session类的代替（默认是Session类）</span></span><br><span class="line">    class_=AsyncSession,</span><br><span class="line">    <span class="comment"># 是否在查找之前执行flush操作（默认是True）</span></span><br><span class="line">    autoflush=<span class="literal">True</span>,</span><br><span class="line">    <span class="comment"># 是否在执行commit操作后Session就过期（默认是True）</span></span><br><span class="line">    expire_on_commit=<span class="literal">False</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h1>创建模型</h1>
-<h3 id="1、定义Base类">1、定义Base类</h3>
-<p><code>Base</code>类是所有<code>ORM Model</code>类的父类，一个<code>ORM Model</code>类对应数据库中的一张表，<code>ORM Model</code>中的一个<code>Column</code>类属性对应数据库表中的一个字段。<code>Base</code>类的生成可以使用<code>sqlalchemy.ext.declarative.declarative_base</code>函数来实现，也可以继承<code>sqlalchemy.MetaData</code>类，实现自己的子类，并在子类中编写约束规范。示例代码如下：</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> MetaData</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义命名约定的Base类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span>(<span class="title class_ inherited__">DeclarativeBase</span>):</span><br><span class="line">    metadata = MetaData(naming_convention=&#123;</span><br><span class="line">        <span class="comment"># ix: index，索引。</span></span><br><span class="line">        <span class="string">&quot;ix&quot;</span>: <span class="string">&#x27;ix_%(column_0_label)s&#x27;</span>,</span><br><span class="line">        <span class="comment"># un：unique，唯一约束</span></span><br><span class="line">        <span class="string">&quot;uq&quot;</span>: <span class="string">&quot;uq_%(table_name)s_%(column_0_name)s&quot;</span>,</span><br><span class="line">        <span class="comment"># ck：Check，检查约束</span></span><br><span class="line">        <span class="string">&quot;ck&quot;</span>: <span class="string">&quot;ck_%(table_name)s_%(constraint_name)s&quot;</span>,</span><br><span class="line">        <span class="comment"># fk：Foreign Key，外键约束</span></span><br><span class="line">        <span class="string">&quot;fk&quot;</span>: <span class="string">&quot;fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s&quot;</span>,</span><br><span class="line">        <span class="comment"># pk：Primary Key，主键约束</span></span><br><span class="line">        <span class="string">&quot;pk&quot;</span>: <span class="string">&quot;pk_%(table_name)s&quot;</span></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="2、创建ORM模型">2、创建ORM模型</h3>
-<p>这里我们以创建一个User模型为例来说明模型的创建（每一个ORM模型对应数据库中的一张表）</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Integer, String, select</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> Mapped, mapped_column</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;user&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    email: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>),unique=<span class="literal">True</span>,index=<span class="literal">True</span>)</span><br><span class="line">    username: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    password: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">200</span>))</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h3 id="3、模型关系（各表关系）">3、模型关系（各表关系）</h3>
-<p>这里我们使用外键来实现一对一、一对多和多对多，示例代码如下：</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> DeclarativeBase, Mapped, mapped_column, relationship</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Integer, String, Text, ForeignKey</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;user&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    email: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>),unique=<span class="literal">True</span>,index=<span class="literal">True</span>)</span><br><span class="line">    username: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    password: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">200</span>))</span><br><span class="line"></span><br><span class="line">    user_extension: Mapped[<span class="string">&quot;UserExtension&quot;</span>] = relationship(back_populates=<span class="string">&quot;user&quot;</span>, uselist=<span class="literal">False</span>)</span><br><span class="line">    articles: Mapped[<span class="string">&#x27;Article&#x27;</span>] = relationship(back_populates=<span class="string">&quot;author&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 和User模型一对一关系</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UserExtension</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;user_extension&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    university: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    user_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&quot;user.id&quot;</span>))</span><br><span class="line">    user: Mapped[<span class="string">&quot;User&quot;</span>] = relationship(back_populates=<span class="string">&quot;user_extension&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 和Article是多对多关系</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Tag</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;tag&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    name: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>), unique=<span class="literal">True</span>)</span><br><span class="line">    articles: Mapped[<span class="built_in">list</span>[<span class="string">&quot;Article&quot;</span>]] = relationship(<span class="string">&quot;Article&quot;</span>, secondary=<span class="string">&quot;article_tag&quot;</span>, back_populates=<span class="string">&#x27;tags&#x27;</span>, lazy=<span class="string">&#x27;dynamic&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 和User是一对多关系</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Article</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&#x27;article&#x27;</span></span><br><span class="line">    <span class="built_in">id</span>: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    title: Mapped[<span class="built_in">str</span>] = mapped_column(String(<span class="number">100</span>))</span><br><span class="line">    content: Mapped[<span class="built_in">str</span>] = mapped_column(Text)</span><br><span class="line">    author_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&#x27;user.id&#x27;</span>))</span><br><span class="line">    author: Mapped[<span class="string">&quot;User&quot;</span>] = relationship(<span class="string">&quot;User&quot;</span>, back_populates=<span class="string">&#x27;articles&#x27;</span>)</span><br><span class="line">    tags: Mapped[<span class="built_in">list</span>[<span class="string">&quot;Tag&quot;</span>]] = relationship(<span class="string">&quot;Tag&quot;</span>, secondary=<span class="string">&quot;article_tag&quot;</span>, back_populates=<span class="string">&#x27;articles&#x27;</span>, lazy=<span class="string">&#x27;dynamic&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Article和Tag多对多关系的中间表</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ArticleTag</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&quot;article_tag&quot;</span></span><br><span class="line">    article_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&quot;article.id&quot;</span>), primary_key=<span class="literal">True</span>)</span><br><span class="line">    tag_id: Mapped[<span class="built_in">int</span>] = mapped_column(Integer, ForeignKey(<span class="string">&quot;tag.id&quot;</span>), primary_key=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>看代码的话有点复杂，感觉很多时候也没必要理解各个表的关系，vibecoding时应该更不用管</p>
-<h1>模型迁移</h1>
-<p>模型定义好后，要将模型映射到数据库中生成表，或者是以后模型上的字段名、字段类型等发生改变了，可以非常方便的使用<code>alembic</code>来进行迁移。</p>
-<h3 id="迁移用的包">迁移用的包</h3>
-<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip install alembic==1.13.2</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>吐槽：怎么干个啥动作都要安装一个包，就这玩意不能直接集成到sqlalchemy中吗？</p>
-<p>用法：和git差不多(也支持版本回退)，得先创建迁移仓库，然后生成迁移脚本（效果图如下），具体的问AI</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260418154157803.png"  alt="image-20260418154150494"></p>
-<h1>后续工作</h1>
-<p>上面讲的是数据库模块细节，在项目中，它还是要与其它模块对接的。这个过程中，session作为中间人，在python端的main函数等模块和数据库之前起桥梁作用。</p>
-<h1>感言</h1>
-<p>说实话专门拿一个框架来管理数据库还是有点麻烦，感觉不如直接去数据库中执行sql语句来的方便。但是在vibecoding中AI真的会告诉我应该怎么执行sql语句吗，在这个角度来看，应该还是用高级语言来写数据库方便点，也许是初学的原因，感觉有点复杂，或许以后可以试试其它轻量级的数据库框架？pysql?sqllite?</p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
       </tags>
   </entry>
 </search>
