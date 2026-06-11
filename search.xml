@@ -89,6 +89,158 @@
       </tags>
   </entry>
   <entry>
+    <title>flask与fastAPI巩固</title>
+    <url>/2026/06/10/flask%E4%B8%8EfastAPI%E5%B7%A9%E5%9B%BA/</url>
+    <content><![CDATA[<h1 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h1><h2 id="并发模型对比"><a href="#并发模型对比" class="headerlink" title="并发模型对比"></a>并发模型对比</h2><div class="table-container"><table>
+<thead>
+<tr>
+<th align="left">框架</th>
+<th align="left">并发方式</th>
+<th align="left">原理</th>
+<th align="left">适合场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Flask</strong></td>
+<td align="left">多线程&#x2F;多进程</td>
+<td align="left">每个请求新建线程</td>
+<td align="left">CPU密集型、阻塞IO</td>
+</tr>
+<tr>
+<td align="left"><strong>FastAPI</strong></td>
+<td align="left">异步事件循环（单线程）</td>
+<td align="left">await 切换任务</td>
+<td align="left">高并发IO操作</td>
+</tr>
+</tbody></table></div>
+<p>flask实现并发大概流程：<br>假如app.py集成了路由，然后路由下定义了业务逻辑函数，那么当多个请求到来时，各个请求互不影响，app.py会为各个请求创建线程，每个线程各自执行。所以假如业务逻辑函数实现需要3秒，当三个请求同时来到时，总处理时间也是3秒。</p>
+<p>对于高并发以及实时场景，更主流的框架是faskAPI，后面简称fast。所以我重点学习fast</p>
+<p>下面是app.py</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&#x27;/sleep&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">sleep</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务开始&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)  <span class="comment"># 模拟IO等待</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务结束&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;ok&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">import</span> uvicorn  //要用uvicorn启动fast项目，但是官方推荐在命令行用   						//uvicorn app:app --reload 启动</span><br><span class="line">    uvicorn.run(app, host=<span class="string">&quot;127.0.0.1&quot;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>下面是test_fastapi_client.py，用于模拟用户请求</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> httpx//支持异步的客户端，与asyncio.gather配合来同时发请求</span><br><span class="line"></span><br><span class="line">URL = <span class="string">&quot;http://127.0.0.1:8000/sleep&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">fetch</span>(<span class="params">client, request_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;异步发起 GET 请求并打印耗时&quot;&quot;&quot;</span></span><br><span class="line">    start_time = time.time()</span><br><span class="line">    response = <span class="keyword">await</span> client.get(URL)</span><br><span class="line">    end_time = time.time()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[请求 <span class="subst">&#123;request_id&#125;</span>] 状态码: <span class="subst">&#123;response.status_code&#125;</span>, &quot;</span></span><br><span class="line">          <span class="string">f&quot;响应内容: <span class="subst">&#123;response.text&#125;</span>, &quot;</span></span><br><span class="line">          <span class="string">f&quot;耗时: <span class="subst">&#123;end_time - start_time:<span class="number">.2</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 使用 httpx.AsyncClient 保持长连接，提升并发性能</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> httpx.AsyncClient() <span class="keyword">as</span> client:</span><br><span class="line">        tasks = []</span><br><span class="line">        total_start = time.time()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建 3 个并发任务</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">4</span>):</span><br><span class="line">            tasks.append(fetch(client, i))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 使用 gather 并发执行所有任务</span></span><br><span class="line">        <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"></span><br><span class="line">        total_end = time.time()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">40</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;总耗时: <span class="subst">&#123;total_end - total_start:<span class="number">.2</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    asyncio.run(main())</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>运行后终端打印分别如下：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610201556890.png"  alt="image-20260610201556812"><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610201610304.png"  alt="image-20260610201610262"></p>
+<p>为什么是2，1，3呢？因为逻辑是先创建任务（把任务加到人物列表中），然后并发执行，执行先后顺序多少会有细微不同（随机情况）</p>
+<h2 id="为什么要用httpx-AsyncClient-保持长连接"><a href="#为什么要用httpx-AsyncClient-保持长连接" class="headerlink" title="为什么要用httpx.AsyncClient 保持长连接"></a>为什么要用httpx.AsyncClient 保持长连接</h2><p>这里涉及到通信问题。首先要说明flask和fast都是用的http协议通信。</p>
+<p>在使用普通的同步 HTTP 客户端（如 <code>requests</code>）时，每次发起请求都会经历：<strong>建立 TCP 连接 -&gt; 发送数据 -&gt; 接收数据 -&gt; 关闭连接</strong>。如果并发发 3 个请求，就会重复这个过程 3 次。</p>
+<p>而在 FastAPI 的异步世界中，我们使用 <code>httpx.AsyncClient</code> 作为上下文管理器（<code>async with httpx.AsyncClient() as client:</code>），起到连接复用的功能：它在后台维持底层的 TCP 连接不中断。当连续发出多个请求时，它会直接复用已经建立好的通道，省去了反复握手、建立连接的开销。</p>
+<p>fast这个异步模型，基于事件循环来工作。当遇到await操作时，当前协程会主动让出事件循环的控制权，使其立马去处理其它的http请求，等await操作完成了再回来继续执行下一步。这里可以理解为主厨同时炒多个菜，然后到处走动</p>
+<p>注意点：</p>
+<p>虽然这里例子中fast用的是http协议，但是它也原生支持websocket协议，用于实时通话等场景：</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@app.websocket(<span class="params"><span class="string">&quot;/ws&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">websocket_endpoint</span>(<span class="params">websocket: WebSocket</span>):</span><br><span class="line">    <span class="keyword">await</span> websocket.accept()</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        data = <span class="keyword">await</span> websocket.receive_text()</span><br><span class="line">        <span class="keyword">await</span> websocket.send_text(<span class="string">f&quot;Message text was: <span class="subst">&#123;data&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+
+
+<p>fast有个优点就是可以自动生成接口文档，假如项目运行在localhost:9999，那么localhost:9999&#x2F;doc就是文档界面。</p>
+<h1 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h1><p>这就是著名的三次握手、四次挥手协议</p>
+<p>我们可以把它想象成两个人（客户端 A 和服务器 B）在嘈杂的环境中打电话：</p>
+<ul>
+<li><strong>第一次握手（A -&gt; B）：</strong> A 拨通电话说：“喂，你能听到我说话吗？”（这在技术上叫发送 <code>SYN</code> 报文，表示请求建立连接）。</li>
+<li><strong>第二次握手（B -&gt; A）：</strong> B 听到了，回复道：“我能听到你说话！那你能听到我说话吗？”（技术上叫返回 <code>SYN + ACK</code>，表示同意并反问确认）。</li>
+<li><strong>第三次握手（A -&gt; B）：</strong> A 回答道：“我也能听到你说话！”（技术上叫发送 <code>ACK</code>，表示最终确认）。</li>
+</ul>
+<p>既然有开始，就有结束。当数据传输完毕，不需要再聊的时候，就需要断开连接。因为 TCP 是双向的（既能发又能收），所以关闭连接比建立连接多了一步，被称为<strong>四次挥手</strong>：</p>
+<ul>
+<li>A 说：“我说完了。”（FIN）</li>
+<li>B 回：“好的，我知道了。”（ACK）</li>
+<li>B 接着说：“我也说完了。”（FIN）</li>
+<li>A 回：“好的，那就挂了吧。”（ACK）</li>
+</ul>
+<h2 id="协议套娃"><a href="#协议套娃" class="headerlink" title="协议套娃"></a>协议套娃</h2><p>TCP协议是HTTP协议和Websocket协议的底层协议。这里联系到协议套娃：</p>
+<p>在计算机里，当你通过浏览器访问一个网页时，数据是这样一层层往下传的：</p>
+<ul>
+<li><strong>应用层 (HTTP)：</strong> 浏览器说：“我要请求 <code>/sleep</code> 接口！”（写好信件内容）</li>
+<li><strong>传输层 (TCP)：</strong> 操作系统接过信件，把它塞进信封，贴上收发件人地址，并准备发起“三次握手”确认通道。（安排物流运输）</li>
+<li><strong>网络层 (IP)：</strong> 邮政局看着信封上的地址，决定这封信要经过哪几个城市的转运中心才能到达对方电脑。（规划跨城市运输路线）</li>
+<li><strong>物理&#x2F;链路层 (网线&#x2F;Wi-Fi)：</strong> 最终变成电信号或无线电波，通过网线和路由器发送出去。（货车开上高速公路）</li>
+</ul>
+<p>当数据到达服务器时，再反过来一层层拆开（解封装），最后把 HTTP 的内容交给 FastAPI 或 Flask 处理。</p>
+<h1 id="ORM（对象关系映射）"><a href="#ORM（对象关系映射）" class="headerlink" title="ORM（对象关系映射）"></a>ORM（对象关系映射）</h1><p>对于fast,官方给的orm是sqlalchemy（之前有过学习），今天学习Tortoise,受Djiango启发。</p>
+<h3 id="fast的ORM操作，主要参考"><a href="#fast的ORM操作，主要参考" class="headerlink" title="fast的ORM操作，主要参考"></a>fast的ORM操作，主要参考</h3><h4 id="1、创建模型"><a href="#1、创建模型" class="headerlink" title="1、创建模型"></a>1、创建模型</h4><p>以选课系统为例：创建个模型类文件 models.py，每个类对应一张表</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#导入tortoise</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tortoise.models <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> tortoise <span class="keyword">import</span> fields</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建班级类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Clas</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;班级名称&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建老师类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Teacher</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    <span class="built_in">id</span> = fields.IntField(pk=<span class="literal">True</span>)</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;姓名&#x27;</span>)</span><br><span class="line">    tno = fields.IntField(description=<span class="string">&#x27;账号&#x27;</span>)</span><br><span class="line">    pwd = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;密码&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#课程表</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Course</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    <span class="built_in">id</span> = fields.IntField(pk=<span class="literal">True</span>)</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;课程名&#x27;</span>)</span><br><span class="line">    teacher = fields.ForeignKeyField(<span class="string">&#x27;models.Teacher&#x27;</span>, related_name=<span class="string">&#x27;courses&#x27;</span>, description=<span class="string">&#x27;课程讲师&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建学生类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    <span class="built_in">id</span> = fields.IntField(pk=<span class="literal">True</span>)</span><br><span class="line">    sno = fields.IntField(description=<span class="string">&#x27;学号&#x27;</span>)</span><br><span class="line">    <span class="comment">#description 在接口文档有个显示</span></span><br><span class="line">    pwd = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;密码&#x27;</span>)</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;姓名&#x27;</span>)</span><br><span class="line">    <span class="comment"># 一对多，反向查询时使用related_name</span></span><br><span class="line">    clas = fields.ForeignKeyField(<span class="string">&#x27;models.Clas&#x27;</span>, related_name=<span class="string">&#x27;students&#x27;</span>)</span><br><span class="line">    <span class="comment"># 多对多</span></span><br><span class="line">    courses = fields.ManyToManyField(<span class="string">&#x27;models.Course&#x27;</span>, related_name=<span class="string">&#x27;students&#x27;</span>,description=<span class="string">&#x27;学生选课表&#x27;</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h4 id="2、创建数据库连接配置文件"><a href="#2、创建数据库连接配置文件" class="headerlink" title="2、创建数据库连接配置文件"></a>2、创建数据库连接配置文件</h4><p>创建settings.py 配置文件</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TORTOISE_ORM = &#123;</span><br><span class="line">    <span class="string">&#x27;connections&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;default&#x27;</span>: &#123;</span><br><span class="line">            <span class="comment"># &#x27;engine&#x27;: &#x27;tortoise.backends.asyncpg&#x27;,  PostgreSQL</span></span><br><span class="line">            <span class="string">&#x27;engine&#x27;</span>: <span class="string">&#x27;tortoise.backends.mysql&#x27;</span>,  <span class="comment"># MySQL or Mariadb</span></span><br><span class="line">            <span class="string">&#x27;credentials&#x27;</span>: &#123;</span><br><span class="line">                <span class="string">&#x27;host&#x27;</span>: <span class="string">&#x27;10.10.0.52&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;port&#x27;</span>: <span class="string">&#x27;3306&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;user&#x27;</span>: <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;password&#x27;</span>: <span class="string">&#x27;Jingxxxxxxxx&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;database&#x27;</span>: <span class="string">&#x27;fastapi&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;minsize&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">&#x27;maxsize&#x27;</span>: <span class="number">5</span>,</span><br><span class="line">                <span class="string">&#x27;charset&#x27;</span>: <span class="string">&#x27;utf8mb4&#x27;</span>,</span><br><span class="line">                <span class="string">&quot;echo&quot;</span>: <span class="literal">True</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;apps&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;models&#x27;</span>: &#123;</span><br><span class="line">            <span class="comment">#这个models就是自己配置的models.py位置</span></span><br><span class="line"></span><br><span class="line">            <span class="string">&#x27;models&#x27;</span>: [<span class="string">&#x27;models&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;default_connection&#x27;</span>: <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;use_tz&#x27;</span>: <span class="literal">False</span>,</span><br><span class="line">    <span class="string">&#x27;timezone&#x27;</span>: <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h4 id="3、启动项目"><a href="#3、启动项目" class="headerlink" title="3、启动项目"></a>3、启动项目</h4><p>app.py启动项目</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI  <span class="comment"># FastAPI 是一个为你的 API 提供了所有功能的 Python 类。</span></span><br><span class="line"><span class="keyword">import</span> uvicorn</span><br><span class="line"><span class="keyword">from</span> tortoise.contrib.fastapi <span class="keyword">import</span> register_tortoise</span><br><span class="line"><span class="keyword">from</span> settings <span class="keyword">import</span> TORTOISE_ORM</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建应用程序，app是应用程序名</span></span><br><span class="line">app = FastAPI()  <span class="comment"># 这个实例将是创建你所有 API 的主要交互对象。这个 app 同样在如下命令中被 uvicorn 所引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 该方法会在fastapi启动时触发，内部通过传递进去的app对象，监听服务启动和终止事件</span></span><br><span class="line"><span class="comment"># 当检测到启动事件时，会初始化Tortoise对象，如果generate_schemas为True则还会进行数据库迁移</span></span><br><span class="line"><span class="comment"># 当检测到终止事件时，会关闭连接</span></span><br><span class="line">register_tortoise(</span><br><span class="line">    app,</span><br><span class="line">    <span class="comment">#数据库配置信息</span></span><br><span class="line">    config=TORTOISE_ORM,</span><br><span class="line">    <span class="comment"># generate_schemas=True,  # 如果数据库为空，则自动生成对应表单，生产环境不要开</span></span><br><span class="line">    <span class="comment"># add_exception_handlers=True,  # 生产环境不要开，会泄露调试信息</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment">#注意，run的第一个参数 必须是文件名:应用程序名</span></span><br><span class="line">    uvicorn.run(<span class="string">&quot;quickstart:app&quot;</span>, port=<span class="number">8080</span>,  reload=<span class="literal">True</span>, workers=<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>正常启动后便连接到了数据库</p>
+<h4 id="4、根据模型类创建数据库表"><a href="#4、根据模型类创建数据库表" class="headerlink" title="4、根据模型类创建数据库表"></a>4、根据模型类创建数据库表</h4><p>这里依靠ORM迁移工具aerich，结合tortoise异步orm框架使用。</p>
+<p>迁移工具可以理解为核心功能是生成和执行数据库迁移脚本（SQL），实现数据库的增删改（没有查，并非少打字）功能，然后异步可以理解为aerich和tortoise是高度绑定的，它们共用配置文件，当执行查询等操作时，这些I&#x2F;O操作都是非阻塞的。</p>
+<p>回到操作步骤，这一步骤分多个小步骤，大概是初始化配置、然后迁移操作、回退操作（类似git）等，都是用命令实现，命令语句和大多工具的用法差不多。具体可参考原文。</p>
+<h3 id="查询功能"><a href="#查询功能" class="headerlink" title="查询功能"></a>查询功能</h3><p>在分发的路由中的路由函数中，把sql的查询语句写成查询函数：</p>
+<p>all查询：<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/0610343cea9374b065e7a9d429cc470c.png"  alt="在这里插入图片描述"></p>
+<p>循环打印：<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/5aeefbf815f261af8b09e696035f051a.png"  alt="在这里插入图片描述"></p>
+<h3 id="静态页面"><a href="#静态页面" class="headerlink" title="静态页面"></a>静态页面</h3><p>就是把查询到的信息，以你喜欢的方式，更好看的呈现在浏览器上。</p>
+<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#导入模板的包</span></span><br><span class="line"><span class="keyword">from</span> fastapi.templating <span class="keyword">import</span> Jinja2Templates</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化Jinja2对象，并将文件夹路径设置为以templates命名的文件夹</span></span><br><span class="line">templates = Jinja2Templates(directory=<span class="string">&quot;templates&quot;</span>)</span><br><span class="line"></span><br><span class="line">接口：</span><br><span class="line"><span class="meta">@api_student.get(<span class="params"><span class="string">&quot;/index&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">show_student</span>(<span class="params">request:Request</span>):</span><br><span class="line">    students = <span class="keyword">await</span> Student.<span class="built_in">all</span>()</span><br><span class="line">    <span class="keyword">return</span> templates.TemplateResponse(</span><br><span class="line">        <span class="string">&#x27;index.html&#x27;</span>, <span class="comment">#第一个参数放模板文件</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;request&#x27;</span>: request,  <span class="comment"># 注意，返回模板响应时，必须有request键值对，且值为Request请求对象</span></span><br><span class="line">            <span class="string">&#x27;students&#x27;</span>:students</span><br><span class="line"></span><br><span class="line">        &#125;, <span class="comment">#context上下文对象，是个字典</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/19236d03204c15f027df67dfcc6d044e.png"  alt="在这里插入图片描述"></p>
+<p>启动程序后，浏览器访问：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/4e220b1d0a7bd8e121930693da241c12.png"  alt="在这里插入图片描述"></p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>flask</tag>
+        <tag>fastAPI</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>做一张行测卷</title>
+    <url>/2026/06/10/%E5%81%9A%E4%B8%80%E5%BC%A0%E8%A1%8C%E6%B5%8B%E5%8D%B7/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>家里一直希望我考公， 可我总是那么抗拒。首先我考公学习上没多少天赋，即不擅长那种题型，其次我不喜欢公务员的生活，那种一考定终身的事情是不是太禁锢人了，我反而更想自由就职。</p>
+<p>但舅舅都提过几次公安网警了，查了一些资料，大概就是有些岗位也需要用到计算机技术，不至于会浪费现在所学到的技术知识。</p>
+<p>那么就做一张行测卷子试试看，到底适不适合走这条路。</p>
+<h1 id="网课速通"><a href="#网课速通" class="headerlink" title="网课速通"></a>网课速通</h1><p>直接做题肯定是艰难又艰巨的，之前了解了下判断推理就能得出做行测还是有很多的技巧的，学了和不学差距真挺大。</p>
+<p>让我先去找一个时长少的网课看看。<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610092036040.png"  alt="image-20260610092028938"></p>
+<p>emm,上午九点，5人正在看啥意思。我寻思今天距离国考还有很长时间吧，他们要考公不应该看系统课么。难不成有情况和我一样的？那真要祝另外四个人能尽早找到自己的心之所向了。</p>
+<p>看了十几分钟，我又回来了，感觉没啥效果，因为考察的素养和高中语文有点像，然而素养这个东西像英语一样，没法速成，我还是直接去做卷子吧。</p>
+<h1 id="小憩"><a href="#小憩" class="headerlink" title="小憩"></a>小憩</h1><p>不是做完试卷了，而是手写笔没电了。那么就利用这个小憩时间写一下当前的感想。</p>
+<p>差不多用了一个小时，做了50道题，其中有大概40道是完全不会的。这也正常，关键问题是，我难以进入心流状态。</p>
+<p>先不管题目正确率的问题，我要检测自己能否学的进行测，就得测试自己是不是容易心流，可我每道题要读好几遍才能理解题意，很多东西我都看不懂。这可能有两种原因：<br>1、我因为不知道这个知识点导致我大脑无法思考，进入看天书状态<br>2、我对这类题型完全提不起兴趣，对不不敢兴趣的东西难以集中注意力</p>
+<p>不管是哪种原因，都指向了我不擅长考公的事实。</p>
+<p>然后做到选词填空的时候，我冒出一个想法。只有准确理解某个词的意思才能精准选中答案，如果我形成这么一个用词精准的思维，那么会失去一种幽默性，我整个人会变得无聊起来。因为生活中用词不准确或者瞎用其实是一种幽默性行为，我不想丧失这么一个人格趣味点。</p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>并非做完了试卷，而是做不下去了，时间走完两个小时我才做一半题目，真的举步维艰。而且也到饭点了，然后就粗略的看了看后面的题型，题型都是见过的，那种小学奥数题、图表分析题（依旧题目要看好几遍才能看懂，这种感觉就是不在状态的感觉）。</p>
+<p>索然无味。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没必要去批改了，也没必要去深挖做题目做的不顺利的原因。总之能很明确的发掘到，我对考公不感兴趣，甚至有点抗拒。</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>考公</tag>
+        <tag>行测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>充值事件</title>
+    <url>/2026/05/07/%E5%85%85%E5%80%BC%E4%BA%8B%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>现在回家最主要的事情就是管一管我那不听话的妹妹了，这不五一假期又闹事。</p>
+<p>在放假之前就听到妈妈说玩蛋仔充值了三百多，我由于在学校没法多管，只叫她自己反省，可口头上的惩罚终究是无足轻重。</p>
+<h1 id="查手机"><a href="#查手机" class="headerlink" title="查手机"></a>查手机</h1><p>那天晚上妹妹玩完手机，我拿走想看看她微信余额，0？就很奇怪，再看下消费记录，这一看吓死人，满屏幕的-648,-128,-12的，我简直难以置信，虚幻而真实，仅仅是翻了几秒我就知道已经好几千了。</p>
+<p>忘了有多生气了，只知道身体开始发热，心跳在加快。于是我开始统计总金额。</p>
+<p>算出最后的结果让我很窒息，也很无奈，我以平静的语气告诉了妈妈，妹妹在旁边也许意识到被我发现了，站在一旁不敢说话。妈妈立马开始斥责妹妹，婆婆也走了过来，听到了所有。我似乎很多年没见到婆婆生这么大的气了，她走过去扭妹妹耳朵，那么一瞬间我怕婆婆会生气晕倒。</p>
+<h1 id="申诉"><a href="#申诉" class="headerlink" title="申诉"></a>申诉</h1><p>我知道得由我来处理退款流程了，我上楼拿下电脑，立马进入工作状态，各种材料提交，不知不觉干到了十一点。233乐园，这种公司存在的价值就是为了坑害小孩的钱吗？还把退费流程设置的这么复杂而苛刻，生怕家长们懂得如何退费是吗？好累，我第二天还得去南昌玩，该休息了。</p>
+<h1 id="睡不着"><a href="#睡不着" class="headerlink" title="睡不着"></a>睡不着</h1><p>我想先放下这件事，尽早休息好，但我睡得很不好，我能睡着但似乎又没睡着，这件事情贯穿我一晚上。醒了又睡，醒了又睡。。。</p>
+<h1 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h1><p>我其实没有因这么多金钱的白白流失而感到有多么生气、可惜。钱没了可以再挣，但可以给妹妹买个教训，不经历这么一下她难以懂得合理花钱的道理。希望妹妹可以更加懂事。</p>
+<h1 id="政府？"><a href="#政府？" class="headerlink" title="政府？"></a>政府？</h1><p>这么多退款材料和流程，家里只有我能看懂，但我不能一直待在家里，我得回学校啊。在学校我会尽我所能，但政府应该帮忙处理这件事情的，嘴里喊着为人民服务的那帮人应该帮我处理这件事的。不然政府里那些人一天到晚都在干些啥？如果他们不帮忙，我会很气愤，我会上诉。</p>
+<h1 id="更新一下"><a href="#更新一下" class="headerlink" title="更新一下"></a>更新一下</h1><p>现在是被爸妈、阿伯都教训了一顿了。其实冷静下来思考一下，确实有我的不对，我请律师请的太急了。应该再等等结果，等实在没招了再动用法律手段的。</p>
+<p>还有一点就是应该和父母商量这种消费上千的事情。也是没有冷静思考有没有必要去花费这个起诉费。</p>
+<p>回想一下昨天的情形。爸爸打电话过来，语气很重的说我不因该请律师的，说应该及时止损。我立马很生气，我觉得是他不懂得维权，主动放弃。于是和他大吵一架。我后面急急挂断了电话，吃完饭去了。吃完去西苑打球。打球中场休息时看到爸爸、阿伯都发了一大串语音过来，我不想听。继续打球，妈妈发了两千过来说是对我辛苦的补偿，我没收，我继续打球。打完球我喝着别人买的可乐，慢慢听着阿伯的语音。听完我也不想回，回实验室干活去吧。。。。</p>
+<p>后面也没啥要记叙的了。</p>
+<p>今天走在路上仔细想了一下事情经过。其实我明明可以先寻求政府帮助的，或者派出所，我完全没必要自己承担所有事情。</p>
+<p>总结就是一句话：<strong>三四而后行</strong>。</p>
+<h1 id="不无收获"><a href="#不无收获" class="headerlink" title="不无收获"></a>不无收获</h1><p>虽然亏了挺多钱的，但是收获的是法律意识，维权意识；起诉流程，签合同，立案等体验感，对涉世未深的我还是大有益处的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+  </entry>
+  <entry>
     <title>关于Vue3和Spring Boot的模糊记忆</title>
     <url>/2026/04/03/%E5%85%B3%E4%BA%8EVue3%E5%92%8CSpringBoot%E7%9A%84%E6%A8%A1%E7%B3%8A%E8%AE%B0%E5%BF%86/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>因为我根本没认真学这俩框架，说是入门都有点过了，所以本篇主要记录对这俩东西的最大程度记忆（大概率以后也不会学，那么此时就是记得最清楚的时候—_—）,防止以后回忆时屁都不知道。</p>
@@ -181,7 +333,7 @@
     <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
 <p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
-<h1 id="旁边的阿姨"><a href="#旁边的阿姨" class="headerlink" title="旁边的阿姨"></a>旁边的阿姨</h1><p>上老爸的客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
+<h1 id="旁边的阿姨"><a href="#旁边的阿姨" class="headerlink" title="旁边的阿姨"></a>旁边的阿姨</h1><p>上客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
 <p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
 <p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
 <h1 id="没钱打车"><a href="#没钱打车" class="headerlink" title="没钱打车"></a>没钱打车</h1><p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
@@ -195,11 +347,44 @@
 <p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
 <p>我的最低目标是以后赚的不能比老爸少。</p>
 <p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
-<p>他是一个很强硬的人，很男人的人。我觉得我也有他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，该强硬时我当仁不让，但平时在学校我应该算是偏文静的的。</p>
+<p>他是一个很强硬的人，很男人的人。我觉得我也继承了他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，但平时在学校我应该算是偏文静的。</p>
 ]]></content>
       <categories>
         <category>杂谈</category>
       </categories>
+  </entry>
+  <entry>
+    <title>我们泪流满面，步步回头</title>
+    <url>/2026/06/02/%E6%88%91%E4%BB%AC%E6%B3%AA%E6%B5%81%E6%BB%A1%E9%9D%A2%EF%BC%8C%E6%AD%A5%E6%AD%A5%E5%9B%9E%E5%A4%B4/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>标题是我在高二时看的书《从你的全世界路过》里的一句话的一部分，我一直对这句话很模糊，但一直记得这句话。<br>今天，我本来打算复习数据库的，但感觉两天就够了，于是在思考要干啥时，我瞥见了抽屉里的《从你的全世界路过》</p>
+<h1 id="看了一篇故事"><a href="#看了一篇故事" class="headerlink" title="看了一篇故事"></a>看了一篇故事</h1><p>这篇故事叫“老情书”，刚看简介时并不知道其背后含义</p>
+<p>简介：<br>老太太拄着拐杖，站在酒吧里，<br>痛骂年轻人一顿，<br>抖出一张发黄的纸条说：<br>“这是我老头写给我的，我都给你们听。<br>哎哟丑活，拿错了，<br>这是电费催缴单。“</p>
+<p>故事大概就是老太太的儿子与儿子的女朋（悦悦）因为异地问题，情感有所破裂，老太太默默的知道一切，她偷偷跑去悦悦那，做了几个粽子给她吃，回来后生病了，再后来去世了。悦悦千里奔丧，朋友们都泣不成声。<br>后来，儿子和悦悦结婚，儿子抽出一张泛黄的纸，认真的读：</p>
+<p>”	<br>	亲爱的刘雪同志，我很喜欢你，我已经跟领导申请过了，我要调到南京（老太太居住地）来。他们没同意，所以我辞职了。现在档案怎么移交我还没想好。所以，请你做好在南京接待我的准备。<br>	亲爱的刘雪同志，我不会说话，但我有句心里话要告诉你。<br>	我想和你生活在一起，永远。<br>”<br>然后，所有人的脑海中浮现出一个场景。也就是简介中的描述。</p>
+<p>看完才知道，老太太经历过儿子同样的局面，但是老太太当时的男朋友已经不顾一切的想要和老太太生活在一起，后来发现自己儿子太窝囊，给他骂了一顿。</p>
+<p>唉，我无法用简短的文字描述出故事所表达的思想，以及张嘉佳独有的那种，能以平淡的文字和故事，表达出最有张力而饱满的情感的能力。所以有想阅读一下这篇故事的朋友可以去找找原文哦。</p>
+<h1 id="散步"><a href="#散步" class="headerlink" title="散步"></a>散步</h1><p>看完这篇故事后，眼睛有点酸涩，我停下来，坐在座位上闭目养神，浮现出了昨晚和她散步的场景。</p>
+<p>那是她的生日，我送了一个键盘给她，并趁机约她出来散步。</p>
+<p>一开始有点小尴尬，我能看出来她有点不知所措，因为我们已经快半年没有私下见面了。</p>
+<p>我说完我临时想好的开场白，于是向着东苑走去。</p>
+<p>我似乎是自发的以温柔的语气和她开始闲聊，边走边聊，偶尔注意一下周围的景物。</p>
+<p>我们爬上了一座她没去过的小山，下山时，居然又回到了南苑篮球场，这里距离女寝很近，我感觉我这场散步要结束了。</p>
+<p>嘻嘻，她问我要不要继续走走？我立马说好。</p>
+<p>大概快走到公共楼时，我突然想碰一下她的手，假装是不小心碰到的那种，我有点紧张，一时忘了我们正在聊的话题，我故意靠近一点并把手晃得大一点。偶买噶！碰到了一下，一瞬间的擦过，她应该感觉到了。她会认为这是我的试探？还是只是无意间碰到的？后来我也不记得聊了什么，只是想到什么说什么。</p>
+<p>我送她回家时，我注意到她的右手怎么没有摆动，这是她的走路习惯吗？还是她故意不摆动，方便我牵她的手呢？（这段是我后来睡觉时突然发觉的，也是我自行脑补的她的想法）我根本无法确定，那为什么我没有在一开始就注意到她没有摆手，那就是她后面才开始不摆？我还是无法确定。</p>
+<p>但我心里想的是，我不能牵，这是她的生日，如果造成了一场尴尬的局面很不好，今天是属于她的，不是属于我们俩的。</p>
+<p>我送她回到了女寝，就和之前那样。</p>
+<p>我又想，我下次约她出来散步时，我们能在一个地方休息，相互对视几秒钟，如果我感觉氛围合适的话，我是不是能自然而然的牵起她的手呢？或者，我会礼貌的先问一声：小美，我可以牵你的手吗？</p>
+<h1 id="我们泪流满面，步步回头"><a href="#我们泪流满面，步步回头" class="headerlink" title="我们泪流满面，步步回头"></a>我们泪流满面，步步回头</h1><p>“<br><em>偶尔梦里回到沙城</em><br><em>那些路灯和脚印无比清晰，而你无法触碰</em><br><em>一旦双手陷入，整座城市就轰隆隆地崩塌</em><br><em>把你的喜笑颜开，把你的碧海蓝天</em><br><em>把关于我们之间所有的影子埋葬</em><br><em>如果你不往前走，就会被沙子掩埋</em><br><em>所以我们泪流满面，步步回头，可是只能往前走</em><br><em>哪怕往前走，是和你擦肩而过</em></p>
+<p>”<br>我还不能完全感受这段话，但以后的某一天，也许我能够感同身受，但我也不希望有那么一天。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>张嘉佳</tag>
+        <tag>阅读</tag>
+      </tags>
   </entry>
   <entry>
     <title>数据库大作业</title>
@@ -235,6 +420,34 @@
       </tags>
   </entry>
   <entry>
+    <title>智能体替代思考</title>
+    <url>/2026/05/27/%E6%99%BA%E8%83%BD%E4%BD%93%E6%9B%BF%E4%BB%A3%E6%80%9D%E8%80%83/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是基于现在小车比赛搞成shit引发的思考。<br>距离比赛只剩三天了，七个队伍居然只有两个队伍的车是能跑的。这与去年相比未免有点离谱。<br>去年：<br>大家都初次开发，从零开始搞机器人比赛，遇到不会的只能问大模型，没有智能体。快比赛时我们已经想出了好几个改进点，并且可以进行模拟比赛，优化时间。<br>今年：<br>老万都因为搞小车比赛的事情召开过好几次由于积极性或者效果性不足的会议了。<br>这种对比明显就能看出来今年的新生的问题解决能力不如我们这一届，为什么呢？</p>
+<h1 id="早已有迹可循"><a href="#早已有迹可循" class="headerlink" title="早已有迹可循"></a>早已有迹可循</h1><p>就上次队名加载中去吃火锅时，丁亚华给我发消息说什么叫我赶紧回去他快不行了。我不排除是开玩笑的原因，但仅仅是用ai跑了几次，问题没解决就说要不行了，这不管是不是纯开玩笑，我都觉得他已经有一种自己的心理暗示，暗示他自己无法解决、没有信心解决。</p>
+<h1 id="剖析"><a href="#剖析" class="headerlink" title="剖析"></a>剖析</h1><p>去年我这届，依赖的是豆包、deepseek等大模型，只能通过对话的形式交流，而现在的智能体，能够接管整个项目，当一个人觉得智能体的技术远强于他的时候、能接管他的活的时候，他就把自己当成了产品经理（无脑而只看结果）。反观豆包，我们必须明确发送给豆包具体的代码，哪个模块出问题或者报错信息，此时的我们和豆包是平等的交流者，因为我必须时时跟上豆包的节奏才能用豆包辅助我。</p>
+<p>上面可以推出一个结论，智能体会激发人的惰性。相当于我明明可以直接把整个项目给它，问它哪里有问题然后去刷抖音等着它跑完，跑完一看还没解决就继续说还是有问题，继续让它跑。<br>那我怎么还会像和豆包交流那样仔细看它给我的返回呢？偷懒是人的天性，智能体给了我们一种我可以偷懒的假象，导致我们无法理解智能体的思考，也就无法真正利用了智能体来解决问题。</p>
+<p>我为何这么说也是因为看到丁亚华电脑在一边跑，他人已经跑到别处聊天去了，提问也是简单的告诉它小车运行不了或者到那就不动了。这种情况除非智能体是通天代，否则是无法解决根本问题的。</p>
+<h1 id="我们都没有错"><a href="#我们都没有错" class="headerlink" title="我们都没有错"></a>我们都没有错</h1><p>工具在进化，工具变强，人就会自发性的解放双手，不愿自主思考。这会导致一种结果：大学四年每次解决问题离不开智能体，等到面试时被问到了一个问题，先思考的是：我该怎么向智能体提问呢？此时旁边有个dan的智能体，那就只能祭祭了。</p>
+<p>然后就感慨：我大学四年似乎一直在忙（是的向智能体提了不少问），但好像啥也没学到，计算机真是第二个土木，我儿子要是以后学计算机先打断他双腿。</p>
+<h1 id="如何破局"><a href="#如何破局" class="headerlink" title="如何破局"></a>如何破局</h1><p>1、聪明的人自己会意识到过于依赖智能体会完蛋；<br>2、因为他人的一些言论而有所感悟；<br>3、半夜在网上看到别人的视频而醍醐灌顶。<br>不限于以上三种破局情况。而我不能呼吁所有人，别人也不一定听我的，我也不一定能有这影响力。</p>
+<h1 id="我该怎么办"><a href="#我该怎么办" class="headerlink" title="我该怎么办"></a>我该怎么办</h1><p>对于AI组的后代们，在有机会时我会直接告诉他们：你们这群菜鸟，一届不如一届，解决问题的能力实在是太差，条件比往届好这么多，结果遇到问题时总是需要来问学长们。然后在适当的时候语重心长的告诉他们不要丢失了自主思考的能力。</p>
+<p>如此嘲讽，会引发新生们的不满吗？<br>我不能保证对每个人都有效，但这种骂人式的激励对于我是有用的。因为去年时张粤湘也是这么说我们的，我们这届不如上一届，我听到后只想努力提升自己。</p>
+<p>我喜欢这种一针见血，不顾表达方式的引导。就像那时，骂人也是一种安慰人的方式。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>因为工具的强大而放松自己，在极限思想下，未来岂不是机器人领着人类巨婴生活？</p>
+<h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><p>现在是比赛后的第二天，比赛成绩还是比较优秀的，三个国赛应该没问题。而我也比较幸运跑出了满分。</p>
+<p>但我在收获满分后并不是很开心，反而有点愧疚。主要是因为yty感到惋惜。我最希望的就是他能够进国赛，因为他和cyw是为这次小车比赛付出最多的，cyw是天命所归，又快又准。但yty那运气真不行。我本来一直在犹豫要不要用最好的，我应该用一台不那么好的，然后把国赛名额尽可能让给yty，唉，只能说都是上天安排了。算了不能一直这么愧疚，毕竟我去年小人、小狗、小车都没去线下。这次干脆当成是上天给我的一次体验卡了。</p>
+<h3 id="说正事了"><a href="#说正事了" class="headerlink" title="说正事了"></a>说正事了</h3><p>在这次线下初赛其实能看出，并不是小的们自己不行，依然是有人热情而积极，像cyw那是燃成舍利子了，幸好上天没有给他开玩笑，其他人只能说会做该做的，但没有yty那种拼劲，当然也这比赛只准备了一星期左右，我还看不出太多端倪。但总体的感觉（这届总体没有那么积极）还是正确的。</p>
+<h3 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h3><p>这贵一点的酒店就是爽啊，还tm有浴缸，要不是太晚了高低得大浴一场，原来人均100的酒店是可以体验到这种细糠的，去哈尔滨那次还是保守了。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>AI时代</tag>
+        <tag>大学生</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>服创未晋级思考</title>
     <url>/2026/05/22/%E6%9C%8D%E5%88%9B%E6%9C%AA%E6%99%8B%E7%BA%A7%E6%80%9D%E8%80%83/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今年的服创比赛大概是我的最后一舞了（最后一次作为主力开发参赛），得了个省三，也是意料之中的事情。不难过，不高兴。</p>
@@ -253,6 +466,34 @@
       </categories>
       <tags>
         <tag>AI时代</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>迟来的个人博客</title>
+    <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
+<p>感觉像一名顶尖、可爱的黑客成长史，我们总说学过的东西容易忘，那这样记下来不就好了。但又说忘了当场查就行，但仔细想了下，其实博客不一定当备忘录用，也可以当笔记本、日记本，总之当我仔细地去看下别人的博客时，总能感受到这博客大有用处，每次点进一个博客网站，像是走进了别人的赛博家园，而我也想有这么一个家。</p>
+<p>学了快两年计算机了才开始搭博客，我难道要把学过的东西全整理上来？这么一想有点为时已晚的感觉，但<strong>当我感觉是否晚了的时候，恰好是最早的时候</strong>，那么说干就干吧！</p>
+<h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
+<p>主要卡在上传到github然后公网访问时，图片没渲染出来，原来是执行hexo g时未成功生成，因为图片路径的处理问题，和AI拉扯半天，说的越多它越发癫，最后新开了个会话成功解决。</p>
+<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214621930.png"  alt="image-20260408214621485"></p>
+<h1 id="之后写一篇博客并完成上传的流程"><a href="#之后写一篇博客并完成上传的流程" class="headerlink" title="之后写一篇博客并完成上传的流程"></a>之后写一篇博客并完成上传的流程</h1><ol>
+<li><p>在blog目录下开终端</p>
+</li>
+<li><p>执行hexo new “文件名（我喜欢用标题）”</p>
+</li>
+<li><p>打开新生成的.md文件，开始编写，写完后记得保存</p>
+</li>
+<li><p>回到终端依次执行<br>hexo clean    （清理缓存）<br>hexo g    (生成静态页面)<br>hexo d    （上传到github仓库）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>小技能</category>
+      </categories>
+      <tags>
+        <tag>框架使用</tag>
       </tags>
   </entry>
   <entry>
@@ -302,264 +543,6 @@
       </categories>
       <tags>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>迟来的个人博客</title>
-    <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
-<p>感觉像一名顶尖、可爱的黑客成长史，我们总说学过的东西容易忘，那这样记下来不就好了。但又说忘了当场查就行，但仔细想了下，其实博客不一定当备忘录用，也可以当笔记本、日记本，总之当我仔细地去看下别人的博客时，总能感受到这博客大有用处，每次点进一个博客网站，像是走进了别人的赛博家园，而我也想有这么一个家。</p>
-<p>学了快两年计算机了才开始搭博客，我难道要把学过的东西全整理上来？这么一想有点为时已晚的感觉，但<strong>当我感觉是否晚了的时候，恰好是最早的时候</strong>，那么说干就干吧！</p>
-<h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
-<p>主要卡在上传到github然后公网访问时，图片没渲染出来，原来是执行hexo g时未成功生成，因为图片路径的处理问题，和AI拉扯半天，说的越多它越发癫，最后新开了个会话成功解决。</p>
-<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214621930.png"  alt="image-20260408214621485"></p>
-<h1 id="之后写一篇博客并完成上传的流程"><a href="#之后写一篇博客并完成上传的流程" class="headerlink" title="之后写一篇博客并完成上传的流程"></a>之后写一篇博客并完成上传的流程</h1><ol>
-<li><p>在blog目录下开终端</p>
-</li>
-<li><p>执行hexo new “文件名（我喜欢用标题）”</p>
-</li>
-<li><p>打开新生成的.md文件，开始编写，写完后记得保存</p>
-</li>
-<li><p>回到终端依次执行<br>hexo clean    （清理缓存）<br>hexo g    (生成静态页面)<br>hexo d    （上传到github仓库）</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>小技能</category>
-      </categories>
-      <tags>
-        <tag>框架使用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>充值事件</title>
-    <url>/2026/05/07/%E5%85%85%E5%80%BC%E4%BA%8B%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>现在回家最主要的事情就是管一管我那不听话的妹妹了，这不五一假期又闹事。</p>
-<p>在放假之前就听到妈妈说玩蛋仔充值了三百多，我由于在学校没法多管，只叫她自己反省，可口头上的惩罚终究是无足轻重。</p>
-<h1 id="查手机"><a href="#查手机" class="headerlink" title="查手机"></a>查手机</h1><p>那天晚上妹妹玩完手机，我拿走想看看她微信余额，0？就很奇怪，再看下消费记录，这一看吓死人，满屏幕的-648,-128,-12的，我简直难以置信，虚幻而真实，仅仅是翻了几秒我就知道已经好几千了。</p>
-<p>忘了有多生气了，只知道身体开始发热，心跳在加快。于是我开始统计总金额。</p>
-<p>算出最后的结果让我很窒息，也很无奈，我以平静的语气告诉了妈妈，妹妹在旁边也许意识到被我发现了，站在一旁不敢说话。妈妈立马开始斥责妹妹，婆婆也走了过来，听到了所有。我似乎很多年没见到婆婆生这么大的气了，她走过去扭妹妹耳朵，那么一瞬间我怕婆婆会生气晕倒。</p>
-<h1 id="申诉"><a href="#申诉" class="headerlink" title="申诉"></a>申诉</h1><p>我知道得由我来处理退款流程了，我上楼拿下电脑，立马进入工作状态，各种材料提交，不知不觉干到了十一点。233乐园，这种公司存在的价值就是为了坑害小孩的钱吗？还把退费流程设置的这么复杂而苛刻，生怕家长们懂得如何退费是吗？好累，我第二天还得去南昌玩，该休息了。</p>
-<h1 id="睡不着"><a href="#睡不着" class="headerlink" title="睡不着"></a>睡不着</h1><p>我想先放下这件事，尽早休息好，但我睡得很不好，我能睡着但似乎又没睡着，这件事情贯穿我一晚上。醒了又睡，醒了又睡。。。</p>
-<h1 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h1><p>我其实没有因这么多金钱的白白流失而感到有多么生气、可惜。钱没了可以再挣，但可以给妹妹买个教训，不经历这么一下她难以懂得合理花钱的道理。希望妹妹可以更加懂事。</p>
-<h1 id="政府？"><a href="#政府？" class="headerlink" title="政府？"></a>政府？</h1><p>这么多退款材料和流程，家里只有我能看懂，但我不能一直待在家里，我得回学校啊。在学校我会尽我所能，但政府应该帮忙处理这件事情的，嘴里喊着为人民服务的那帮人应该帮我处理这件事的。不然政府里那些人一天到晚都在干些啥？如果他们不帮忙，我会很气愤，我会上诉。</p>
-<h1 id="更新一下"><a href="#更新一下" class="headerlink" title="更新一下"></a>更新一下</h1><p>现在是被爸妈、阿伯都教训了一顿了。其实冷静下来思考一下，确实有我的不对，我请律师请的太急了。应该再等等结果，等实在没招了再动用法律手段的。</p>
-<p>还有一点就是应该和父母商量这种消费上千的事情。也是没有冷静思考有没有必要去花费这个起诉费。</p>
-<p>回想一下昨天的情形。爸爸打电话过来，语气很重的说我不因该请律师的，说应该及时止损。我立马很生气，我觉得是他不懂得维权，主动放弃。于是和他大吵一架。我后面急急挂断了电话，吃完饭去了。吃完去西苑打球。打球中场休息时看到爸爸、阿伯都发了一大串语音过来，我不想听。继续打球，妈妈发了两千过来说是对我辛苦的补偿，我没收，我继续打球。打完球我喝着别人买的可乐，慢慢听着阿伯的语音。听完我也不想回，回实验室干活去吧。。。。</p>
-<p>后面也没啥要记叙的了。</p>
-<p>今天走在路上仔细想了一下事情经过。其实我明明可以先寻求政府帮助的，或者派出所，我完全没必要自己承担所有事情。</p>
-<p>总结就是一句话：<strong>三四而后行</strong>。</p>
-<h1 id="不无收获"><a href="#不无收获" class="headerlink" title="不无收获"></a>不无收获</h1><p>虽然亏了挺多钱的，但是收获的是法律意识，维权意识；起诉流程，签合同，立案等体验感，对涉世未深的我还是大有益处的。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>我们泪流满面，步步回头</title>
-    <url>/2026/06/02/%E6%88%91%E4%BB%AC%E6%B3%AA%E6%B5%81%E6%BB%A1%E9%9D%A2%EF%BC%8C%E6%AD%A5%E6%AD%A5%E5%9B%9E%E5%A4%B4/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>标题是我在高二时看的书《从你的全世界路过》里的一句话的一部分，我一直对这句话很模糊，但一直记得这句话。<br>今天，我本来打算复习数据库的，但感觉两天就够了，于是在思考要干啥时，我瞥见了抽屉里的《从你的全世界路过》</p>
-<h1 id="看了一篇故事"><a href="#看了一篇故事" class="headerlink" title="看了一篇故事"></a>看了一篇故事</h1><p>这篇故事叫“老情书”，刚看简介时并不知道其背后含义</p>
-<p>简介：<br>老太太拄着拐杖，站在酒吧里，<br>痛骂年轻人一顿，<br>抖出一张发黄的纸条说：<br>“这是我老头写给我的，我都给你们听。<br>哎哟丑活，拿错了，<br>这是电费催缴单。“</p>
-<p>故事大概就是老太太的儿子与儿子的女朋（悦悦）因为异地问题，情感有所破裂，老太太默默的知道一切，她偷偷跑去悦悦那，做了几个粽子给她吃，回来后生病了，再后来去世了。悦悦千里奔丧，朋友们都泣不成声。<br>后来，儿子和悦悦结婚，儿子抽出一张泛黄的纸，认真的读：</p>
-<p>”	<br>	亲爱的刘雪同志，我很喜欢你，我已经跟领导申请过了，我要调到南京（老太太居住地）来。他们没同意，所以我辞职了。现在档案怎么移交我还没想好。所以，请你做好在南京接待我的准备。<br>	亲爱的刘雪同志，我不会说话，但我有句心里话要告诉你。<br>	我想和你生活在一起，永远。<br>”<br>然后，所有人的脑海中浮现出一个场景。也就是简介中的描述。</p>
-<p>看完才知道，老太太经历过儿子同样的局面，但是老太太当时的男朋友已经不顾一切的想要和老太太生活在一起，后来发现自己儿子太窝囊，给他骂了一顿。</p>
-<p>唉，我无法用简短的文字描述出故事所表达的思想，以及张嘉佳独有的那种，能以平淡的文字和故事，表达出最有张力而饱满的情感的能力。所以有想阅读一下这篇故事的朋友可以去找找原文哦。</p>
-<h1 id="散步"><a href="#散步" class="headerlink" title="散步"></a>散步</h1><p>看完这篇故事后，眼睛有点酸涩，我停下来，坐在座位上闭目养神，浮现出了昨晚和她散步的场景。</p>
-<p>那是她的生日，我送了一个键盘给她，并趁机约她出来散步。</p>
-<p>一开始有点小尴尬，我能看出来她有点不知所措，因为我们已经快半年没有私下见面了。</p>
-<p>我说完我临时想好的开场白，于是向着东苑走去。</p>
-<p>我似乎是自发的以温柔的语气和她开始闲聊，边走边聊，偶尔注意一下周围的景物。</p>
-<p>我们爬上了一座她没去过的小山，下山时，居然又回到了南苑篮球场，这里距离女寝很近，我感觉我这场散步要结束了。</p>
-<p>嘻嘻，她问我要不要继续走走？我立马说好。</p>
-<p>大概快走到公共楼时，我突然想碰一下她的手，假装是不小心碰到的那种，我有点紧张，一时忘了我们正在聊的话题，我故意靠近一点并把手晃得大一点。偶买噶！碰到了一下，一瞬间的擦过，她应该感觉到了。她会认为这是我的试探？还是只是无意间碰到的？后来我也不记得聊了什么，只是想到什么说什么。</p>
-<p>我送她回家时，我注意到她的右手怎么没有摆动，这是她的走路习惯吗？还是她故意不摆动，方便我牵她的手呢？（这段是我后来睡觉时突然发觉的，也是我自行脑补的她的想法）我根本无法确定，那为什么我没有在一开始就注意到她没有摆手，那就是她后面才开始不摆？我还是无法确定。</p>
-<p>但我心里想的是，我不能牵，这是她的生日，如果造成了一场尴尬的局面很不好，今天是属于她的，不是属于我们俩的。</p>
-<p>我送她回到了女寝，就和之前那样。</p>
-<p>我又想，我下次约她出来散步时，我们能在一个地方休息，相互对视几秒钟，如果我感觉氛围合适的话，我是不是能自然而然的牵起她的手呢？或者，我会礼貌的先问一声：小美，我可以牵你的手吗？</p>
-<h1 id="我们泪流满面，步步回头"><a href="#我们泪流满面，步步回头" class="headerlink" title="我们泪流满面，步步回头"></a>我们泪流满面，步步回头</h1><p>“<br><em>偶尔梦里回到沙城</em><br><em>那些路灯和脚印无比清晰，而你无法触碰</em><br><em>一旦双手陷入，整座城市就轰隆隆地崩塌</em><br><em>把你的喜笑颜开，把你的碧海蓝天</em><br><em>把关于我们之间所有的影子埋葬</em><br><em>如果你不往前走，就会被沙子掩埋</em><br><em>所以我们泪流满面，步步回头，可是只能往前走</em><br><em>哪怕往前走，是和你擦肩而过</em></p>
-<p>”<br>我还不能完全感受这段话，但以后的某一天，也许我能够感同身受，但我也不希望有那么一天。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>张嘉佳</tag>
-        <tag>阅读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>智能体替代思考</title>
-    <url>/2026/05/27/%E6%99%BA%E8%83%BD%E4%BD%93%E6%9B%BF%E4%BB%A3%E6%80%9D%E8%80%83/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是基于现在小车比赛搞成shit引发的思考。<br>距离比赛只剩三天了，七个队伍居然只有两个队伍的车是能跑的。这与去年相比未免有点离谱。<br>去年：<br>大家都初次开发，从零开始搞机器人比赛，遇到不会的只能问大模型，没有智能体。快比赛时我们已经想出了好几个改进点，并且可以进行模拟比赛，优化时间。<br>今年：<br>老万都因为搞小车比赛的事情召开过好几次由于积极性或者效果性不足的会议了。<br>这种对比明显就能看出来今年的新生的问题解决能力不如我们这一届，为什么呢？</p>
-<h1 id="早已有迹可循"><a href="#早已有迹可循" class="headerlink" title="早已有迹可循"></a>早已有迹可循</h1><p>就上次队名加载中去吃火锅时，丁亚华给我发消息说什么叫我赶紧回去他快不行了。我不排除是开玩笑的原因，但仅仅是用ai跑了几次，问题没解决就说要不行了，这不管是不是纯开玩笑，我都觉得他已经有一种自己的心理暗示，暗示他自己无法解决、没有信心解决。</p>
-<h1 id="剖析"><a href="#剖析" class="headerlink" title="剖析"></a>剖析</h1><p>去年我这届，依赖的是豆包、deepseek等大模型，只能通过对话的形式交流，而现在的智能体，能够接管整个项目，当一个人觉得智能体的技术远强于他的时候、能接管他的活的时候，他就把自己当成了产品经理（无脑而只看结果）。反观豆包，我们必须明确发送给豆包具体的代码，哪个模块出问题或者报错信息，此时的我们和豆包是平等的交流者，因为我必须时时跟上豆包的节奏才能用豆包辅助我。</p>
-<p>上面可以推出一个结论，智能体会激发人的惰性。相当于我明明可以直接把整个项目给它，问它哪里有问题然后去刷抖音等着它跑完，跑完一看还没解决就继续说还是有问题，继续让它跑。<br>那我怎么还会像和豆包交流那样仔细看它给我的返回呢？偷懒是人的天性，智能体给了我们一种我可以偷懒的假象，导致我们无法理解智能体的思考，也就无法真正利用了智能体来解决问题。</p>
-<p>我为何这么说也是因为看到丁亚华电脑在一边跑，他人已经跑到别处聊天去了，提问也是简单的告诉它小车运行不了或者到那就不动了。这种情况除非智能体是通天代，否则是无法解决根本问题的。</p>
-<h1 id="我们都没有错"><a href="#我们都没有错" class="headerlink" title="我们都没有错"></a>我们都没有错</h1><p>工具在进化，工具变强，人就会自发性的解放双手，不愿自主思考。这会导致一种结果：大学四年每次解决问题离不开智能体，等到面试时被问到了一个问题，先思考的是：我该怎么向智能体提问呢？此时旁边有个dan的智能体，那就只能祭祭了。</p>
-<p>然后就感慨：我大学四年似乎一直在忙（是的向智能体提了不少问），但好像啥也没学到，计算机真是第二个土木，我儿子要是以后学计算机先打断他双腿。</p>
-<h1 id="如何破局"><a href="#如何破局" class="headerlink" title="如何破局"></a>如何破局</h1><p>1、聪明的人自己会意识到过于依赖智能体会完蛋；<br>2、因为他人的一些言论而有所感悟；<br>3、半夜在网上看到别人的视频而醍醐灌顶。<br>不限于以上三种破局情况。而我不能呼吁所有人，别人也不一定听我的，我也不一定能有这影响力。</p>
-<h1 id="我该怎么办"><a href="#我该怎么办" class="headerlink" title="我该怎么办"></a>我该怎么办</h1><p>对于AI组的后代们，在有机会时我会直接告诉他们：你们这群菜鸟，一届不如一届，解决问题的能力实在是太差，条件比往届好这么多，结果遇到问题时总是需要来问学长们。然后在适当的时候语重心长的告诉他们不要丢失了自主思考的能力。</p>
-<p>如此嘲讽，会引发新生们的不满吗？<br>我不能保证对每个人都有效，但这种骂人式的激励对于我是有用的。因为去年时张粤湘也是这么说我们的，我们这届不如上一届，我听到后只想努力提升自己。</p>
-<p>我喜欢这种一针见血，不顾表达方式的引导。就像那时我因情感问题无法自拔时，我以为刘恒会稍稍安慰一下，结果他好像在骂我，我反而因此被骂醒了。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>因为工具的强大而放松自己，在极限思想下，未来岂不是机器人领着人类巨婴生活？</p>
-<h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><p>现在是比赛后的第二天，比赛成绩还是比较优秀的，三个国赛应该没问题。而我也比较幸运跑出了满分。</p>
-<p>但我在收获满分后并不是很开心，反而有点愧疚。主要是因为yty感到惋惜。我最希望的就是他能够进国赛，因为他和cyw是为这次小车比赛付出最多的，cyw是天命所归，又快又准。但yty那运气真不行。我本来一直在犹豫要不要用最好的，我应该用一台不那么好的，然后把国赛名额尽可能让给yty，唉，只能说都是上天安排了。算了不能一直这么愧疚，毕竟我去年小人、小狗、小车都没去线下。这次干脆当成是上天给我的一次体验卡了。</p>
-<h3 id="说正事了"><a href="#说正事了" class="headerlink" title="说正事了"></a>说正事了</h3><p>在这次线下初赛其实能看出，并不是小的们自己不行，依然是有人热情而积极，像cyw那是燃成舍利子了，幸好上天没有给他开玩笑，其他人只能说会做该做的，但没有yty那种拼劲，当然也这比赛只准备了一星期左右，我还看不出太多端倪。但总体的感觉（这届总体没有那么积极）还是正确的。</p>
-<h3 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h3><p>这贵一点的酒店就是爽啊，还tm有浴缸，要不是太晚了高低得大浴一场，原来人均100的酒店是可以体验到这种细糠的，去哈尔滨那次还是保守了。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>AI时代</tag>
-        <tag>大学生</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>做一张行测卷</title>
-    <url>/2026/06/10/%E5%81%9A%E4%B8%80%E5%BC%A0%E8%A1%8C%E6%B5%8B%E5%8D%B7/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>家里一直希望我考公， 可我总是那么抗拒。首先我考公学习上没多少天赋，即不擅长那种题型，其次我不喜欢公务员的生活，那种一考定终身的事情是不是太禁锢人了，我反而更想自由就职。</p>
-<p>但舅舅都提过几次公安网警了，查了一些资料，大概就是有些岗位也需要用到计算机技术，不至于会浪费现在所学到的技术知识。</p>
-<p>那么就做一张行测卷子试试看，到底适不适合走这条路。</p>
-<h1>网课速通</h1>
-<p>直接做题肯定是艰难又艰巨的，之前了解了下判断推理就能得出做行测还是有很多的技巧的，学了和不学差距真挺大。</p>
-<p>让我先去找一个时长少的网课看看。<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610092036040.png"  alt="image-20260610092028938"></p>
-<p>emm,上午九点，5人正在看啥意思。我寻思今天距离国考还有很长时间吧，他们要考公不应该看系统课么。难不成有情况和我一样的？那真要祝另外四个人能尽早找到自己的心之所向了。</p>
-<p>看了十几分钟，我又回来了，感觉没啥效果，因为考察的素养和高中语文有点像，然而素养这个东西像英语一样，没法速成，我还是直接去做卷子吧。</p>
-<h1>小憩</h1>
-<p>不是做完试卷了，而是手写笔没电了。那么就利用这个小憩时间写一下当前的感想。</p>
-<p>差不多用了一个小时，做了50道题，其中有大概40道是完全不会的。这也正常，关键问题是，我难以进入心流状态。</p>
-<p>先不管题目正确率的问题，我要检测自己能否学的进行测，就得测试自己是不是容易心流，可我每道题要读好几遍才能理解题意，很多东西我都看不懂。这可能有两种原因：<br>
-1、我因为不知道这个知识点导致我大脑无法思考，进入看天书状态<br>
-2、我对这类题型完全提不起兴趣，对不不敢兴趣的东西难以集中注意力</p>
-<p>不管是哪种原因，都指向了我不擅长考公的事实。</p>
-<p>然后做到选词填空的时候，我冒出一个想法。只有准确理解某个词的意思才能精准选中答案，如果我形成这么一个用词精准的思维，那么会失去一种幽默性，我整个人会变得无聊起来。因为生活中用词不准确或者瞎用其实是一种幽默性行为，我不想丧失这么一个人格趣味点。</p>
-<h1>结束</h1>
-<p>并非做完了试卷，而是做不下去了，时间走完两个小时我才做一半题目，真的举步维艰。而且也到饭点了，然后就粗略的看了看后面的题型，题型都是见过的，那种小学奥数题、图表分析题（依旧题目要看好几遍才能看懂，这种感觉就是不在状态的感觉）。</p>
-<p>索然无味。</p>
-<h1>总结</h1>
-<p>没必要去批改了，也没必要去深挖做题目做的不顺利的原因。总之能很明确的发掘到，我对考公不感兴趣，甚至有点抗拒。</p>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>考公</tag>
-        <tag>行测</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>flask与fastAPI巩固</title>
-    <url>/2026/06/10/flask%E4%B8%8EfastAPI%E5%B7%A9%E5%9B%BA/</url>
-    <content><![CDATA[<h1>异步</h1>
-<h2 id="并发模型对比">并发模型对比</h2>
-<div class="table-container"><table>
-<thead>
-<tr>
-<th style="text-align:left">框架</th>
-<th style="text-align:left">并发方式</th>
-<th style="text-align:left">原理</th>
-<th style="text-align:left">适合场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>Flask</strong></td>
-<td style="text-align:left">多线程/多进程</td>
-<td style="text-align:left">每个请求新建线程</td>
-<td style="text-align:left">CPU密集型、阻塞IO</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>FastAPI</strong></td>
-<td style="text-align:left">异步事件循环（单线程）</td>
-<td style="text-align:left">await 切换任务</td>
-<td style="text-align:left">高并发IO操作</td>
-</tr>
-</tbody>
-</table></div>
-<p>flask实现并发大概流程：<br>
-假如app.py集成了路由，然后路由下定义了业务逻辑函数，那么当多个请求到来时，各个请求互不影响，app.py会为各个请求创建线程，每个线程各自执行。所以假如业务逻辑函数实现需要3秒，当三个请求同时来到时，总处理时间也是3秒。</p>
-<p>对于高并发以及实时场景，更主流的框架是faskAPI，后面简称fast。所以我重点学习fast</p>
-<p><a href="http://xn--app-y28dq71iey5d.py">下面是app.py</a></p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&#x27;/sleep&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">sleep</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务开始&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)  <span class="comment"># 模拟IO等待</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务结束&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;ok&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">import</span> uvicorn  //要用uvicorn启动fast项目，但是官方推荐在命令行用   						//uvicorn app:app --reload 启动</span><br><span class="line">    uvicorn.run(app, host=<span class="string">&quot;127.0.0.1&quot;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>下面是test_fastapi_client.py，用于模拟用户请求</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> httpx//支持异步的客户端，与asyncio.gather配合来同时发请求</span><br><span class="line"></span><br><span class="line">URL = <span class="string">&quot;http://127.0.0.1:8000/sleep&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">fetch</span>(<span class="params">client, request_id</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;异步发起 GET 请求并打印耗时&quot;&quot;&quot;</span></span><br><span class="line">    start_time = time.time()</span><br><span class="line">    response = <span class="keyword">await</span> client.get(URL)</span><br><span class="line">    end_time = time.time()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[请求 <span class="subst">&#123;request_id&#125;</span>] 状态码: <span class="subst">&#123;response.status_code&#125;</span>, &quot;</span></span><br><span class="line">          <span class="string">f&quot;响应内容: <span class="subst">&#123;response.text&#125;</span>, &quot;</span></span><br><span class="line">          <span class="string">f&quot;耗时: <span class="subst">&#123;end_time - start_time:<span class="number">.2</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment"># 使用 httpx.AsyncClient 保持长连接，提升并发性能</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> httpx.AsyncClient() <span class="keyword">as</span> client:</span><br><span class="line">        tasks = []</span><br><span class="line">        total_start = time.time()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建 3 个并发任务</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">4</span>):</span><br><span class="line">            tasks.append(fetch(client, i))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 使用 gather 并发执行所有任务</span></span><br><span class="line">        <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"></span><br><span class="line">        total_end = time.time()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span> * <span class="number">40</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;总耗时: <span class="subst">&#123;total_end - total_start:<span class="number">.2</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    asyncio.run(main())</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>运行后终端打印分别如下：<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610201556890.png"  alt="image-20260610201556812"><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610201610304.png"  alt="image-20260610201610262"></p>
-<p>为什么是2，1，3呢？因为逻辑是先创建任务（把任务加到人物列表中），然后并发执行，执行先后顺序多少会有细微不同（随机情况）</p>
-<h2 id="为什么要用httpx-AsyncClient-保持长连接">为什么要用httpx.AsyncClient 保持长连接</h2>
-<p>这里涉及到通信问题。首先要说明flask和fast都是用的http协议通信。</p>
-<p>在使用普通的同步 HTTP 客户端（如 <code>requests</code>）时，每次发起请求都会经历：<strong>建立 TCP 连接 -&gt; 发送数据 -&gt; 接收数据 -&gt; 关闭连接</strong>。如果并发发 3 个请求，就会重复这个过程 3 次。</p>
-<p>而在 FastAPI 的异步世界中，我们使用 <code>httpx.AsyncClient</code> 作为上下文管理器（<code>async with httpx.AsyncClient() as client:</code>），起到连接复用的功能：它在后台维持底层的 TCP 连接不中断。当连续发出多个请求时，它会直接复用已经建立好的通道，省去了反复握手、建立连接的开销。</p>
-<p>fast这个异步模型，基于事件循环来工作。当遇到await操作时，当前协程会主动让出事件循环的控制权，使其立马去处理其它的http请求，等await操作完成了再回来继续执行下一步。这里可以理解为主厨同时炒多个菜，然后到处走动</p>
-<p>注意点：</p>
-<p>虽然这里例子中fast用的是http协议，但是它也原生支持websocket协议，用于实时通话等场景：</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@app.websocket(<span class="params"><span class="string">&quot;/ws&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">websocket_endpoint</span>(<span class="params">websocket: WebSocket</span>):</span><br><span class="line">    <span class="keyword">await</span> websocket.accept()</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        data = <span class="keyword">await</span> websocket.receive_text()</span><br><span class="line">        <span class="keyword">await</span> websocket.send_text(<span class="string">f&quot;Message text was: <span class="subst">&#123;data&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>fast有个优点就是可以自动生成接口文档，假如项目运行在localhost:9999，那么localhost:9999/doc就是文档界面。</p>
-<h1>TCP协议</h1>
-<p>这就是著名的三次握手、四次挥手协议</p>
-<p>我们可以把它想象成两个人（客户端 A 和服务器 B）在嘈杂的环境中打电话：</p>
-<ul>
-<li><strong>第一次握手（A -&gt; B）：</strong> A 拨通电话说：“喂，你能听到我说话吗？”（这在技术上叫发送 <code>SYN</code> 报文，表示请求建立连接）。</li>
-<li><strong>第二次握手（B -&gt; A）：</strong> B 听到了，回复道：“我能听到你说话！那你能听到我说话吗？”（技术上叫返回 <code>SYN + ACK</code>，表示同意并反问确认）。</li>
-<li><strong>第三次握手（A -&gt; B）：</strong> A 回答道：“我也能听到你说话！”（技术上叫发送 <code>ACK</code>，表示最终确认）。</li>
-</ul>
-<p>既然有开始，就有结束。当数据传输完毕，不需要再聊的时候，就需要断开连接。因为 TCP 是双向的（既能发又能收），所以关闭连接比建立连接多了一步，被称为<strong>四次挥手</strong>：</p>
-<ul>
-<li>A 说：“我说完了。”（FIN）</li>
-<li>B 回：“好的，我知道了。”（ACK）</li>
-<li>B 接着说：“我也说完了。”（FIN）</li>
-<li>A 回：“好的，那就挂了吧。”（ACK）</li>
-</ul>
-<h2 id="协议套娃">协议套娃</h2>
-<p>TCP协议是HTTP协议和Websocket协议的底层协议。这里联系到协议套娃：</p>
-<p>在计算机里，当你通过浏览器访问一个网页时，数据是这样一层层往下传的：</p>
-<ul>
-<li><strong>应用层 (HTTP)：</strong> 浏览器说：“我要请求 <code>/sleep</code> 接口！”（写好信件内容）</li>
-<li><strong>传输层 (TCP)：</strong> 操作系统接过信件，把它塞进信封，贴上收发件人地址，并准备发起“三次握手”确认通道。（安排物流运输）</li>
-<li><strong>网络层 (IP)：</strong> 邮政局看着信封上的地址，决定这封信要经过哪几个城市的转运中心才能到达对方电脑。（规划跨城市运输路线）</li>
-<li><strong>物理/链路层 (网线/Wi-Fi)：</strong> 最终变成电信号或无线电波，通过网线和路由器发送出去。（货车开上高速公路）</li>
-</ul>
-<p>当数据到达服务器时，再反过来一层层拆开（解封装），最后把 HTTP 的内容交给 FastAPI 或 Flask 处理。</p>
-<h1>ORM（对象关系映射）</h1>
-<p>对于fast,官方给的orm是sqlalchemy（之前有过学习），今天学习Tortoise,受Djiango启发。</p>
-<h3 id="fast的ORM操作，主要参考">fast的ORM操作，主要参考</h3>
-<h4 id="1、创建模型">1、创建模型</h4>
-<p>以选课系统为例：创建个模型类文件 <a href="http://models.py">models.py</a>，每个类对应一张表</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#导入tortoise</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tortoise.models <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> tortoise <span class="keyword">import</span> fields</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建班级类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Clas</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;班级名称&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建老师类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Teacher</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    <span class="built_in">id</span> = fields.IntField(pk=<span class="literal">True</span>)</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;姓名&#x27;</span>)</span><br><span class="line">    tno = fields.IntField(description=<span class="string">&#x27;账号&#x27;</span>)</span><br><span class="line">    pwd = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;密码&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#课程表</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Course</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    <span class="built_in">id</span> = fields.IntField(pk=<span class="literal">True</span>)</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;课程名&#x27;</span>)</span><br><span class="line">    teacher = fields.ForeignKeyField(<span class="string">&#x27;models.Teacher&#x27;</span>, related_name=<span class="string">&#x27;courses&#x27;</span>, description=<span class="string">&#x27;课程讲师&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建学生类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span>(<span class="title class_ inherited__">Model</span>):</span><br><span class="line">    <span class="built_in">id</span> = fields.IntField(pk=<span class="literal">True</span>)</span><br><span class="line">    sno = fields.IntField(description=<span class="string">&#x27;学号&#x27;</span>)</span><br><span class="line">    <span class="comment">#description 在接口文档有个显示</span></span><br><span class="line">    pwd = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;密码&#x27;</span>)</span><br><span class="line">    name = fields.CharField(max_length=<span class="number">255</span>, description=<span class="string">&#x27;姓名&#x27;</span>)</span><br><span class="line">    <span class="comment"># 一对多，反向查询时使用related_name</span></span><br><span class="line">    clas = fields.ForeignKeyField(<span class="string">&#x27;models.Clas&#x27;</span>, related_name=<span class="string">&#x27;students&#x27;</span>)</span><br><span class="line">    <span class="comment"># 多对多</span></span><br><span class="line">    courses = fields.ManyToManyField(<span class="string">&#x27;models.Course&#x27;</span>, related_name=<span class="string">&#x27;students&#x27;</span>,description=<span class="string">&#x27;学生选课表&#x27;</span>)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h4 id="2、创建数据库连接配置文件">2、创建数据库连接配置文件</h4>
-<p><a href="http://xn--settings-8q7m267h.py">创建settings.py</a> 配置文件</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TORTOISE_ORM = &#123;</span><br><span class="line">    <span class="string">&#x27;connections&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;default&#x27;</span>: &#123;</span><br><span class="line">            <span class="comment"># &#x27;engine&#x27;: &#x27;tortoise.backends.asyncpg&#x27;,  PostgreSQL</span></span><br><span class="line">            <span class="string">&#x27;engine&#x27;</span>: <span class="string">&#x27;tortoise.backends.mysql&#x27;</span>,  <span class="comment"># MySQL or Mariadb</span></span><br><span class="line">            <span class="string">&#x27;credentials&#x27;</span>: &#123;</span><br><span class="line">                <span class="string">&#x27;host&#x27;</span>: <span class="string">&#x27;10.10.0.52&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;port&#x27;</span>: <span class="string">&#x27;3306&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;user&#x27;</span>: <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;password&#x27;</span>: <span class="string">&#x27;Jingxxxxxxxx&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;database&#x27;</span>: <span class="string">&#x27;fastapi&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;minsize&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">&#x27;maxsize&#x27;</span>: <span class="number">5</span>,</span><br><span class="line">                <span class="string">&#x27;charset&#x27;</span>: <span class="string">&#x27;utf8mb4&#x27;</span>,</span><br><span class="line">                <span class="string">&quot;echo&quot;</span>: <span class="literal">True</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;apps&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;models&#x27;</span>: &#123;</span><br><span class="line">            <span class="comment">#这个models就是自己配置的models.py位置</span></span><br><span class="line"></span><br><span class="line">            <span class="string">&#x27;models&#x27;</span>: [<span class="string">&#x27;models&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;default_connection&#x27;</span>: <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;use_tz&#x27;</span>: <span class="literal">False</span>,</span><br><span class="line">    <span class="string">&#x27;timezone&#x27;</span>: <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<h4 id="3、启动项目">3、启动项目</h4>
-<p>app.py启动项目</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI  <span class="comment"># FastAPI 是一个为你的 API 提供了所有功能的 Python 类。</span></span><br><span class="line"><span class="keyword">import</span> uvicorn</span><br><span class="line"><span class="keyword">from</span> tortoise.contrib.fastapi <span class="keyword">import</span> register_tortoise</span><br><span class="line"><span class="keyword">from</span> settings <span class="keyword">import</span> TORTOISE_ORM</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建应用程序，app是应用程序名</span></span><br><span class="line">app = FastAPI()  <span class="comment"># 这个实例将是创建你所有 API 的主要交互对象。这个 app 同样在如下命令中被 uvicorn 所引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 该方法会在fastapi启动时触发，内部通过传递进去的app对象，监听服务启动和终止事件</span></span><br><span class="line"><span class="comment"># 当检测到启动事件时，会初始化Tortoise对象，如果generate_schemas为True则还会进行数据库迁移</span></span><br><span class="line"><span class="comment"># 当检测到终止事件时，会关闭连接</span></span><br><span class="line">register_tortoise(</span><br><span class="line">    app,</span><br><span class="line">    <span class="comment">#数据库配置信息</span></span><br><span class="line">    config=TORTOISE_ORM,</span><br><span class="line">    <span class="comment"># generate_schemas=True,  # 如果数据库为空，则自动生成对应表单，生产环境不要开</span></span><br><span class="line">    <span class="comment"># add_exception_handlers=True,  # 生产环境不要开，会泄露调试信息</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment">#注意，run的第一个参数 必须是文件名:应用程序名</span></span><br><span class="line">    uvicorn.run(<span class="string">&quot;quickstart:app&quot;</span>, port=<span class="number">8080</span>,  reload=<span class="literal">True</span>, workers=<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>正常启动后便连接到了数据库</p>
-<h4 id="4、根据模型类创建数据库表">4、根据模型类创建数据库表</h4>
-<p>这里依靠ORM迁移工具aerich，结合tortoise异步orm框架使用。</p>
-<p>迁移工具可以理解为核心功能是生成和执行数据库迁移脚本（SQL），实现数据库的增删改（没有查，并非少打字）功能，然后异步可以理解为aerich和tortoise是高度绑定的，它们共用配置文件，当执行查询等操作时，这些I/O操作都是非阻塞的。</p>
-<p>回到操作步骤，这一步骤分多个小步骤，大概是初始化配置、然后迁移操作、回退操作（类似git）等，都是用命令实现，命令语句和大多工具的用法差不多。具体可参考原文。</p>
-<h3 id="查询功能">查询功能</h3>
-<p>在分发的路由中的路由函数中，把sql的查询语句写成查询函数：</p>
-<p>all查询：<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/0610343cea9374b065e7a9d429cc470c.png"  alt="在这里插入图片描述"></p>
-<p>循环打印：<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/5aeefbf815f261af8b09e696035f051a.png"  alt="在这里插入图片描述"></p>
-<h3 id="静态页面">静态页面</h3>
-<p>就是把查询到的信息，以你喜欢的方式，更好看的呈现在浏览器上。</p>
-<div class="code-container" code-lang="Python"><div class="codebox"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#导入模板的包</span></span><br><span class="line"><span class="keyword">from</span> fastapi.templating <span class="keyword">import</span> Jinja2Templates</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化Jinja2对象，并将文件夹路径设置为以templates命名的文件夹</span></span><br><span class="line">templates = Jinja2Templates(directory=<span class="string">&quot;templates&quot;</span>)</span><br><span class="line"></span><br><span class="line">接口：</span><br><span class="line"><span class="meta">@api_student.get(<span class="params"><span class="string">&quot;/index&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">show_student</span>(<span class="params">request:Request</span>):</span><br><span class="line">    students = <span class="keyword">await</span> Student.<span class="built_in">all</span>()</span><br><span class="line">    <span class="keyword">return</span> templates.TemplateResponse(</span><br><span class="line">        <span class="string">&#x27;index.html&#x27;</span>, <span class="comment">#第一个参数放模板文件</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;request&#x27;</span>: request,  <span class="comment"># 注意，返回模板响应时，必须有request键值对，且值为Request请求对象</span></span><br><span class="line">            <span class="string">&#x27;students&#x27;</span>:students</span><br><span class="line"></span><br><span class="line">        &#125;, <span class="comment">#context上下文对象，是个字典</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/19236d03204c15f027df67dfcc6d044e.png"  alt="在这里插入图片描述"></p>
-<p>启动程序后，浏览器访问：<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://i-blog.csdnimg.cn/blog_migrate/4e220b1d0a7bd8e121930693da241c12.png"  alt="在这里插入图片描述"></p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>flask</tag>
-        <tag>fastAPI</tag>
-        <tag>python</tag>
       </tags>
   </entry>
 </search>
