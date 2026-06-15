@@ -546,4 +546,116 @@
         <tag>数据库</tag>
       </tags>
   </entry>
+  <entry>
+    <title>golang初学</title>
+    <url>/2026/06/12/golang%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一门语言不够那就学两门，对于完全没学过go但是学过其它语言且有一定的开发经验的我来说，感觉两天学完基本语法没问题。</p>
+<h1 id="安装报错"><a href="#安装报错" class="headerlink" title="安装报错"></a>安装报错</h1><p>当我去官网下载了go的最新版本的安装程序后，运行后发生这么一个错误：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260612191111404.png"  alt="image-20260612191104318"></p>
+<p>这是典型的MSI安装包权限或系统服务异常问题。</p>
+<p>然后我这么做：</p>
+<ul>
+<li>缺少Windows Installer文件夹<br>打开“此电脑” → C盘 → Windows文件夹 → 检查是否存在名为 <code>Installer</code> 的隐藏文件夹。若不存在，手动新建一个名为 <code>Installer</code> 的文件夹（注意：不要加引号，不要带空格）。</li>
+</ul>
+<p>后就成功了，那么这个文件夹是什么？</p>
+<p><code>C:\Windows\Installer</code> 文件夹是 Windows Installer 服务用于存储软件安装、更新、修复和卸载所需缓存文件的核心目录，其作用是确保系统能正确管理软件生命周期。</p>
+<h1 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h1><p>当我要运行main文件时，我可以在命令行运行go run main.go；或者运行go build main.go，这样会生成main.exe，然后.\main.exe运行这个可执行文件，这相当于把编译执行拆开。</p>
+<p>我每次修改完代码后，都需要ctrl+s保存，不然终端看的还是旧代码。</p>
+<p><strong>短变量声明法</strong>：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	a, b, c := <span class="number">1</span>, <span class="number">2</span>, <span class="string">&quot;3&quot;</span></span><br><span class="line">	fmt.Println(a, b, c)</span><br><span class="line">	<span class="comment">// fmt.Println(&quot;a&quot;, &quot;a&quot;)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这样可正常打印：1 2 3(中间有一个空格，这是规范，就算println中不夹空格这里也会加)，然后短变量声明不能用来声明全局变量</p>
+<p><strong>匿名变量</strong>：</p>
+<p>在使用多重赋值时，如果想要忽略某个值，可以使用<strong>匿名变量</strong>（anonymous variable）。 匿</p>
+<p>名变量用一个下划线_表示，例如：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getUserinfo</span> <span class="params">(<span class="type">string</span>, <span class="type">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;ZhangSan&quot;</span>, <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _, age = getUserinfo()</span><br><span class="line">    fmt.Println(age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>匿名变量不占用命名空间，不会分配内存，所以匿名变量之间不存在重复声明。</p>
+<p>注意事项：</p>
+<p>1、函数外的每个语句都必须以关键字开始（var、const、func 等）</p>
+<p>2、:&#x3D;不能使用在函数外。</p>
+<p>3、_多用于占位，表示忽略值。</p>
+<p><strong>基本数据类型及其范围</strong>：</p>
+<p>先记一下整形的数据范围</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613100426712.png"  alt="image-20260613100426586"></p>
+<p>然后我们声明变量的时候就可以显示定义某个数是哪个范围的，就像这样：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> num <span class="type">int8</span></span><br><span class="line">	num = <span class="number">123</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;值:%v 类型%T&quot;</span>, num, num)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>会打印出：<br>值:123  类型int8</p>
+<p>此时要注意，由于int8类型的范围是-128到127，所以如果赋值为128会报错。</p>
+<p>如果是直接var num int &#x3D; 128,那么此时的数据类型根据操作系统架构而定，如果是64位系统，int就默认是int64。</p>
+<p>那么为防止数据超出范围，为什么不都直接用int呢？因为int比int8等更小位数的数据占用的字节更多，更不省内存。</p>
+<p>只要数据大小不溢出，各数据类型可相互转换：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613101028665.png"  alt="image-20260613101028606"></p>
+<p>再记一下各转义字符输出数据：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613101400469.png"  alt="image-20260613101400404"></p>
+<p><em><strong>字符属于int型</strong></em>：它的值为ascii值</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613112245146.png"  alt="image-20260613112245051"></p>
+<p>go中的字符分为两种类型。<br>一种是byte，也叫uint8类型类型，就是输出“我”时输出的是三个我现在还不认识的符号，因为它在utf-8编码下占据三个字节<br>另一种是rune类型， 按%v（%c）格式输出时就是正常的汉字和它对应的ascii值，例如20320（你）</p>
+<p>二者区别在于输出汉字时，能否直接输出汉字原型。</p>
+<p><strong>值类型</strong>：</p>
+<p>基本数据类型和数组都属于值类型，值类型有一个特点就是：</p>
+<p>当数组a1被声明了，然后数组a2 ：&#x3D; a1，那么此时a2（副本）是额外开辟了内存空间的，此后a1的修改于a2无关，类似于浅拷贝</p>
+<p><strong>引用类型</strong>：</p>
+<p>就是与上面相对的，副本会改变的，一般切片就是引用类型，存在内存空间共享</p>
+<p><strong>函数作为类型</strong></p>
+<p>我知道函数可以作为参数，其实函数也能作为数据类型。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613165701615.png"  alt="image-20260613165654508"></p>
+<p>如图，第一行通过type关键字声明了一个calc类型的函数，那么我在主函数中就可以声明一个calc类型的函数c，然后c就可以复制为函数sub，因为sub是完全符合calc的参数及返回要求的，这里很像python中的多态。</p>
+<p><strong>闭包</strong>：可以让变量常驻内存又不污染全局</p>
+<p>闭包就是函数里面再写个函数，然后外层函数返回值是内层函数。在主函数中，当外层函数被调用并被传入了一个参数，此时它返回一个内层函数，然后外层函数的局部变量相对于内层函数就是全局变量，当内层函数对该变量进行修改时，该变量会被作为全局变量而改变，所以如果下一行又调用了这个内层函数，那么此时的内层函数是在上一行改变了的变量的条件下进行作用的。（这一段很抽象，只有我编辑的时候能看懂，所以上图！）</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260614161737372.png"  alt="image-20260614161730289"><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260614161744499.png"  alt="image-20260614161744451"></p>
+<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>go中如果没有特异的异常处理代码，遇到错误时会直接结束执行，不会继续往后。</p>
+<p>下面给出defer、panic、recover抛出异常的示例：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">readFile</span><span class="params">(fileName <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> fileName == <span class="string">&quot;main.go&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> errors.New(<span class="string">&quot;读取文件错误&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fn3</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; <span class="comment">//defer会被注册并压入defer栈中，在这个函数结束前执行</span></span><br><span class="line">        err := <span class="built_in">recover</span>() <span class="comment">//用recover获取异常</span></span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            fmt.Println(<span class="string">&quot;抛出异常给管理员发送邮件&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;() <span class="comment">//自执行函数</span></span><br><span class="line">    <span class="keyword">var</span> err = readFile(<span class="string">&quot;xxx.go&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(err) <span class="comment">//主动抛出异常</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;继续执行&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fn3()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这段代码只会打印：<br>抛出异常给管理员发送邮件</p>
+<p>因为抛出异常时，函数会准备退出，但是退出之前要先执行defer语句，然后<code>recover()</code> 成功捕获了 panic 传递过来的错误信息。</p>
+<p><strong>指针巩固理解</strong></p>
+<p>变量a的值为10，程序运行时，a存在于内存中，且有一个内存中的地址，然后可以令p :&#x3D; &amp;a，此时指针p的值就是a的地址，同时呢，p自身也有一个地址，这个地址是和a的地址没有关系的，也能用取地址符号&amp;获得p的地址。</p>
+<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a><strong>结构体</strong></h1><p><strong>结构体方法</strong>：</p>
+<p>结构体函数有下面这两种定义方式<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615155445565.png"  alt="image-20260615155438477"></p>
+<p>第二种的接收者类型为指针，这样的方式使得在主函数中调用这个方法时，属性可以全局改变，但是第一种就不行。</p>
+<h1 id="使用第三方包"><a href="#使用第三方包" class="headerlink" title="使用第三方包"></a>使用第三方包</h1><p>假如我的项目目录最后是Test（项目名）</p>
+<p>那么我应该先在命令行用go mode init 项目名 来初始化项目，这一步会生成go.mod文件用于项目包管理。</p>
+<p>当我要自己写一个包时，我应该先新建一个calc文件夹在根目录下，然后在calc文件夹下写函数，就像这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193414942.png"  alt="image-20260615193414892"></p>
+<p>然后引用时就这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193444645.png"  alt="image-20260615193444613"></p>
+<p>这是用自己的包的流程，接下来说用官方包：</p>
+<p>要先去网站<a href="https://pkg.go.dev/">Go Packages - Go Packages</a>中找到自己要的那个包</p>
+<p>然后import左上角这个包的地址<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193731212.png"  alt="image-20260615193731175"></p>
+<p>，然后要么用go mod download 命令下载，要么就用go mod tidy来自动补全缺失的包（这个好用一点），然后就能用了</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>肖佬经验之谈</title>
+    <url>/2026/06/11/%E8%82%96%E4%BD%AC%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该着重考虑以后的发展方向了，有了舅舅的支持，我也能更放开心去想去做了。</p>
+<p>于是我找到了肖佬聊天，下图只为消除学历焦虑。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260611165226224.png"  alt="image-20260611165226164"></p>
+<h1 id="我需要再掌握一门后端语言"><a href="#我需要再掌握一门后端语言" class="headerlink" title="我需要再掌握一门后端语言"></a>我需要再掌握一门后端语言</h1><p>python语言主要用于研究测，双非学历只能干工程测的，需要在go和java中选一个。</p>
+<p>大厂后端以及原有业务开发agent大多仍是java。</p>
+<p>go目前生态较弱，但更适配agent的发展。</p>
+<p>python后端就是一坨屎，速度慢的要死，真正业务不可能用python上线，但是研究的时候需要做测试还是需要会基础的curl。</p>
+<h1 id="简历包装"><a href="#简历包装" class="headerlink" title="简历包装"></a>简历包装</h1><h3 id="奖项"><a href="#奖项" class="headerlink" title="奖项"></a>奖项</h3><p>首先奖项在简历上的作用有两个：<br>一是在简历筛选中占一点优势，二是在后期议薪时利于涨薪。甚至大厂一般都把竞赛奖项当shit</p>
+<h3 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h3><p>然后技术栈，这里就写自己会什么，写够就行，不要怕吹嘘风险。在计算机行业，“精通”这两个字只适用于开创者。</p>
+<h3 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h3><p>项目经历，这个比较重要，因为这是面试时主要要问的东西，面试官会先让我说我做过什么项目，在其中干了什么，然后面试官会根据我说的进行追问，这里他会层层深入，所以这里要注意引导。</p>
+<h3 id="实习经历"><a href="#实习经历" class="headerlink" title="实习经历"></a>实习经历</h3><p>对于找第一段实习的我来说，能过就行，不要太挑剔。有了一段实习经验后，会极大的提升后续的学习效率。</p>
+<p>同时不要害怕实习时长的问题，一般面试时说自己三个月或者六个月都行，反正大家都是干一个多月就走人了，也会开实习证明的。</p>
+<h1 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h1><p>面试官主要问的：</p>
+<p>简历上的东西面试官其实不咋看，毕竟他要面这个岗位的人，他就按照岗位要求去问就行。</p>
+<p>首先是通用技术，就是git，docker，通信协议等程序员都需要具备的技能的一些底层，但也没那么底层，就是知识点类的东西。这里设计到408的一些相关东西，所以408重要知识点还是要学一下。</p>
+<p>然后是项目经历，这里就引导面试官问自己利己的问题。对于一个项目，就算不是主力开发，也要去熟悉项目，可以吹嘘自己在项目中都干了啥。</p>
+<p>然后就是八股，这个比较重要，还是要背的比较熟悉才行。面试官爱问没办法。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>经验</tag>
+        <tag>就业</tag>
+      </tags>
+  </entry>
 </search>
