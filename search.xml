@@ -1,91 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>uni-app初学</title>
-    <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
-<p>现在是大二下册中期，到现在做的项目几乎全都是web开发，还没接触过小程序呢。但学习小程序肯定是作为一个程序员必不可少的，那么就先从一个简单的小程序开发框架开始。（它也能开发APP）</p>
-<p>小程序开发框架主要解决一套代码在多个平台（如微信、支付宝、H5等）运行的问题。</p>
-<p><strong>uni-app</strong></p>
+    <title>golang初学</title>
+    <url>/2026/06/12/golang%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一门语言不够那就学两门，对于完全没学过go但是学过其它语言且有一定的开发经验的我来说，感觉两天学完基本语法没问题。</p>
+<h1 id="安装报错"><a href="#安装报错" class="headerlink" title="安装报错"></a>安装报错</h1><p>当我去官网下载了go的最新版本的安装程序后，运行后发生这么一个错误：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260612191111404.png"  alt="image-20260612191104318"></p>
+<p>这是典型的MSI安装包权限或系统服务异常问题。</p>
+<p>然后我这么做：</p>
 <ul>
-<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信&#x2F;支付宝&#x2F;百度&#x2F;头条&#x2F;飞书&#x2F;QQ&#x2F;快手&#x2F;钉钉&#x2F;淘宝）、快应用等多个平台。</li>
-<li><strong>优点：</strong> 学习成本低（尤其对Vue开发者），插件市场资源丰富，跨端覆盖最广。</li>
-<li><strong>适用场景：</strong> 中小团队希望以最低成本快速覆盖多端，尤其是小程序生态</li>
-<li>教程源码在桌面资料里的fast-api教程的uniapp-demo下</li>
+<li>缺少Windows Installer文件夹<br>打开“此电脑” → C盘 → Windows文件夹 → 检查是否存在名为 <code>Installer</code> 的隐藏文件夹。若不存在，手动新建一个名为 <code>Installer</code> 的文件夹（注意：不要加引号，不要带空格）。</li>
 </ul>
-<h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h3 id="1、开发工具"><a href="#1、开发工具" class="headerlink" title="1、开发工具"></a>1、开发工具</h3><p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
-<h3 id="2、项目结构介绍"><a href="#2、项目结构介绍" class="headerlink" title="2、项目结构介绍"></a>2、项目结构介绍</h3><p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260420214114194.png"  alt="image-20260420214107103"></p>
-<ul>
-<li><code>pages.json</code>：对<code>uni-app</code>项目进行全局配置，决定页面文件的路径、窗口样式、导航条、底部的tabbar等。</li>
-<li><code>manifest.json</code>：应用的配置文件，用于指定应用的名称、图标、权限等。</li>
-<li><code>App.vue</code>：根组件，是整个程序的入口页面，所有其他页面都是它的子页面。</li>
-<li><code>main.js</code>：项目入口文件，用于初始化<code>vue</code>实例对象，并配置相关的插件。</li>
-<li><code>uni.scss</code>：预置了一些<code>scss</code>样式变量，如有需要可直接导入使用。（不管）</li>
-<li><code>unpackage</code>：打包目录，包括在各个平台的打包文件。</li>
-<li><code>pages</code>：所有的页面，一般一个页面文件用一个文件夹存放。</li>
-<li><code>static</code>：所有的静态文件，比如图片，字体等，但是不要存放<code>css/sass/less</code>和<code>js</code>等文件。</li>
-</ul>
-<p>为了实现多端兼容，综合考虑编译速度、运行性能等因素，<code>uni-app</code> 约定了如下开发规范：</p>
-<ul>
-<li>页面文件遵循 <a href="https://vue-loader.vuejs.org/zh/spec.html">Vue 单文件组件 (SFC) 规范</a></li>
-<li>组件标签靠近小程序规范，详见<a href="https://uniapp.dcloud.io/component/README">uni-app 组件规范</a></li>
-<li>接口能力（JS API）靠近微信小程序规范，但需将前缀 <code>wx</code> 替换为 <code>uni</code>，详见<a href="https://uniapp.dcloud.io/api/README">uni-app接口规范</a></li>
-<li>数据绑定及事件处理同 <code>Vue.js</code> 规范，同时补充了App及页面的生命周期</li>
-<li>为兼容多端运行，建议使用flex布局进行开发</li>
-</ul>
-<h3 id="3、运行项目"><a href="#3、运行项目" class="headerlink" title="3、运行项目"></a>3、运行项目</h3><h3 id="1）-运行在网页"><a href="#1）-运行在网页" class="headerlink" title="1） 运行在网页"></a>1） 运行在网页</h3><p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
-<h3 id="2）-运行在微信小程序"><a href="#2）-运行在微信小程序" class="headerlink" title="2） 运行在微信小程序"></a>2） 运行在微信小程序</h3><ul>
-<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-%3E%E5%B7%A5%E5%85%B7-%3E%E8%AE%BE%E7%BD%AE-%3E%E8%BF%90%E8%A1%8C%E8%AE%BE%E7%BD%AE-%3E%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%85%8D%E7%BD%AE%60%EF%BC%8C%E6%89%BE%E5%88%B0%60%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E8%B7%AF%E5%BE%84%60%EF%BC%8C%E5%B0%86%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E7%9A%84%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84%E8%AE%BE%E7%BD%AE%E5%A5%BD%E3%80%82">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置`，找到`微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</a></li>
-<li>设置测试号：打开微信小程序开发者工具，然后创建项目，点击获取<code>测试号</code>。然后在<code>HBuilderX</code>的项目中，找到<code>manifest.json</code>文件，然后找到<code>微信小程序配置</code>，将从微信开发者工具中获取到的测试号设置到<code>微信小程序AppID</code>中。</li>
-<li>运行：在<code>运行-&gt;运行到小程序-&gt;微信开发者工具</code>，即可在微信小程序中运行项目。</li>
-</ul>
-<h3 id="3）-作为APP运行在安卓真机"><a href="#3）-作为APP运行在安卓真机" class="headerlink" title="3） 作为APP运行在安卓真机"></a>3） 作为APP运行在安卓真机</h3><p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
-<ul>
-<li>在安卓手机上开启：开发者选项，开启USB调试，允许USB安装应用，然后用<strong>数据线</strong>连接电脑。</li>
-<li>在HBuilderX上：设置合适的adb。设置方式为在<code>运行-&gt;运行手机或模拟器-&gt;设置adb路径</code>。<code>HBuilderX</code>自带的<code>adb</code>路径在：<code>HBuilderX\plugins\launcher-tools\tools\adbs</code>。</li>
-</ul>
-<p>然后点击HBuilderX的<code>运行-&gt;运行手机或模拟器</code>即可启动。</p>
+<p>后就成功了，那么这个文件夹是什么？</p>
+<p><code>C:\Windows\Installer</code> 文件夹是 Windows Installer 服务用于存储软件安装、更新、修复和卸载所需缓存文件的核心目录，其作用是确保系统能正确管理软件生命周期。</p>
+<h1 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h1><p>当我要运行main文件时，我可以在命令行运行go run main.go；或者运行go build main.go，这样会生成main.exe，然后.\main.exe运行这个可执行文件，这相当于把编译执行拆开。</p>
+<p>我每次修改完代码后，都需要ctrl+s保存，不然终端看的还是旧代码。</p>
+<p><strong>短变量声明法</strong>：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	a, b, c := <span class="number">1</span>, <span class="number">2</span>, <span class="string">&quot;3&quot;</span></span><br><span class="line">	fmt.Println(a, b, c)</span><br><span class="line">	<span class="comment">// fmt.Println(&quot;a&quot;, &quot;a&quot;)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这样可正常打印：1 2 3(中间有一个空格，这是规范，就算println中不夹空格这里也会加)，然后短变量声明不能用来声明全局变量</p>
+<p><strong>匿名变量</strong>：</p>
+<p>在使用多重赋值时，如果想要忽略某个值，可以使用<strong>匿名变量</strong>（anonymous variable）。 匿</p>
+<p>名变量用一个下划线_表示，例如：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getUserinfo</span> <span class="params">(<span class="type">string</span>, <span class="type">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;ZhangSan&quot;</span>, <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _, age = getUserinfo()</span><br><span class="line">    fmt.Println(age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>匿名变量不占用命名空间，不会分配内存，所以匿名变量之间不存在重复声明。</p>
+<p>注意事项：</p>
+<p>1、函数外的每个语句都必须以关键字开始（var、const、func 等）</p>
+<p>2、:&#x3D;不能使用在函数外。</p>
+<p>3、_多用于占位，表示忽略值。</p>
+<p><strong>基本数据类型及其范围</strong>：</p>
+<p>先记一下整形的数据范围</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613100426712.png"  alt="image-20260613100426586"></p>
+<p>然后我们声明变量的时候就可以显示定义某个数是哪个范围的，就像这样：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> num <span class="type">int8</span></span><br><span class="line">	num = <span class="number">123</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;值:%v 类型%T&quot;</span>, num, num)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>会打印出：<br>值:123  类型int8</p>
+<p>此时要注意，由于int8类型的范围是-128到127，所以如果赋值为128会报错。</p>
+<p>如果是直接var num int &#x3D; 128,那么此时的数据类型根据操作系统架构而定，如果是64位系统，int就默认是int64。</p>
+<p>那么为防止数据超出范围，为什么不都直接用int呢？因为int比int8等更小位数的数据占用的字节更多，更不省内存。</p>
+<p>只要数据大小不溢出，各数据类型可相互转换：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613101028665.png"  alt="image-20260613101028606"></p>
+<p>再记一下各转义字符输出数据：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613101400469.png"  alt="image-20260613101400404"></p>
+<p><em><strong>字符属于int型</strong></em>：它的值为ascii值</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613112245146.png"  alt="image-20260613112245051"></p>
+<p>go中的字符分为两种类型。<br>一种是byte，也叫uint8类型类型，就是输出“我”时输出的是三个我现在还不认识的符号，因为它在utf-8编码下占据三个字节<br>另一种是rune类型， 按%v（%c）格式输出时就是正常的汉字和它对应的ascii值，例如20320（你）</p>
+<p>二者区别在于输出汉字时，能否直接输出汉字原型。</p>
+<p><strong>值类型</strong>：</p>
+<p>基本数据类型和数组都属于值类型，值类型有一个特点就是：</p>
+<p>当数组a1被声明了，然后数组a2 ：&#x3D; a1，那么此时a2（副本）是额外开辟了内存空间的，此后a1的修改于a2无关，类似于浅拷贝</p>
+<p><strong>引用类型</strong>：</p>
+<p>就是与上面相对的，副本会改变的，一般切片就是引用类型，存在内存空间共享</p>
+<p><strong>函数作为类型</strong></p>
+<p>我知道函数可以作为参数，其实函数也能作为数据类型。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613165701615.png"  alt="image-20260613165654508"></p>
+<p>如图，第一行通过type关键字声明了一个calc类型的函数，那么我在主函数中就可以声明一个calc类型的函数c，然后c就可以复制为函数sub，因为sub是完全符合calc的参数及返回要求的，这里很像python中的多态。</p>
+<p><strong>闭包</strong>：可以让变量常驻内存又不污染全局</p>
+<p>闭包就是函数里面再写个函数，然后外层函数返回值是内层函数。在主函数中，当外层函数被调用并被传入了一个参数，此时它返回一个内层函数，然后外层函数的局部变量相对于内层函数就是全局变量，当内层函数对该变量进行修改时，该变量会被作为全局变量而改变，所以如果下一行又调用了这个内层函数，那么此时的内层函数是在上一行改变了的变量的条件下进行作用的。（这一段很抽象，只有我编辑的时候能看懂，所以上图！）</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260614161737372.png"  alt="image-20260614161730289"><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260614161744499.png"  alt="image-20260614161744451"></p>
+<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>go中如果没有特异的异常处理代码，遇到错误时会直接结束执行，不会继续往后。</p>
+<p>下面给出defer、panic、recover抛出异常的示例：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">readFile</span><span class="params">(fileName <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> fileName == <span class="string">&quot;main.go&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> errors.New(<span class="string">&quot;读取文件错误&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fn3</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; <span class="comment">//defer会被注册并压入defer栈中，在这个函数结束前执行</span></span><br><span class="line">        err := <span class="built_in">recover</span>() <span class="comment">//用recover获取异常</span></span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            fmt.Println(<span class="string">&quot;抛出异常给管理员发送邮件&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;() <span class="comment">//自执行函数</span></span><br><span class="line">    <span class="keyword">var</span> err = readFile(<span class="string">&quot;xxx.go&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(err) <span class="comment">//主动抛出异常</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;继续执行&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fn3()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这段代码只会打印：<br>抛出异常给管理员发送邮件</p>
+<p>因为抛出异常时，函数会准备退出，但是退出之前要先执行defer语句，然后<code>recover()</code> 成功捕获了 panic 传递过来的错误信息。</p>
+<p><strong>指针巩固理解</strong></p>
+<p>变量a的值为10，程序运行时，a存在于内存中，且有一个内存中的地址，然后可以令p :&#x3D; &amp;a，此时指针p的值就是a的地址，同时呢，p自身也有一个地址，这个地址是和a的地址没有关系的，也能用取地址符号&amp;获得p的地址。</p>
+<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a><strong>结构体</strong></h1><p><strong>结构体方法</strong>：</p>
+<p>结构体函数有下面这两种定义方式<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615155445565.png"  alt="image-20260615155438477"></p>
+<p>第二种的接收者类型为指针，这样的方式使得在主函数中调用这个方法时，属性可以全局改变，但是第一种就不行。</p>
+<h1 id="使用第三方包"><a href="#使用第三方包" class="headerlink" title="使用第三方包"></a>使用第三方包</h1><p>假如我的项目目录最后是Test（项目名）</p>
+<p>那么我应该先在命令行用go mode init 项目名 来初始化项目，这一步会生成go.mod文件用于项目包管理。</p>
+<p>当我要自己写一个包时，我应该先新建一个calc文件夹在根目录下，然后在calc文件夹下写函数，就像这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193414942.png"  alt="image-20260615193414892"></p>
+<p>然后引用时就这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193444645.png"  alt="image-20260615193444613"></p>
+<p>这是用自己的包的流程，接下来说用官方包：</p>
+<p>要先去网站<a href="https://pkg.go.dev/">Go Packages - Go Packages</a>中找到自己要的那个包</p>
+<p>然后import左上角这个包的地址<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193731212.png"  alt="image-20260615193731175"></p>
+<p>，然后要么用go mod download 命令下载，要么就用go mod tidy来自动补全缺失的包（这个好用一点），然后就能用了</p>
+<h1 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h1><p>Go中，把接口理解为一种约定，里面会声明一些函数，然后这些函数依赖结构体来实现（结构体需要实现约定中的所有函数）。然后在主函数中，声明一个接口实例和一个结构体实例，把结构体实例赋值给接口实例，此时接口实例就能调用接口中约定的方法了。</p>
+<p><strong>空接口</strong></p>
+<p>给它赋值的变量是什么类型，那么这个接口就是什么类型。</p>
+<p> <strong>类型断言</strong></p>
+<p>当我要判断一个接口实例是什么类型时。<br>第一种用法：用语法flag :&#x3D; a.(string)，相当于判断实例a是否时string类型，这是一个布尔变量。<br>第二种用法：a.(type)，然后用switch case来分类讨论。</p>
+<h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><p>协程是用户级的一个操作，比如程序中的一个函数，在主协程中（main.go）只需要一个go关键字就能开辟一个协程。当主协程执行完毕时，无论其它协程有没有执行完，都会停止。</p>
+<h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><p>用于各个协程之间通信（各协程可以共享管道）</p>
+<h1 id="互斥锁与读写互斥锁"><a href="#互斥锁与读写互斥锁" class="headerlink" title="互斥锁与读写互斥锁"></a>互斥锁与读写互斥锁</h1><p>这俩东西不一样，读写互斥锁中，读操作是可以并发的，但是写操作要独占一个锁</p>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>初步理解为给函数传入一个参数，定义函数时用空接口表示要接收的参数，这样的话实际使用时可以接收任意数据类型的接口，然后可以通过反射包中的方法获取传入参数的类型以及值。获取到后就可以分情况修改或者操作这个参数了。</p>
+<h1 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h1><p>读文件时，每次可以选择读一行或者多少字节，然后for循环读取，读完后会有个err参数接收到信息，用if判断这个参数，然后跳出循环。</p>
+<p>写文件时，有个参数配置：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260618164749461.png"  alt="image-20260618164742337"></p>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getData</span>[<span class="title">T</span> <span class="title">any</span>]<span class="params">(value T)</span></span> T &#123;</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这样的话，传入的 value可以是任何类型，不需要做类型断言，也不用担心类型安全</p>
 ]]></content>
       <categories>
         <category>开发</category>
       </categories>
       <tags>
-        <tag>框架使用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vibecoding项目迭代</title>
-    <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上创业课太无聊了，我居然点进了哔站刷视频，于是乎就看到这么个视频【小白AI编程进阶：不写一行代码，教你Vibecoding项目完美升级！】<a href="https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e%E3%80%82%E5%94%89%EF%BC%8Cvibecoding%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E4%B8%8D%E8%B7%9F%E4%B8%8A%E5%8E%BB%E5%AD%A6%E4%B8%80%E5%AD%A6%EF%BC%8C%E8%B7%AF%E8%BE%B9%E7%9A%84%E5%A4%A7%E7%88%B7%E5%BE%85%E4%BC%9A%E9%83%BD%E6%AF%94%E6%88%91%E6%9B%B4%E4%BC%9A%E7%BC%96%E7%A8%8B%E4%BA%86%E3%80%82">https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e。唉，vibecoding的时代，不跟上去学一学，路边的大爷待会都比我更会编程了。</a></p>
-<p>我将把这个视频所传知识化为己有。</p>
-<p>懒得仔细看就直接看最后的总结图片。</p>
-<h1 id="小改"><a href="#小改" class="headerlink" title="小改"></a>小改</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210329014.png"  alt="image-20260408210328987"></p>
-<p>如上图，直接截图告诉它就行，改完后看效果，不满意再改。</p>
-<h1 id="大改"><a href="#大改" class="headerlink" title="大改"></a>大改</h1><h3 id="1、存档"><a href="#1、存档" class="headerlink" title="1、存档"></a>1、存档</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210349026.png"  alt="image-20260408210348995"></p>
-<p>用如上图的方式让AI帮打包，或者用github进行版本管理。</p>
-<h3 id="2、写迭代文档PRD"><a href="#2、写迭代文档PRD" class="headerlink" title="2、写迭代文档PRD"></a>2、写迭代文档PRD</h3><p>找到一个厉害点的大模型，告诉它：</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210410691.png"  alt="image-20260408210410652"></p>
-<p>如果有不满意的地方，截图丢回去让它改，如下图</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://gitee.com/han-fangfang/blogs_picture/raw/master/20260408201828383.png"  alt="image-20260408201828348"></p>
-<p>最终，我们应该得到了一份满意的迭代PRD</p>
-<h3 id="3、IDE内行动"><a href="#3、IDE内行动" class="headerlink" title="3、IDE内行动"></a>3、IDE内行动</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210458951.png"  alt="image-20260408210458859"></p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210512601.png"  alt="image-20260408210512578"></p>
-<p>建立这样的文件结构，前面大模型给的迭代prd和迭代html代码就放在迭代2.0这样的目录下。</p>
-<p>然后把迭代2.0目录右击，添加到对话，就像这样：</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210539600.png"  alt="image-20260408210539578"></p>
-<p>然后切换到plan模式，并：</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210552887.png"  alt="image-20260408210552859"></p>
-<p>完了之后点击计划给出的build按钮，也就是开始编码</p>
-<h3 id="4、备忘"><a href="#4、备忘" class="headerlink" title="4、备忘"></a>4、备忘</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210601648.png"  alt="image-20260408210601618"></p>
-<p>也就是总结一下这次迭代都干了些啥</p>
-<h1 id="总结图片"><a href="#总结图片" class="headerlink" title="总结图片"></a>总结图片</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210611798.png"  alt="image-20260408210611675"></p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>vibecoding</tag>
+        <tag>go</tag>
       </tags>
   </entry>
   <entry>
@@ -191,6 +200,161 @@
       </tags>
   </entry>
   <entry>
+    <title>gozero初学</title>
+    <url>/2026/06/20/gozero%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>此时已经过完了go的基础语法，本来要开始学习Gin框架了，但肖佬说这个框架过时了，直接去学gozero，这是一个集成了各种工程实践的web和微服务框架。</p>
+<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p>微服务就是一种分而治之的思想，把一个紧密结合的应用解耦，各有各的数据库、接口等，各自发展。</p>
+<p>那么它和分布式有什么区别呢？一句话概括就是微服务是分布式架构的一种实现方式的突出演变，就像深度学习与机器学习的关系。</p>
+<h1 id="rpc和grpc"><a href="#rpc和grpc" class="headerlink" title="rpc和grpc"></a>rpc和grpc</h1><p>RPC（remote prduce call），是一种通信协议，<strong>让程序像调用本地函数一样，去调用另一台机器（或另一个进程）上的函数，而不需要了解底层的网络通信细节</strong>。</p>
+<p>gRPC是Google开发的一款<strong>高性能、通用的 RPC 框架</strong>，专为微服务架构设计。</p>
+<h1 id="初始化一个gozero项目"><a href="#初始化一个gozero项目" class="headerlink" title="初始化一个gozero项目"></a>初始化一个gozero项目</h1><p>第一种方式：()</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">goctl api new proj_name</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>第二：<br>当项目中已经有一个proj_name.api文件时，cd进项目，然后执行以下命令</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">goctl api go --api proj_name.api --<span class="built_in">dir</span> .</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>然后再执行go mod tidy来下载依赖，完成初始化。</p>
+<p>基本目录解析如下：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260620164828021.png"  alt="image-20260620164820908"></p>
+<p>可用命令goctl api doc –dir . –o .&#x2F;doc生成doc文档</p>
+<h1 id="请求到返回大致流程"><a href="#请求到返回大致流程" class="headerlink" title="请求到返回大致流程"></a>请求到返回大致流程</h1><p>在.api文件中定义路由以及结构体（这个结构体和types中的写的一致）-&gt;</p>
+<p>然后这里定义的路由会被卸载handler下的routes.go中-&gt;</p>
+<p>routes.go中的handler也就是handler目录下的各个模块的某某handler.go-&gt;</p>
+<p>然后这个某某.handler.go中会用上logic目录下的函数，这个函数会写最终要return的东西</p>
+<p>当我想要新增一个接口时，只需要在.api文件中写好，然后执行那个goctl生成代码的命令，它会帮我生成从routes.go到最后的logic下函数中途中的所有代码，我只需要补充logic下那个函数的返回逻辑</p>
+<h1 id="分模块"><a href="#分模块" class="headerlink" title="分模块"></a>分模块</h1><p>在.api中，我们用@server()来统一前缀，以用来将路由们分模块。</p>
+<p>除了handler可以分模块，也可以建立一个.api目录，把proj_name.api文件分为各个模块。</p>
+<h1 id="MySQL的sqlx"><a href="#MySQL的sqlx" class="headerlink" title="MySQL的sqlx"></a>MySQL的sqlx</h1><p>和python中的ORM差不多，也是需要定义模型、定义连接什么的，但是感觉go中的跳转有好多，从发起请求到返回响应之间层层链接，中途有极多的文件间跳转、引用。</p>
+<p>这会导致牵一发动全身的感觉，我目前感觉很麻烦，所以不得不衍生出一个更简便的ORM框架——GORM</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gozero</tag>
+        <tag>框架</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gorm</title>
+    <url>/2026/06/22/gorm/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>简单来说，它是一个开发者工具，能让你用操作 Go 结构体（Struct）和对象的方式来与关系型数据库（如 MySQL、PostgreSQL、SQLite 等）进行交互，而无需编写复杂的 SQL 语句。</p>
+<p>核心思想：将数据库中的“表”映射为 Go 程序中的“结构体”，将表中的“行”映射为结构体的“实例”，将表中的“列”映射为结构体的“字段”。</p>
+<h1 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h1><div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u gorm.io/gorm</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>假如是操作mysql，那么下一步是：</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u gorm.io/driver/mysql</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>tips：gorm不是全局安装，而是项目级别的，需要在项目已有**<code>go.mod</code>**文件时才能给项目安装</p>
+<p>这里不得不的提一嘴，go的项目依赖是全局安装的，但不需要担心多个项目依赖冲突的问题，因为在全局缓存目录中，go允许一个库的多个版本同时存在。当项目编译时，go编译器只会根据go.mod去编译对应版本的库</p>
+<p>。。。懒得写了，大体流程和python那些都差不多，只是具有了一些gozero的特性而已。</p>
+<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>就像用sql语句查询特定的字段值<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260622191018448.png"  alt="image-20260622191011309"></p>
+<p>也可以执行原生SQL语句：</p>
+<p>Exec(sql) 执行一个语句，返回受影响的行数，用于 删除数据 或者修改数据</p>
+<p>Raw(sql) Scan() 用于查询数</p>
+<p>如：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用原生sql Exec修改article表中的一条数据</span></span><br><span class="line">result := l.svcCtx.DB.Exec(<span class="string">&quot;UPDATE article SET title = ? WHERE id = ?&quot;</span>, <span class="string">&quot;原生sql修改数据&quot;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//Raw查询article表中id=2的数据</span></span><br><span class="line">article := []gorm.Article&#123;&#125;</span><br><span class="line">l.svcCtx.DB.Raw(<span class="string">&quot;SELECT * FROM article WHERE id = ?&quot;</span>, <span class="number">2</span>).Scan(&amp;article)</span><br><span class="line"></span><br><span class="line"><span class="comment">//原生sql统计article表的数量</span></span><br><span class="line"><span class="keyword">var</span> count <span class="type">int64</span></span><br><span class="line">result = l.svcCtx.DB.Raw(<span class="string">&quot;SELECT COUNT(*) FROM article&quot;</span>).Scan(&amp;count)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+
+
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gorm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vibecoding项目迭代</title>
+    <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上创业课太无聊了，我居然点进了哔站刷视频，于是乎就看到这么个视频【小白AI编程进阶：不写一行代码，教你Vibecoding项目完美升级！】<a href="https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e%E3%80%82%E5%94%89%EF%BC%8Cvibecoding%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E4%B8%8D%E8%B7%9F%E4%B8%8A%E5%8E%BB%E5%AD%A6%E4%B8%80%E5%AD%A6%EF%BC%8C%E8%B7%AF%E8%BE%B9%E7%9A%84%E5%A4%A7%E7%88%B7%E5%BE%85%E4%BC%9A%E9%83%BD%E6%AF%94%E6%88%91%E6%9B%B4%E4%BC%9A%E7%BC%96%E7%A8%8B%E4%BA%86%E3%80%82">https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e。唉，vibecoding的时代，不跟上去学一学，路边的大爷待会都比我更会编程了。</a></p>
+<p>我将把这个视频所传知识化为己有。</p>
+<p>懒得仔细看就直接看最后的总结图片。</p>
+<h1 id="小改"><a href="#小改" class="headerlink" title="小改"></a>小改</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210329014.png"  alt="image-20260408210328987"></p>
+<p>如上图，直接截图告诉它就行，改完后看效果，不满意再改。</p>
+<h1 id="大改"><a href="#大改" class="headerlink" title="大改"></a>大改</h1><h3 id="1、存档"><a href="#1、存档" class="headerlink" title="1、存档"></a>1、存档</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210349026.png"  alt="image-20260408210348995"></p>
+<p>用如上图的方式让AI帮打包，或者用github进行版本管理。</p>
+<h3 id="2、写迭代文档PRD"><a href="#2、写迭代文档PRD" class="headerlink" title="2、写迭代文档PRD"></a>2、写迭代文档PRD</h3><p>找到一个厉害点的大模型，告诉它：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210410691.png"  alt="image-20260408210410652"></p>
+<p>如果有不满意的地方，截图丢回去让它改，如下图</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://gitee.com/han-fangfang/blogs_picture/raw/master/20260408201828383.png"  alt="image-20260408201828348"></p>
+<p>最终，我们应该得到了一份满意的迭代PRD</p>
+<h3 id="3、IDE内行动"><a href="#3、IDE内行动" class="headerlink" title="3、IDE内行动"></a>3、IDE内行动</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210458951.png"  alt="image-20260408210458859"></p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210512601.png"  alt="image-20260408210512578"></p>
+<p>建立这样的文件结构，前面大模型给的迭代prd和迭代html代码就放在迭代2.0这样的目录下。</p>
+<p>然后把迭代2.0目录右击，添加到对话，就像这样：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210539600.png"  alt="image-20260408210539578"></p>
+<p>然后切换到plan模式，并：</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210552887.png"  alt="image-20260408210552859"></p>
+<p>完了之后点击计划给出的build按钮，也就是开始编码</p>
+<h3 id="4、备忘"><a href="#4、备忘" class="headerlink" title="4、备忘"></a>4、备忘</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210601648.png"  alt="image-20260408210601618"></p>
+<p>也就是总结一下这次迭代都干了些啥</p>
+<h1 id="总结图片"><a href="#总结图片" class="headerlink" title="总结图片"></a>总结图片</h1><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408210611798.png"  alt="image-20260408210611675"></p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>vibecoding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>uni-app初学</title>
+    <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
+<p>现在是大二下册中期，到现在做的项目几乎全都是web开发，还没接触过小程序呢。但学习小程序肯定是作为一个程序员必不可少的，那么就先从一个简单的小程序开发框架开始。（它也能开发APP）</p>
+<p>小程序开发框架主要解决一套代码在多个平台（如微信、支付宝、H5等）运行的问题。</p>
+<p><strong>uni-app</strong></p>
+<ul>
+<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信&#x2F;支付宝&#x2F;百度&#x2F;头条&#x2F;飞书&#x2F;QQ&#x2F;快手&#x2F;钉钉&#x2F;淘宝）、快应用等多个平台。</li>
+<li><strong>优点：</strong> 学习成本低（尤其对Vue开发者），插件市场资源丰富，跨端覆盖最广。</li>
+<li><strong>适用场景：</strong> 中小团队希望以最低成本快速覆盖多端，尤其是小程序生态</li>
+<li>教程源码在桌面资料里的fast-api教程的uniapp-demo下</li>
+</ul>
+<h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h3 id="1、开发工具"><a href="#1、开发工具" class="headerlink" title="1、开发工具"></a>1、开发工具</h3><p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
+<h3 id="2、项目结构介绍"><a href="#2、项目结构介绍" class="headerlink" title="2、项目结构介绍"></a>2、项目结构介绍</h3><p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260420214114194.png"  alt="image-20260420214107103"></p>
+<ul>
+<li><code>pages.json</code>：对<code>uni-app</code>项目进行全局配置，决定页面文件的路径、窗口样式、导航条、底部的tabbar等。</li>
+<li><code>manifest.json</code>：应用的配置文件，用于指定应用的名称、图标、权限等。</li>
+<li><code>App.vue</code>：根组件，是整个程序的入口页面，所有其他页面都是它的子页面。</li>
+<li><code>main.js</code>：项目入口文件，用于初始化<code>vue</code>实例对象，并配置相关的插件。</li>
+<li><code>uni.scss</code>：预置了一些<code>scss</code>样式变量，如有需要可直接导入使用。（不管）</li>
+<li><code>unpackage</code>：打包目录，包括在各个平台的打包文件。</li>
+<li><code>pages</code>：所有的页面，一般一个页面文件用一个文件夹存放。</li>
+<li><code>static</code>：所有的静态文件，比如图片，字体等，但是不要存放<code>css/sass/less</code>和<code>js</code>等文件。</li>
+</ul>
+<p>为了实现多端兼容，综合考虑编译速度、运行性能等因素，<code>uni-app</code> 约定了如下开发规范：</p>
+<ul>
+<li>页面文件遵循 <a href="https://vue-loader.vuejs.org/zh/spec.html">Vue 单文件组件 (SFC) 规范</a></li>
+<li>组件标签靠近小程序规范，详见<a href="https://uniapp.dcloud.io/component/README">uni-app 组件规范</a></li>
+<li>接口能力（JS API）靠近微信小程序规范，但需将前缀 <code>wx</code> 替换为 <code>uni</code>，详见<a href="https://uniapp.dcloud.io/api/README">uni-app接口规范</a></li>
+<li>数据绑定及事件处理同 <code>Vue.js</code> 规范，同时补充了App及页面的生命周期</li>
+<li>为兼容多端运行，建议使用flex布局进行开发</li>
+</ul>
+<h3 id="3、运行项目"><a href="#3、运行项目" class="headerlink" title="3、运行项目"></a>3、运行项目</h3><h3 id="1）-运行在网页"><a href="#1）-运行在网页" class="headerlink" title="1） 运行在网页"></a>1） 运行在网页</h3><p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
+<h3 id="2）-运行在微信小程序"><a href="#2）-运行在微信小程序" class="headerlink" title="2） 运行在微信小程序"></a>2） 运行在微信小程序</h3><ul>
+<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-%3E%E5%B7%A5%E5%85%B7-%3E%E8%AE%BE%E7%BD%AE-%3E%E8%BF%90%E8%A1%8C%E8%AE%BE%E7%BD%AE-%3E%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%85%8D%E7%BD%AE%60%EF%BC%8C%E6%89%BE%E5%88%B0%60%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E8%B7%AF%E5%BE%84%60%EF%BC%8C%E5%B0%86%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E7%9A%84%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84%E8%AE%BE%E7%BD%AE%E5%A5%BD%E3%80%82">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置`，找到`微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</a></li>
+<li>设置测试号：打开微信小程序开发者工具，然后创建项目，点击获取<code>测试号</code>。然后在<code>HBuilderX</code>的项目中，找到<code>manifest.json</code>文件，然后找到<code>微信小程序配置</code>，将从微信开发者工具中获取到的测试号设置到<code>微信小程序AppID</code>中。</li>
+<li>运行：在<code>运行-&gt;运行到小程序-&gt;微信开发者工具</code>，即可在微信小程序中运行项目。</li>
+</ul>
+<h3 id="3）-作为APP运行在安卓真机"><a href="#3）-作为APP运行在安卓真机" class="headerlink" title="3） 作为APP运行在安卓真机"></a>3） 作为APP运行在安卓真机</h3><p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
+<ul>
+<li>在安卓手机上开启：开发者选项，开启USB调试，允许USB安装应用，然后用<strong>数据线</strong>连接电脑。</li>
+<li>在HBuilderX上：设置合适的adb。设置方式为在<code>运行-&gt;运行手机或模拟器-&gt;设置adb路径</code>。<code>HBuilderX</code>自带的<code>adb</code>路径在：<code>HBuilderX\plugins\launcher-tools\tools\adbs</code>。</li>
+</ul>
+<p>然后点击HBuilderX的<code>运行-&gt;运行手机或模拟器</code>即可启动。</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>框架使用</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>做一张行测卷</title>
     <url>/2026/06/10/%E5%81%9A%E4%B8%80%E5%BC%A0%E8%A1%8C%E6%B5%8B%E5%8D%B7/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>家里一直希望我考公， 可我总是那么抗拒。首先我考公学习上没多少天赋，即不擅长那种题型，其次我不喜欢公务员的生活，那种一考定终身的事情是不是太禁锢人了，我反而更想自由就职。</p>
@@ -216,6 +380,27 @@
         <tag>考公</tag>
         <tag>行测</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>关于是否考研的想法</title>
+    <url>/2026/04/10/%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%80%83%E7%A0%94%E7%9A%84%E6%83%B3%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
+<p>因为每次看到别人为了论证自己所说的是正确的时，我总觉得很有道理，大概因为我是个认同型人格吧。直到今晚与中科院吴博士交流了一下······</p>
+<h1 id="选就业？"><a href="#选就业？" class="headerlink" title="选就业？"></a>选就业？</h1><p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
+<p>我觉得我是个能适应社会的人，也许是因为我还没真正经历社会摧残的原因吧，我有股想闯荡社会的冲动。</p>
+<p>优势：早点自己挣钱，不拖累父母；代码能力还可以，大一大二两年培养了较强的工程能力；有点小奖，简历上有的写；符合我的少年心气。</p>
+<p>劣势：薪资估计高不了，也没法根本改变家里的局面；可能这辈子都达不到研究生学历了。</p>
+<h1 id="考研？"><a href="#考研？" class="headerlink" title="考研？"></a>考研？</h1><p>目前还是选择的这条路，毕竟论文还在搞着。</p>
+<p>优势：起薪高，这一学历用一辈子，也是我提升阶级的唯一机会。我英语也算还好，不偏科。</p>
+<p>劣势：二战风险，难度大，辛苦，再吃几年父母的。（这里有个思考：工作三年也并不能为父母带来什么改变，三年的工作时间在一生中只是天地之蜉蝣，三年投资带来的成功是三年工作经验比不了的。而且就那几年研究生能花多少钱）</p>
+<h1 id="吴博士所言"><a href="#吴博士所言" class="headerlink" title="吴博士所言"></a>吴博士所言</h1><p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
+<p>公司选人的本质依然是看一个人的能力。技术好、学历高等等都是一个人能力强的证明，二者缺一都是有所缺陷的，不必花心思纠结在二者择一的问题上，而是把二者都当作提升自己的思路，提升自己，才叫做直击企业用人核心。</p>
+<p>对于AI取代程序员，这是不可能的。之前一人耕一亩地，现在一人耕十亩地，但终究需要人来耕地，而且随着效率提升，需求也会随之提升。自古以来，从不会因为工具过于强大而行业崩塌的说法。这是人类社会的进步。</p>
+<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
   </entry>
   <entry>
     <title>充值事件</title>
@@ -307,27 +492,6 @@
         <tag>Vue3</tag>
         <tag>Spring boot</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>关于是否考研的想法</title>
-    <url>/2026/04/10/%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%80%83%E7%A0%94%E7%9A%84%E6%83%B3%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>是否要考研，这个问题纠缠我很久了，每当刷到相关视频或者与他人聊起时，心中考研的信念总是容易动摇。</p>
-<p>因为每次看到别人为了论证自己所说的是正确的时，我总觉得很有道理，大概因为我是个认同型人格吧。直到今晚与中科院吴博士交流了一下······</p>
-<h1 id="选就业？"><a href="#选就业？" class="headerlink" title="选就业？"></a>选就业？</h1><p>其实就业大多时候才是我的心之所向，我并没有什么高校情怀或者高考遗憾，说起高考，我很乐意接受这么个结果，因为我再错一个选择题，我就遇不到她了^v^</p>
-<p>我觉得我是个能适应社会的人，也许是因为我还没真正经历社会摧残的原因吧，我有股想闯荡社会的冲动。</p>
-<p>优势：早点自己挣钱，不拖累父母；代码能力还可以，大一大二两年培养了较强的工程能力；有点小奖，简历上有的写；符合我的少年心气。</p>
-<p>劣势：薪资估计高不了，也没法根本改变家里的局面；可能这辈子都达不到研究生学历了。</p>
-<h1 id="考研？"><a href="#考研？" class="headerlink" title="考研？"></a>考研？</h1><p>目前还是选择的这条路，毕竟论文还在搞着。</p>
-<p>优势：起薪高，这一学历用一辈子，也是我提升阶级的唯一机会。我英语也算还好，不偏科。</p>
-<p>劣势：二战风险，难度大，辛苦，再吃几年父母的。（这里有个思考：工作三年也并不能为父母带来什么改变，三年的工作时间在一生中只是天地之蜉蝣，三年投资带来的成功是三年工作经验比不了的。而且就那几年研究生能花多少钱）</p>
-<h1 id="吴博士所言"><a href="#吴博士所言" class="headerlink" title="吴博士所言"></a>吴博士所言</h1><p>经典大二还早。。。感觉交流过的大佬们都觉得大二还很早。他说考研和就业是不冲突的，因为考研也得学技术，写论文对就业亦有帮助。总而言之，当下的任务是专心学习，提升自我，考研只是提升自我上限的一个方法，它并不会切断我的其它路。</p>
-<p>公司选人的本质依然是看一个人的能力。技术好、学历高等等都是一个人能力强的证明，二者缺一都是有所缺陷的，不必花心思纠结在二者择一的问题上，而是把二者都当作提升自己的思路，提升自己，才叫做直击企业用人核心。</p>
-<p>对于AI取代程序员，这是不可能的。之前一人耕一亩地，现在一人耕十亩地，但终究需要人来耕地，而且随着效率提升，需求也会随之提升。自古以来，从不会因为工具过于强大而行业崩塌的说法。这是人类社会的进步。</p>
-<h1 id="综上"><a href="#综上" class="headerlink" title="综上"></a>综上</h1><p>潜心学习，提升自我能力，这样到真正需要抉择的时候，是不会迷茫的。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
   </entry>
   <entry>
     <title>安顺一游</title>
@@ -470,6 +634,35 @@
       </tags>
   </entry>
   <entry>
+    <title>肖佬经验之谈</title>
+    <url>/2026/06/11/%E8%82%96%E4%BD%AC%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该着重考虑以后的发展方向了，有了舅舅的支持，我也能更放开心去想去做了。</p>
+<p>于是我找到了肖佬聊天，下图只为消除学历焦虑。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260611165226224.png"  alt="image-20260611165226164"></p>
+<h1 id="我需要再掌握一门后端语言"><a href="#我需要再掌握一门后端语言" class="headerlink" title="我需要再掌握一门后端语言"></a>我需要再掌握一门后端语言</h1><p>python语言主要用于研究测，双非学历只能干工程测的，需要在go和java中选一个。</p>
+<p>大厂后端以及原有业务开发agent大多仍是java。</p>
+<p>go目前生态较弱，但更适配agent的发展。</p>
+<p>python后端就是一坨屎，速度慢的要死，真正业务不可能用python上线，但是研究的时候需要做测试还是需要会基础的curl。</p>
+<h1 id="简历包装"><a href="#简历包装" class="headerlink" title="简历包装"></a>简历包装</h1><h3 id="奖项"><a href="#奖项" class="headerlink" title="奖项"></a>奖项</h3><p>首先奖项在简历上的作用有两个：<br>一是在简历筛选中占一点优势，二是在后期议薪时利于涨薪。甚至大厂一般都把竞赛奖项当shit</p>
+<h3 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h3><p>然后技术栈，这里就写自己会什么，写够就行，不要怕吹嘘风险。在计算机行业，“精通”这两个字只适用于开创者。</p>
+<h3 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h3><p>项目经历，这个比较重要，因为这是面试时主要要问的东西，面试官会先让我说我做过什么项目，在其中干了什么，然后面试官会根据我说的进行追问，这里他会层层深入，所以这里要注意引导。</p>
+<h3 id="实习经历"><a href="#实习经历" class="headerlink" title="实习经历"></a>实习经历</h3><p>对于找第一段实习的我来说，能过就行，不要太挑剔。有了一段实习经验后，会极大的提升后续的学习效率。</p>
+<p>同时不要害怕实习时长的问题，一般面试时说自己三个月或者六个月都行，反正大家都是干一个多月就走人了，也会开实习证明的。</p>
+<h1 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h1><p>面试官主要问的：</p>
+<p>简历上的东西面试官其实不咋看，毕竟他要面这个岗位的人，他就按照岗位要求去问就行。</p>
+<p>首先是通用技术，就是git，docker，通信协议等程序员都需要具备的技能的一些底层，但也没那么底层，就是知识点类的东西。这里设计到408的一些相关东西，所以408重要知识点还是要学一下。</p>
+<p>然后是项目经历，这里就引导面试官问自己利己的问题。对于一个项目，就算不是主力开发，也要去熟悉项目，可以吹嘘自己在项目中都干了啥。</p>
+<p>然后就是八股，这个比较重要，还是要背的比较熟悉才行。面试官爱问没办法。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>经验</tag>
+        <tag>就业</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>迟来的个人博客</title>
     <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
@@ -544,118 +737,6 @@
       </categories>
       <tags>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>golang初学</title>
-    <url>/2026/06/12/golang%E5%88%9D%E5%AD%A6/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一门语言不够那就学两门，对于完全没学过go但是学过其它语言且有一定的开发经验的我来说，感觉两天学完基本语法没问题。</p>
-<h1 id="安装报错"><a href="#安装报错" class="headerlink" title="安装报错"></a>安装报错</h1><p>当我去官网下载了go的最新版本的安装程序后，运行后发生这么一个错误：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260612191111404.png"  alt="image-20260612191104318"></p>
-<p>这是典型的MSI安装包权限或系统服务异常问题。</p>
-<p>然后我这么做：</p>
-<ul>
-<li>缺少Windows Installer文件夹<br>打开“此电脑” → C盘 → Windows文件夹 → 检查是否存在名为 <code>Installer</code> 的隐藏文件夹。若不存在，手动新建一个名为 <code>Installer</code> 的文件夹（注意：不要加引号，不要带空格）。</li>
-</ul>
-<p>后就成功了，那么这个文件夹是什么？</p>
-<p><code>C:\Windows\Installer</code> 文件夹是 Windows Installer 服务用于存储软件安装、更新、修复和卸载所需缓存文件的核心目录，其作用是确保系统能正确管理软件生命周期。</p>
-<h1 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h1><p>当我要运行main文件时，我可以在命令行运行go run main.go；或者运行go build main.go，这样会生成main.exe，然后.\main.exe运行这个可执行文件，这相当于把编译执行拆开。</p>
-<p>我每次修改完代码后，都需要ctrl+s保存，不然终端看的还是旧代码。</p>
-<p><strong>短变量声明法</strong>：</p>
-<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	a, b, c := <span class="number">1</span>, <span class="number">2</span>, <span class="string">&quot;3&quot;</span></span><br><span class="line">	fmt.Println(a, b, c)</span><br><span class="line">	<span class="comment">// fmt.Println(&quot;a&quot;, &quot;a&quot;)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>这样可正常打印：1 2 3(中间有一个空格，这是规范，就算println中不夹空格这里也会加)，然后短变量声明不能用来声明全局变量</p>
-<p><strong>匿名变量</strong>：</p>
-<p>在使用多重赋值时，如果想要忽略某个值，可以使用<strong>匿名变量</strong>（anonymous variable）。 匿</p>
-<p>名变量用一个下划线_表示，例如：</p>
-<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getUserinfo</span> <span class="params">(<span class="type">string</span>, <span class="type">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;ZhangSan&quot;</span>, <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _, age = getUserinfo()</span><br><span class="line">    fmt.Println(age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>匿名变量不占用命名空间，不会分配内存，所以匿名变量之间不存在重复声明。</p>
-<p>注意事项：</p>
-<p>1、函数外的每个语句都必须以关键字开始（var、const、func 等）</p>
-<p>2、:&#x3D;不能使用在函数外。</p>
-<p>3、_多用于占位，表示忽略值。</p>
-<p><strong>基本数据类型及其范围</strong>：</p>
-<p>先记一下整形的数据范围</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613100426712.png"  alt="image-20260613100426586"></p>
-<p>然后我们声明变量的时候就可以显示定义某个数是哪个范围的，就像这样：</p>
-<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> num <span class="type">int8</span></span><br><span class="line">	num = <span class="number">123</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;值:%v 类型%T&quot;</span>, num, num)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>会打印出：<br>值:123  类型int8</p>
-<p>此时要注意，由于int8类型的范围是-128到127，所以如果赋值为128会报错。</p>
-<p>如果是直接var num int &#x3D; 128,那么此时的数据类型根据操作系统架构而定，如果是64位系统，int就默认是int64。</p>
-<p>那么为防止数据超出范围，为什么不都直接用int呢？因为int比int8等更小位数的数据占用的字节更多，更不省内存。</p>
-<p>只要数据大小不溢出，各数据类型可相互转换：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613101028665.png"  alt="image-20260613101028606"></p>
-<p>再记一下各转义字符输出数据：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613101400469.png"  alt="image-20260613101400404"></p>
-<p><em><strong>字符属于int型</strong></em>：它的值为ascii值</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613112245146.png"  alt="image-20260613112245051"></p>
-<p>go中的字符分为两种类型。<br>一种是byte，也叫uint8类型类型，就是输出“我”时输出的是三个我现在还不认识的符号，因为它在utf-8编码下占据三个字节<br>另一种是rune类型， 按%v（%c）格式输出时就是正常的汉字和它对应的ascii值，例如20320（你）</p>
-<p>二者区别在于输出汉字时，能否直接输出汉字原型。</p>
-<p><strong>值类型</strong>：</p>
-<p>基本数据类型和数组都属于值类型，值类型有一个特点就是：</p>
-<p>当数组a1被声明了，然后数组a2 ：&#x3D; a1，那么此时a2（副本）是额外开辟了内存空间的，此后a1的修改于a2无关，类似于浅拷贝</p>
-<p><strong>引用类型</strong>：</p>
-<p>就是与上面相对的，副本会改变的，一般切片就是引用类型，存在内存空间共享</p>
-<p><strong>函数作为类型</strong></p>
-<p>我知道函数可以作为参数，其实函数也能作为数据类型。</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260613165701615.png"  alt="image-20260613165654508"></p>
-<p>如图，第一行通过type关键字声明了一个calc类型的函数，那么我在主函数中就可以声明一个calc类型的函数c，然后c就可以复制为函数sub，因为sub是完全符合calc的参数及返回要求的，这里很像python中的多态。</p>
-<p><strong>闭包</strong>：可以让变量常驻内存又不污染全局</p>
-<p>闭包就是函数里面再写个函数，然后外层函数返回值是内层函数。在主函数中，当外层函数被调用并被传入了一个参数，此时它返回一个内层函数，然后外层函数的局部变量相对于内层函数就是全局变量，当内层函数对该变量进行修改时，该变量会被作为全局变量而改变，所以如果下一行又调用了这个内层函数，那么此时的内层函数是在上一行改变了的变量的条件下进行作用的。（这一段很抽象，只有我编辑的时候能看懂，所以上图！）</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260614161737372.png"  alt="image-20260614161730289"><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260614161744499.png"  alt="image-20260614161744451"></p>
-<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>go中如果没有特异的异常处理代码，遇到错误时会直接结束执行，不会继续往后。</p>
-<p>下面给出defer、panic、recover抛出异常的示例：</p>
-<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">readFile</span><span class="params">(fileName <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> fileName == <span class="string">&quot;main.go&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> errors.New(<span class="string">&quot;读取文件错误&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fn3</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; <span class="comment">//defer会被注册并压入defer栈中，在这个函数结束前执行</span></span><br><span class="line">        err := <span class="built_in">recover</span>() <span class="comment">//用recover获取异常</span></span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            fmt.Println(<span class="string">&quot;抛出异常给管理员发送邮件&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;() <span class="comment">//自执行函数</span></span><br><span class="line">    <span class="keyword">var</span> err = readFile(<span class="string">&quot;xxx.go&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(err) <span class="comment">//主动抛出异常</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;继续执行&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fn3()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>这段代码只会打印：<br>抛出异常给管理员发送邮件</p>
-<p>因为抛出异常时，函数会准备退出，但是退出之前要先执行defer语句，然后<code>recover()</code> 成功捕获了 panic 传递过来的错误信息。</p>
-<p><strong>指针巩固理解</strong></p>
-<p>变量a的值为10，程序运行时，a存在于内存中，且有一个内存中的地址，然后可以令p :&#x3D; &amp;a，此时指针p的值就是a的地址，同时呢，p自身也有一个地址，这个地址是和a的地址没有关系的，也能用取地址符号&amp;获得p的地址。</p>
-<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a><strong>结构体</strong></h1><p><strong>结构体方法</strong>：</p>
-<p>结构体函数有下面这两种定义方式<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615155445565.png"  alt="image-20260615155438477"></p>
-<p>第二种的接收者类型为指针，这样的方式使得在主函数中调用这个方法时，属性可以全局改变，但是第一种就不行。</p>
-<h1 id="使用第三方包"><a href="#使用第三方包" class="headerlink" title="使用第三方包"></a>使用第三方包</h1><p>假如我的项目目录最后是Test（项目名）</p>
-<p>那么我应该先在命令行用go mode init 项目名 来初始化项目，这一步会生成go.mod文件用于项目包管理。</p>
-<p>当我要自己写一个包时，我应该先新建一个calc文件夹在根目录下，然后在calc文件夹下写函数，就像这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193414942.png"  alt="image-20260615193414892"></p>
-<p>然后引用时就这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193444645.png"  alt="image-20260615193444613"></p>
-<p>这是用自己的包的流程，接下来说用官方包：</p>
-<p>要先去网站<a href="https://pkg.go.dev/">Go Packages - Go Packages</a>中找到自己要的那个包</p>
-<p>然后import左上角这个包的地址<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260615193731212.png"  alt="image-20260615193731175"></p>
-<p>，然后要么用go mod download 命令下载，要么就用go mod tidy来自动补全缺失的包（这个好用一点），然后就能用了</p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>肖佬经验之谈</title>
-    <url>/2026/06/11/%E8%82%96%E4%BD%AC%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>该着重考虑以后的发展方向了，有了舅舅的支持，我也能更放开心去想去做了。</p>
-<p>于是我找到了肖佬聊天，下图只为消除学历焦虑。</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260611165226224.png"  alt="image-20260611165226164"></p>
-<h1 id="我需要再掌握一门后端语言"><a href="#我需要再掌握一门后端语言" class="headerlink" title="我需要再掌握一门后端语言"></a>我需要再掌握一门后端语言</h1><p>python语言主要用于研究测，双非学历只能干工程测的，需要在go和java中选一个。</p>
-<p>大厂后端以及原有业务开发agent大多仍是java。</p>
-<p>go目前生态较弱，但更适配agent的发展。</p>
-<p>python后端就是一坨屎，速度慢的要死，真正业务不可能用python上线，但是研究的时候需要做测试还是需要会基础的curl。</p>
-<h1 id="简历包装"><a href="#简历包装" class="headerlink" title="简历包装"></a>简历包装</h1><h3 id="奖项"><a href="#奖项" class="headerlink" title="奖项"></a>奖项</h3><p>首先奖项在简历上的作用有两个：<br>一是在简历筛选中占一点优势，二是在后期议薪时利于涨薪。甚至大厂一般都把竞赛奖项当shit</p>
-<h3 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h3><p>然后技术栈，这里就写自己会什么，写够就行，不要怕吹嘘风险。在计算机行业，“精通”这两个字只适用于开创者。</p>
-<h3 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h3><p>项目经历，这个比较重要，因为这是面试时主要要问的东西，面试官会先让我说我做过什么项目，在其中干了什么，然后面试官会根据我说的进行追问，这里他会层层深入，所以这里要注意引导。</p>
-<h3 id="实习经历"><a href="#实习经历" class="headerlink" title="实习经历"></a>实习经历</h3><p>对于找第一段实习的我来说，能过就行，不要太挑剔。有了一段实习经验后，会极大的提升后续的学习效率。</p>
-<p>同时不要害怕实习时长的问题，一般面试时说自己三个月或者六个月都行，反正大家都是干一个多月就走人了，也会开实习证明的。</p>
-<h1 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h1><p>面试官主要问的：</p>
-<p>简历上的东西面试官其实不咋看，毕竟他要面这个岗位的人，他就按照岗位要求去问就行。</p>
-<p>首先是通用技术，就是git，docker，通信协议等程序员都需要具备的技能的一些底层，但也没那么底层，就是知识点类的东西。这里设计到408的一些相关东西，所以408重要知识点还是要学一下。</p>
-<p>然后是项目经历，这里就引导面试官问自己利己的问题。对于一个项目，就算不是主力开发，也要去熟悉项目，可以吹嘘自己在项目中都干了啥。</p>
-<p>然后就是八股，这个比较重要，还是要背的比较熟悉才行。面试官爱问没办法。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>经验</tag>
-        <tag>就业</tag>
       </tags>
   </entry>
 </search>
