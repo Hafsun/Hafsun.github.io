@@ -1086,7 +1086,7 @@ body[data-mode="dark"] .pageview .icon {
 }
 .home-article {
   position: relative;
-  background: linear-gradient(145deg, rgba(255,255,255,0.26), rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.045)), linear-gradient(125deg, rgba(255,255,255,0.2), rgba(255,255,255,0) 36%);
+  background: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07) 45%, rgba(255,255,255,0.025)), linear-gradient(125deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 36%);
   backdrop-filter: blur(32px) saturate(200%) brightness(1.08);
   -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.08);
   border: 1px solid rgba(255,255,255,0.26);
@@ -1118,7 +1118,7 @@ body[data-mode="dark"] .pageview .icon {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), inset 0 -1px 0 rgba(255,255,255,0.24), 0 22px 55px rgba(18,28,45,0.2), 0 2px 14px rgba(255,255,255,0.22);
 }
 body[data-mode="dark"] .home-article {
-  background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.02)), linear-gradient(125deg, rgba(255,255,255,0.1), rgba(255,255,255,0) 38%);
+  background: linear-gradient(145deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025) 45%, rgba(255,255,255,0.012)), linear-gradient(125deg, rgba(255,255,255,0.06), rgba(255,255,255,0) 38%);
   border-color: rgba(255,255,255,0.1);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.24), inset 0 -1px 0 rgba(255,255,255,0.08), 0 18px 45px rgba(0,0,0,0.34);
 }
@@ -3085,7 +3085,7 @@ body[data-mode="dark"] .search-container {
   position: relative;
   width: 100%;
   height: max-content;
-  background: linear-gradient(145deg, rgba(255,255,255,0.27), rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.05)), linear-gradient(125deg, rgba(255,255,255,0.2), rgba(255,255,255,0) 36%);
+  background: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07) 48%, rgba(255,255,255,0.025)), linear-gradient(125deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 36%);
   backdrop-filter: blur(32px) saturate(200%) brightness(1.08);
   -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.08);
   border: 1px solid rgba(255,255,255,0.26);
@@ -3121,7 +3121,7 @@ body[data-mode="dark"] .search-container {
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18), inset 18px 18px 42px rgba(255,255,255,0.14), inset -18px -18px 42px rgba(40,65,95,0.08);
 }
 body[data-mode="dark"] .sidebar-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.02)), linear-gradient(125deg, rgba(255,255,255,0.1), rgba(255,255,255,0) 38%);
+  background: linear-gradient(145deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025) 45%, rgba(255,255,255,0.012)), linear-gradient(125deg, rgba(255,255,255,0.06), rgba(255,255,255,0) 38%);
   border-color: rgba(255,255,255,0.1);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.24), inset 0 -1px 0 rgba(255,255,255,0.08), 0 18px 45px rgba(0,0,0,0.34);
 }
