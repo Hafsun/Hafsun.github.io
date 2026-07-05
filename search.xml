@@ -1095,4 +1095,67 @@ hexo d    （上传到github仓库）</p>
         <tag>数据库</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Eino初学</title>
+    <url>/2026/07/04/Eino%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>此时是已经初步学习了go中的各个主流框架（其实也就gozero、grpc），主要是为了更加深入的了解Sim,我还需学习为go量身打造的agent框架—-Eino，可以粗糙的理解为把langchain工程落地的go版本</p>
+<p>此博客搭配笔记<a href="https://mirage-thought-d06.notion.site/Eino-21d747825dae807ca9b3ff601c655f4a%E9%A3%9F%E7%94%A8%E6%9B%B4%E4%BD%B3">https://mirage-thought-d06.notion.site/Eino-21d747825dae807ca9b3ff601c655f4a食用更佳</a></p>
+<p>这里放一幅图，现在我还看的不是很通透，也许后面回顾时再来看就通透了。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260704172457036.png"  alt="image-20260704172456731"></p>
+<h1 id="React-Agent"><a href="#React-Agent" class="headerlink" title="React Agent"></a>React Agent</h1><p>React（Reasoning+Acting）并不是一个框架，而是一种agent设计思想，也就上让agent不断思考并调用工具再思考，直到完成最终目标的过程。</p>
+<p>&#x2F;&#x2F;<em><strong>接下来介绍构建agent的各个组件</strong></em></p>
+<h1 id="ChatModel"><a href="#ChatModel" class="headerlink" title="ChatModel"></a>ChatModel</h1><p>也就是基础的大模型api，能够返回回复、调整参数、多模态交互</p>
+<p>关于ChatModel的使用，和我当时python调用讯飞差不多：</p>
+<p>准备好.env</p>
+<p>引入库，然后实例化模型，传参传入config，设置好返回模式</p>
+<p>同时定义好message结构体，也就是用户输入，定义还系统提示此，然后把该结构体当作input参数传入generate函数，得到返回，如果是流式返回，还得for chunk啥的</p>
+<h1 id="ChatTemplate"><a href="#ChatTemplate" class="headerlink" title="ChatTemplate"></a>ChatTemplate</h1><p>也就是先写一个消息模板，然后后面就只需要传入参数，例如{role}、{task}，就能够嵌入模板形成一份完整的提示词</p>
+<p>&#x2F;&#x2F;<em><strong>然后是RAG的一些介绍，由于之前学过，这里不做赘述</strong></em></p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>Eino</tag>
+        <tag>agent</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>八股探索</title>
+    <url>/2026/07/03/%E5%85%AB%E8%82%A1%E6%8E%A2%E7%B4%A2/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于误打误撞收到一份面试邀请，可是我才学不到半个月的golang，真的能通过一个中厂golang后端开发岗的面试吗？首先我学的时间短，其次我没背八股，然后我还没刷力扣算法题，而且go的项目一个都没有，这些事实都指向了这场面试我将被拷打。</p>
+<p>但是肖佬说面试就是看运气，要我赶紧准备八股。我想想，也许面试官会偏向于招培养型人才，潜力型人才，那也许能碰碰运气咯。而且也能涨涨经验。</p>
+<h1 id="goroutine如何防止脏写"><a href="#goroutine如何防止脏写" class="headerlink" title="goroutine如何防止脏写"></a>goroutine如何防止脏写</h1><p>脏写也就是当我两个协程都同时给n++时，n可能只加1</p>
+<p>方法有很多种：</p>
+<p>加Mutex互斥锁：这里就尽量把少的会发生冲突的操作加入锁内，比如网络请求啥的这种协程自己的事情就没必要加入了；</p>
+<p>读多写少的情况加RWMutex读写锁：因为它允许读共享，但Mutex锁住了，就啥都只能单独进行；</p>
+<p>转换操作为原子操作：也就是把n++写成更高级的，更繁琐的代码，那代码中的函数或者实例会强制把某种操作改为原子操作。</p>
+<h1 id="make和new有什么区别"><a href="#make和new有什么区别" class="headerlink" title="make和new有什么区别"></a>make和new有什么区别</h1><p>new是分配内存的，make是初始化的。</p>
+<p>拿 map举例，m :&#x3D; new(map[string]int)，只是在内存中开辟了一个空间给m，且m被当作是零值，这里的m &#x3D; nil，然而给map赋值时，是需要map有哈希表的，此时m仅仅只有个空值nil以及在内存中的地址，其它啥也没有，所以不能被赋值；</p>
+<p>但是用m :&#x3D; make(map[string]int)时，m就被make初始化好了，不仅仅是被分配了内存，还初始化了哈希表啥的基层建筑，就能被赋值。</p>
+<p>这里注意make一般用于slice、map、chan的初始化。</p>
+<h1 id="slice踩坑"><a href="#slice踩坑" class="headerlink" title="slice踩坑"></a>slice踩坑</h1><p>首先，不能把slice理解为数组，而是数组是slice的底层数组，实际上的slcie是一个结构体:</p>
+ <div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">    ptr unsafe.Pointer <span class="comment">// 指向底层数组的指针</span></span><br><span class="line">    <span class="built_in">len</span> <span class="type">int</span></span><br><span class="line">    <span class="built_in">cap</span> <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>ptr指针指向底层数组，所以假如s :&#x3D; []int{1，2，3}，那么s &#x3D; s.ptr  &#x3D; &amp;s[0]（切片中第一个元素的地址），然后slice和它底层的数组是内存中两个不同的东西，并不是底层数组是slice的一部分，而是slice的指针可以指向数组的地址。 </p>
+<p><strong>扩容</strong>：当预留的内存空间不够用时，会重新申请一块更大的内存空间并把原数据拷贝过来，原来的内存空间会被GC回收。扩容大小一般是扩容为原来的2倍或者1.25倍</p>
+<h3 id="关于母子切片的内存关系"><a href="#关于母子切片的内存关系" class="headerlink" title="关于母子切片的内存关系"></a>关于母子切片的内存关系</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260704112921625.png"  alt="image-20260704112914510"></p>
+<p>也就是母子切片共享底层数组，修改其中一个也会影响另一个，但是当子切片append到超出了母切片预留的内存空间，那么它俩就会剥离，不再有关系。</p>
+<h3 id="函数传参方式对于切片的修改"><a href="#函数传参方式对于切片的修改" class="headerlink" title="函数传参方式对于切片的修改"></a>函数传参方式对于切片的修改</h3><p>如果给函数传参传的时slice而不是*slice，那么修改底层数组是可以全局生效，但是修改slice的三个属性就不行，因为go中的函数传参都是值传递，也就是传的是拷贝体，不存在引用传递，然后拷贝体和本体的ptr指针指向的是同一个数组，所以修改那个底层数组就会全局生效。</p>
+<h1 id="GMP调度模型"><a href="#GMP调度模型" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h1><p>线程由操作系统调度，goroutine由go Runtime的GMP模型调度。</p>
+<p>G为 goroutine,M可以理解为操作系统线程，P为逻辑处理器，它们关系为：</p>
+<p>M + P → 执行 G</p>
+<p>p的数量一般等于cpu逻辑核心数量。举例：</p>
+<p>100000 个 G<br>8 个 P<br>十几个或更多 M</p>
+<p>但此时运行的M只有8个</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>八股</tag>
+      </tags>
+  </entry>
 </search>
