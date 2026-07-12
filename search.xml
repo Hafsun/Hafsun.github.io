@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Eino初学</title>
+    <url>/2026/07/04/Eino%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>此时是已经初步学习了go中的各个主流框架（其实也就gozero、grpc），主要是为了更加深入的了解Sim,我还需学习为go量身打造的agent框架----Eino，可以粗糙的理解为把langchain工程落地的go版本</p>
+<p>此博客搭配笔记<a href="https://mirage-thought-d06.notion.site/Eino-21d747825dae807ca9b3ff601c655f4a%E9%A3%9F%E7%94%A8%E6%9B%B4%E4%BD%B3">https://mirage-thought-d06.notion.site/Eino-21d747825dae807ca9b3ff601c655f4a食用更佳</a></p>
+<p>这里放一幅图，现在我还看的不是很通透，也许后面回顾时再来看就通透了。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260704172457036.png"  alt="image-20260704172456731"></p>
+<h1>React Agent</h1>
+<p>React（Reasoning+Acting）并不是一个框架，而是一种agent设计思想，也就上让agent不断思考并调用工具再思考，直到完成最终目标的过程。</p>
+<p>//<em><strong>接下来介绍构建agent的各个组件</strong></em></p>
+<h1>ChatModel</h1>
+<p>也就是基础的大模型api，能够返回回复、调整参数、多模态交互</p>
+<p>关于ChatModel的使用，和我当时python调用讯飞差不多：</p>
+<p>准备好.env</p>
+<p>引入库，然后实例化模型，传参传入config，设置好返回模式</p>
+<p>同时定义好message结构体，也就是用户输入，定义还系统提示此，然后把该结构体当作input参数传入generate函数，得到返回，如果是流式返回，还得for chunk啥的</p>
+<h1>ChatTemplate</h1>
+<p>也就是先写一个消息模板，然后后面就只需要传入参数，例如{role}、{task}，就能够嵌入模板形成一份完整的提示词</p>
+<p>//<em><strong>然后是RAG的一些介绍，由于之前学过，这里不做赘述</strong></em>，接下来讲编排相关内容</p>
+<h1>Chain</h1>
+<p>编排分为链式编排和图式编排，链式是图式的一种</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注册链条</span></span><br><span class="line">chain := compose.NewChain[<span class="type">string</span>, *schema.Message]()<span class="comment">//这里泛型用[]</span></span><br><span class="line"><span class="comment">//连接起各个节点</span></span><br><span class="line">chain.AppendLambda(lambda).AppendChatModel(model)</span><br><span class="line">r, err := chain.Compile(ctx)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line">answer, err := r.Invoke(ctx, <span class="string">&quot;你好，请告诉我你的名字&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(answer.Content)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+<p>以上是一个极简链式编排，我还能往里面加工具调用节点，也就是需要我先写好工具函数，定义好工具描述，并注入大模型的可调用工具列表中，然后当我输入一段话时，大模型会思考它是否需要调用工具，要的话就会提取我输入中的参数作为工具函数的参数传入工具函数，然后返回结果再发送给大模型，给出回答。所以可以得到这个过程中大模型是思考了两下的。</p>
+<h1>Graph</h1>
+<p>图可以添加更多的东西，与链的初步区别就是加入了分支，我可以创建多个分支节点，然后用一个分支控制节点来决定流程要往哪个分支走，类似于多个if else。代码流程是需要在创建好节点后把节点加入图，然后再把节点加入分支，才算组成图完毕，我上面所说的这些是不加入大模型的情况，后面还能加入大模型、状态、回调，这些就是 graph编排的高级特性了。</p>
+<h3 id="state">state</h3>
+<p>主要用于记忆功能，让各节点共享state</p>
+<h3 id="callback">callback</h3>
+<p>让经过每个节点时可以做一次例如打印当前节点名称、输入输出的功能。实时监控的感觉</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>Eino</tag>
+        <tag>go</tag>
+        <tag>agent</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>flask与fastAPI巩固</title>
     <url>/2026/06/10/flask%E4%B8%8EfastAPI%E5%B7%A9%E5%9B%BA/</url>
     <content><![CDATA[<h1>异步</h1>
@@ -261,118 +301,6 @@
       </tags>
   </entry>
   <entry>
-    <title>uni-app初学</title>
-    <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc?#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
-<p>现在是大二下册中期，到现在做的项目几乎全都是web开发，还没接触过小程序呢。但学习小程序肯定是作为一个程序员必不可少的，那么就先从一个简单的小程序开发框架开始。（它也能开发APP）</p>
-<p>小程序开发框架主要解决一套代码在多个平台（如微信、支付宝、H5等）运行的问题。</p>
-<p><strong>uni-app</strong></p>
-<ul>
-<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信/支付宝/百度/头条/飞书/QQ/快手/钉钉/淘宝）、快应用等多个平台。</li>
-<li><strong>优点：</strong> 学习成本低（尤其对Vue开发者），插件市场资源丰富，跨端覆盖最广。</li>
-<li><strong>适用场景：</strong> 中小团队希望以最低成本快速覆盖多端，尤其是小程序生态</li>
-<li>教程源码在桌面资料里的fast-api教程的uniapp-demo下</li>
-</ul>
-<h1>入门</h1>
-<h3 id="1、开发工具">1、开发工具</h3>
-<p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
-<h3 id="2、项目结构介绍">2、项目结构介绍</h3>
-<p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260420214114194.png"  alt="image-20260420214107103"></p>
-<ul>
-<li><code>pages.json</code>：对<code>uni-app</code>项目进行全局配置，决定页面文件的路径、窗口样式、导航条、底部的tabbar等。</li>
-<li><code>manifest.json</code>：应用的配置文件，用于指定应用的名称、图标、权限等。</li>
-<li><code>App.vue</code>：根组件，是整个程序的入口页面，所有其他页面都是它的子页面。</li>
-<li><code>main.js</code>：项目入口文件，用于初始化<code>vue</code>实例对象，并配置相关的插件。</li>
-<li><code>uni.scss</code>：预置了一些<code>scss</code>样式变量，如有需要可直接导入使用。（不管）</li>
-<li><code>unpackage</code>：打包目录，包括在各个平台的打包文件。</li>
-<li><code>pages</code>：所有的页面，一般一个页面文件用一个文件夹存放。</li>
-<li><code>static</code>：所有的静态文件，比如图片，字体等，但是不要存放<code>css/sass/less</code>和<code>js</code>等文件。</li>
-</ul>
-<p>为了实现多端兼容，综合考虑编译速度、运行性能等因素，<code>uni-app</code> 约定了如下开发规范：</p>
-<ul>
-<li>页面文件遵循 <a href="https://vue-loader.vuejs.org/zh/spec.html">Vue 单文件组件 (SFC) 规范</a></li>
-<li>组件标签靠近小程序规范，详见<a href="https://uniapp.dcloud.io/component/README">uni-app 组件规范</a></li>
-<li>接口能力（JS API）靠近微信小程序规范，但需将前缀 <code>wx</code> 替换为 <code>uni</code>，详见<a href="https://uniapp.dcloud.io/api/README">uni-app接口规范</a></li>
-<li>数据绑定及事件处理同 <code>Vue.js</code> 规范，同时补充了App及页面的生命周期</li>
-<li>为兼容多端运行，建议使用flex布局进行开发</li>
-</ul>
-<h3 id="3、运行项目">3、运行项目</h3>
-<h3 id="1）-运行在网页">1） 运行在网页</h3>
-<p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
-<h3 id="2）-运行在微信小程序">2） 运行在微信小程序</h3>
-<ul>
-<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-</a>&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置<code>，找到</code>微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</li>
-<li>设置测试号：打开微信小程序开发者工具，然后创建项目，点击获取<code>测试号</code>。然后在<code>HBuilderX</code>的项目中，找到<code>manifest.json</code>文件，然后找到<code>微信小程序配置</code>，将从微信开发者工具中获取到的测试号设置到<code>微信小程序AppID</code>中。</li>
-<li>运行：在<code>运行-&gt;运行到小程序-&gt;微信开发者工具</code>，即可在微信小程序中运行项目。</li>
-</ul>
-<h3 id="3）-作为APP运行在安卓真机">3） 作为APP运行在安卓真机</h3>
-<p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
-<ul>
-<li>在安卓手机上开启：开发者选项，开启USB调试，允许USB安装应用，然后用<strong>数据线</strong>连接电脑。</li>
-<li>在HBuilderX上：设置合适的adb。设置方式为在<code>运行-&gt;运行手机或模拟器-&gt;设置adb路径</code>。<code>HBuilderX</code>自带的<code>adb</code>路径在：<code>HBuilderX\plugins\launcher-tools\tools\adbs</code>。</li>
-</ul>
-<p>然后点击HBuilderX的<code>运行-&gt;运行手机或模拟器</code>即可启动。</p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>框架使用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>gozero初学</title>
-    <url>/2026/06/20/gozero%E5%88%9D%E5%AD%A6/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>此时已经过完了go的基础语法，本来要开始学习Gin框架了，但肖佬说这个框架过时了，直接去学gozero，这是一个集成了各种工程实践的web和微服务框架。</p>
-<h1>微服务</h1>
-<p>微服务就是一种分而治之的思想，把一个紧密结合的应用解耦，各有各的数据库、接口等，各自发展。</p>
-<p>那么它和分布式有什么区别呢？一句话概括就是微服务是分布式架构的一种实现方式的突出演变，就像深度学习与机器学习的关系。</p>
-<h1>rpc和grpc</h1>
-<p>RPC（remote prduce call），是一种通信协议，<strong>让程序像调用本地函数一样，去调用另一台机器（或另一个进程）上的函数，而不需要了解底层的网络通信细节</strong>。</p>
-<p>gRPC是Google开发的一款<strong>高性能、通用的 RPC 框架</strong>，专为微服务架构设计。</p>
-<h2 id="grpc初学">grpc初学</h2>
-<p>g表示google的意思，并不是go，所以这个通信框架是多语言通用的。</p>
-<p>在go中使用grpc，首先要写一个.protoc文件，由于这个框架是为通信服务的，所以要在这个文件中写好message结构体，就像定义go结构体那样，然后还得写service，就像这样：</p>
-<div class="code-container" code-lang="Protobuf"><div class="codebox"><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="keyword">service </span><span class="title class_">StudentService</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> GetStudentInfo(Request) <span class="keyword">returns</span> (Student)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> AddStudent(Student) <span class="keyword">returns</span> (Student)</span>;   </span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> ListStudents(Empty) <span class="keyword">returns</span> (StudentList)</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>这两点是基本的，也就是写好消息和服务，然后就可以用一个命令，这个命令会调用插件protoc-gen-go和protoc-gen-go-grpc来生成.go代码，就像这样：<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260624184813654.png"  alt="image-20260624184806599"></p>
-<p>第一个文件中封装的是通信的底层实现，包括http/2的通信逻辑，第二个文件中封装了结构体长什么样以及序列化代码。</p>
-<h1>初始化一个gozero项目</h1>
-<p>第一种方式：()</p>
-<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">goctl api new proj_name</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>第二：<br>
-当项目中已经有一个proj_name.api文件时，cd进项目，然后执行以下命令</p>
-<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">goctl api go --api proj_name.api --<span class="built_in">dir</span> .</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-<p>然后再执行go mod tidy来下载依赖，完成初始化。</p>
-<p>基本目录解析如下：<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260620164828021.png"  alt="image-20260620164820908"></p>
-<p>可用命令goctl api doc --dir . --o ./doc生成doc文档</p>
-<h1>请求到返回大致流程</h1>
-<p>在.api文件中定义路由以及结构体（这个结构体和types中的写的一致）-&gt;</p>
-<p>然后这里定义的路由会被卸载handler下的routes.go中-&gt;</p>
-<p>routes.go中的handler也就是handler目录下的各个模块的某某handler.go-&gt;</p>
-<p>然后这个某某.handler.go中会用上logic目录下的函数，这个函数会写最终要return的东西</p>
-<p>当我想要新增一个接口时，只需要在.api文件中写好，然后执行那个goctl生成代码的命令，它会帮我生成从routes.go到最后的logic下函数中途中的所有代码，我只需要补充logic下那个函数的返回逻辑</p>
-<h1>分模块</h1>
-<p>在.api中，我们用@server()来统一前缀，以用来将路由们分模块。</p>
-<p>除了handler可以分模块，也可以建立一个.api目录，把proj_name.api文件分为各个模块。</p>
-<h1>MySQL的sqlx</h1>
-<p>和python中的ORM差不多，也是需要定义模型、定义连接什么的，但是感觉go中的跳转有好多，从发起请求到返回响应之间层层链接，中途有极多的文件间跳转、引用。</p>
-<p>这会导致牵一发动全身的感觉，我目前感觉很麻烦，所以不得不衍生出一个更简便的ORM框架——GORM</p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>gozero</tag>
-        <tag>框架</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>redis初学</title>
     <url>/2026/06/26/redis%E5%88%9D%E5%AD%A6/</url>
     <content><![CDATA[<h1>前言</h1>
@@ -627,6 +555,110 @@ redis(ACID处理非常简单)<br>
       </tags>
   </entry>
   <entry>
+    <title>uni-app初学</title>
+    <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc?#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
+<p>现在是大二下册中期，到现在做的项目几乎全都是web开发，还没接触过小程序呢。但学习小程序肯定是作为一个程序员必不可少的，那么就先从一个简单的小程序开发框架开始。（它也能开发APP）</p>
+<p>小程序开发框架主要解决一套代码在多个平台（如微信、支付宝、H5等）运行的问题。</p>
+<p><strong>uni-app</strong></p>
+<ul>
+<li><strong>简介：</strong> uni-app是由DCloud公司开发的，一款使用 <a href="https://vuejs.org/">Vue.js</a> 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信/支付宝/百度/头条/飞书/QQ/快手/钉钉/淘宝）、快应用等多个平台。</li>
+<li><strong>优点：</strong> 学习成本低（尤其对Vue开发者），插件市场资源丰富，跨端覆盖最广。</li>
+<li><strong>适用场景：</strong> 中小团队希望以最低成本快速覆盖多端，尤其是小程序生态</li>
+<li>教程源码在桌面资料里的fast-api教程的uniapp-demo下</li>
+</ul>
+<h1>入门</h1>
+<h3 id="1、开发工具">1、开发工具</h3>
+<p>uni-app有专门的开发工具，叫做<code>HbuilderX</code>。在这里可以下载到：<a href="https://www.dcloud.io/hbuilderx.html%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E7%94%A8%E8%A7%A3%E5%8E%8B%E8%BD%AF%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%BC%80%E6%9D%A5%EF%BC%8C%E5%8F%8C%E5%87%BB%60HBuilderX.exe%60%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">https://www.dcloud.io/hbuilderx.html，下载完成后，用解压软件解压开来，双击`HBuilderX.exe`即可使用。</a></p>
+<h3 id="2、项目结构介绍">2、项目结构介绍</h3>
+<p>在创建完一个项目后，就会生成一些文件和目录（如下图是成熟的uniapp文件结构），以下分别进行讲解。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260420214114194.png"  alt="image-20260420214107103"></p>
+<ul>
+<li><code>pages.json</code>：对<code>uni-app</code>项目进行全局配置，决定页面文件的路径、窗口样式、导航条、底部的tabbar等。</li>
+<li><code>manifest.json</code>：应用的配置文件，用于指定应用的名称、图标、权限等。</li>
+<li><code>App.vue</code>：根组件，是整个程序的入口页面，所有其他页面都是它的子页面。</li>
+<li><code>main.js</code>：项目入口文件，用于初始化<code>vue</code>实例对象，并配置相关的插件。</li>
+<li><code>uni.scss</code>：预置了一些<code>scss</code>样式变量，如有需要可直接导入使用。（不管）</li>
+<li><code>unpackage</code>：打包目录，包括在各个平台的打包文件。</li>
+<li><code>pages</code>：所有的页面，一般一个页面文件用一个文件夹存放。</li>
+<li><code>static</code>：所有的静态文件，比如图片，字体等，但是不要存放<code>css/sass/less</code>和<code>js</code>等文件。</li>
+</ul>
+<p>为了实现多端兼容，综合考虑编译速度、运行性能等因素，<code>uni-app</code> 约定了如下开发规范：</p>
+<ul>
+<li>页面文件遵循 <a href="https://vue-loader.vuejs.org/zh/spec.html">Vue 单文件组件 (SFC) 规范</a></li>
+<li>组件标签靠近小程序规范，详见<a href="https://uniapp.dcloud.io/component/README">uni-app 组件规范</a></li>
+<li>接口能力（JS API）靠近微信小程序规范，但需将前缀 <code>wx</code> 替换为 <code>uni</code>，详见<a href="https://uniapp.dcloud.io/api/README">uni-app接口规范</a></li>
+<li>数据绑定及事件处理同 <code>Vue.js</code> 规范，同时补充了App及页面的生命周期</li>
+<li>为兼容多端运行，建议使用flex布局进行开发</li>
+</ul>
+<h3 id="3、运行项目">3、运行项目</h3>
+<h3 id="1）-运行在网页">1） 运行在网页</h3>
+<p>在顶部的菜单栏，找到<code>运行-&gt;运行到浏览器</code>即可。（这个教程只讲这个）</p>
+<h3 id="2）-运行在微信小程序">2） 运行在微信小程序</h3>
+<ul>
+<li>安装软件：首先要安装微信小程序开发软件：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%60HBuilderX-">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html，然后在`HBuilderX-</a>&gt;工具-&gt;设置-&gt;运行设置-&gt;小程序运行配置<code>，找到</code>微信开发者工具路径`，将微信小程序开发者工具的安装路径设置好。</li>
+<li>设置测试号：打开微信小程序开发者工具，然后创建项目，点击获取<code>测试号</code>。然后在<code>HBuilderX</code>的项目中，找到<code>manifest.json</code>文件，然后找到<code>微信小程序配置</code>，将从微信开发者工具中获取到的测试号设置到<code>微信小程序AppID</code>中。</li>
+<li>运行：在<code>运行-&gt;运行到小程序-&gt;微信开发者工具</code>，即可在微信小程序中运行项目。</li>
+</ul>
+<h3 id="3）-作为APP运行在安卓真机">3） 作为APP运行在安卓真机</h3>
+<p>由于安卓手机种类繁多，没法写一个统一的教程，要作为安卓app运行在真机上，确保以下两点：</p>
+<ul>
+<li>在安卓手机上开启：开发者选项，开启USB调试，允许USB安装应用，然后用<strong>数据线</strong>连接电脑。</li>
+<li>在HBuilderX上：设置合适的adb。设置方式为在<code>运行-&gt;运行手机或模拟器-&gt;设置adb路径</code>。<code>HBuilderX</code>自带的<code>adb</code>路径在：<code>HBuilderX\plugins\launcher-tools\tools\adbs</code>。</li>
+</ul>
+<p>然后点击HBuilderX的<code>运行-&gt;运行手机或模拟器</code>即可启动。</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>框架使用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gozero初学</title>
+    <url>/2026/06/20/gozero%E5%88%9D%E5%AD%A6/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>此时已经过完了go的基础语法，本来要开始学习Gin框架了，但肖佬说这个框架过时了，直接去学gozero，这是一个集成了各种工程实践的web和微服务框架。</p>
+<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p>微服务就是一种分而治之的思想，把一个紧密结合的应用解耦，各有各的数据库、接口等，各自发展。</p>
+<p>那么它和分布式有什么区别呢？一句话概括就是微服务是分布式架构的一种实现方式的突出演变，就像深度学习与机器学习的关系。</p>
+<h1 id="rpc和grpc"><a href="#rpc和grpc" class="headerlink" title="rpc和grpc"></a>rpc和grpc</h1><p>RPC（remote prduce call），是一种通信协议，<strong>让程序像调用本地函数一样，去调用另一台机器（或另一个进程）上的函数，而不需要了解底层的网络通信细节</strong>。</p>
+<p>gRPC是Google开发的一款<strong>高性能、通用的 RPC 框架</strong>，专为微服务架构设计。</p>
+<h2 id="grpc初学"><a href="#grpc初学" class="headerlink" title="grpc初学"></a>grpc初学</h2><p>g表示google的意思，并不是go，所以这个通信框架是多语言通用的。</p>
+<p>在go中使用grpc，首先要写一个.protoc文件，由于这个框架是为通信服务的，所以要在这个文件中写好message结构体，就像定义go结构体那样，然后还得写service，就像这样：</p>
+<div class="code-container" code-lang="Protobuf"><div class="codebox"><figure class="highlight protobuf"><table><tr><td class="code"><pre><span class="line"><span class="keyword">service </span><span class="title class_">StudentService</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> GetStudentInfo(Request) <span class="keyword">returns</span> (Student)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> AddStudent(Student) <span class="keyword">returns</span> (Student)</span>;   </span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> ListStudents(Empty) <span class="keyword">returns</span> (StudentList)</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这两点是基本的，也就是写好消息和服务，然后就可以用一个命令，这个命令会调用插件protoc-gen-go和protoc-gen-go-grpc来生成.go代码，就像这样：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260624184813654.png"  alt="image-20260624184806599"></p>
+<p>第一个文件中封装的是通信的底层实现，包括http&#x2F;2的通信逻辑，第二个文件中封装了结构体长什么样以及序列化代码。</p>
+<h1 id="初始化一个gozero项目"><a href="#初始化一个gozero项目" class="headerlink" title="初始化一个gozero项目"></a>初始化一个gozero项目</h1><p>第一种方式：()</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">goctl api new proj_name</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>第二：<br>当项目中已经有一个proj_name.api文件时，cd进项目，然后执行以下命令</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">goctl api go --api proj_name.api --<span class="built_in">dir</span> . </span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>然后再执行go mod tidy来下载依赖，完成初始化。</p>
+<p>基本目录解析如下：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260620164828021.png"  alt="image-20260620164820908"></p>
+<p>可用命令goctl api doc –dir . –o .&#x2F;doc生成doc文档</p>
+<h1 id="请求到返回大致流程"><a href="#请求到返回大致流程" class="headerlink" title="请求到返回大致流程"></a>请求到返回大致流程</h1><p>在.api文件中定义路由以及结构体（这个结构体和types中的写的一致）-&gt;</p>
+<p>然后这里定义的路由会被卸载handler下的routes.go中-&gt;</p>
+<p>routes.go中的handler也就是handler目录下的各个模块的某某handler.go-&gt;</p>
+<p>然后这个某某.handler.go中会用上logic目录下的函数，这个函数会写最终要return的东西</p>
+<p>当我想要新增一个接口时，只需要在.api文件中写好，然后执行那个goctl生成代码的命令，它会帮我生成从routes.go到最后的logic下函数中途中的所有代码，我只需要补充logic下那个函数的返回逻辑</p>
+<h1 id="分模块"><a href="#分模块" class="headerlink" title="分模块"></a>分模块</h1><p>在.api中，我们用@server()来统一前缀，以用来将路由们分模块。</p>
+<p>除了handler可以分模块，也可以建立一个.api目录，把proj_name.api文件分为各个模块。</p>
+<h1 id="MySQL的sqlx"><a href="#MySQL的sqlx" class="headerlink" title="MySQL的sqlx"></a>MySQL的sqlx</h1><p>和python中的ORM差不多，也是需要定义模型、定义连接什么的，但是感觉go中的跳转有好多，从发起请求到返回响应之间层层链接，中途有极多的文件间跳转、引用。</p>
+<p>这会导致牵一发动全身的感觉，我目前感觉很麻烦，所以不得不衍生出一个更简便的ORM框架——GORM</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gozero</tag>
+        <tag>框架</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vibecoding项目迭代</title>
     <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
     <content><![CDATA[<h1>前言</h1>
@@ -701,6 +733,51 @@ redis(ACID处理非常简单)<br>
       <tags>
         <tag>考公</tag>
         <tag>行测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>八股探索</title>
+    <url>/2026/07/03/%E5%85%AB%E8%82%A1%E6%8E%A2%E7%B4%A2/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>由于误打误撞收到一份面试邀请，可是我才学不到半个月的golang，真的能通过一个中厂golang后端开发岗的面试吗？首先我学的时间短，其次我没背八股，然后我还没刷力扣算法题，而且go的项目一个都没有，这些事实都指向了这场面试我将被拷打。</p>
+<p>但是肖佬说面试就是看运气，要我赶紧准备八股。我想想，也许面试官会偏向于招培养型人才，潜力型人才，那也许能碰碰运气咯。而且也能涨涨经验。</p>
+<h1>goroutine如何防止脏写</h1>
+<p>脏写也就是当我两个协程都同时给n++时，n可能只加1</p>
+<p>方法有很多种：</p>
+<p>加Mutex互斥锁：这里就尽量把少的会发生冲突的操作加入锁内，比如网络请求啥的这种协程自己的事情就没必要加入了；</p>
+<p>读多写少的情况加RWMutex读写锁：因为它允许读共享，但Mutex锁住了，就啥都只能单独进行；</p>
+<p>转换操作为原子操作：也就是把n++写成更高级的，更繁琐的代码，那代码中的函数或者实例会强制把某种操作改为原子操作。</p>
+<h1>make和new有什么区别</h1>
+<p>new是分配内存的，make是初始化的。</p>
+<p>拿 map举例，m := new(map[string]int)，只是在内存中开辟了一个空间给m，且m被当作是零值，这里的m = nil，然而给map赋值时，是需要map有哈希表的，此时m仅仅只有个空值nil以及在内存中的地址，其它啥也没有，所以不能被赋值；</p>
+<p>但是用m := make(map[string]int)时，m就被make初始化好了，不仅仅是被分配了内存，还初始化了哈希表啥的基层建筑，就能被赋值。</p>
+<p>这里注意make一般用于slice、map、chan的初始化。</p>
+<h1>slice踩坑</h1>
+<p>首先，不能把slice理解为数组，而是数组是slice的底层数组，实际上的slcie是一个结构体:</p>
+ <div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">    ptr unsafe.Pointer <span class="comment">// 指向底层数组的指针</span></span><br><span class="line">    <span class="built_in">len</span> <span class="type">int</span></span><br><span class="line">    <span class="built_in">cap</span> <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+<p>ptr指针指向底层数组，所以假如s := []int{1，2，3}，那么s = s.ptr  = &amp;s[0]（切片中第一个元素的地址），然后slice和它底层的数组是内存中两个不同的东西，并不是底层数组是slice的一部分，而是slice的指针可以指向数组的地址。</p>
+<p><strong>扩容</strong>：当预留的内存空间不够用时，会重新申请一块更大的内存空间并把原数据拷贝过来，原来的内存空间会被GC回收。扩容大小一般是扩容为原来的2倍或者1.25倍</p>
+<h3 id="关于母子切片的内存关系">关于母子切片的内存关系</h3>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260704112921625.png"  alt="image-20260704112914510"></p>
+<p>也就是母子切片共享底层数组，修改其中一个也会影响另一个，但是当子切片append到超出了母切片预留的内存空间，那么它俩就会剥离，不再有关系。</p>
+<h3 id="函数传参方式对于切片的修改">函数传参方式对于切片的修改</h3>
+<p>如果给函数传参传的时slice而不是*slice，那么修改底层数组是可以全局生效，但是修改slice的三个属性就不行，因为go中的函数传参都是值传递，也就是传的是拷贝体，不存在引用传递，然后拷贝体和本体的ptr指针指向的是同一个数组，所以修改那个底层数组就会全局生效。</p>
+<h1>GMP调度模型</h1>
+<p>线程由操作系统调度，goroutine由go Runtime的GMP模型调度。</p>
+<p>G为 goroutine,M可以理解为操作系统线程，P为逻辑处理器，它们关系为：</p>
+<p>M + P → 执行 G</p>
+<p>p的数量一般等于cpu逻辑核心数量。举例：</p>
+<p>100000 个 G<br>
+8 个 P<br>
+十几个或更多 M</p>
+<p>但此时运行的M只有8个</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>八股</tag>
       </tags>
   </entry>
   <entry>
@@ -790,35 +867,6 @@ redis(ACID处理非常简单)<br>
       </tags>
   </entry>
   <entry>
-    <title>安顺一游</title>
-    <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
-<p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
-<h1>旁边的阿姨</h1>
-<p>上客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
-<p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
-<p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
-<h1>没钱打车</h1>
-<p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
-<p>随眼看了下交通，打顺风车还挺划算的。</p>
-<p>（到车站）没有去黄果树的车了；顺风车打不到了；公交车没有去那儿的；打滴怎么要八十啊？我可是去附近的景点玩，凭啥啊。算了，我似乎也不太擅长一个人看山看水，不如今晚去小吃街爽吃算了。</p>
-<p>其实如果有个人陪我我也不用太在意这些了，人多还能A车费。</p>
-<p>去旅行一定要看风景吗？我更想爽吃各种特色小吃。</p>
-<p>（傍晚）总算到顾府街了，大吃特吃时间到。</p>
-<p>额，我突然发现由于感冒，我的嗅觉丧失，味觉丧失了一半，所以我的美食体验会折扣50%  TvT  但是，来都来了。。。</p>
-<h1>彻夜长谈</h1>
-<p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
-<p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
-<p>我的最低目标是以后赚的不能比老爸少。</p>
-<p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
-<p>他是一个很强硬的人，很男人的人。我觉得我也继承了他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，但平时在学校我应该算是偏文静的。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-  </entry>
-  <entry>
     <title>学术研究总结</title>
     <url>/2026/06/29/%E5%AD%A6%E6%9C%AF%E7%A0%94%E7%A9%B6%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h1>前言</h1>
@@ -850,6 +898,65 @@ redis(ACID处理非常简单)<br>
       <tags>
         <tag>论文</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>关于效率</title>
+    <url>/2026/07/08/%E5%85%B3%E4%BA%8E%E6%95%88%E7%8E%87/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>好久没写杂谈了，也许是这段时间太忙了，忙着复习、忙着学go、操心着机器人竞赛，为什么现在又开始写了呢，也许是又进入了这么一种心境吧。</p>
+<p>我现在是什么心境呢，难以静心学习，刷抖音刷的不爽快，也不想看小说，不想打游戏。有点像深夜失眠时的那样思绪万千的感觉。无法学习，也无法放松。</p>
+<p>也许这种时候，最适合写杂谈了。</p>
+<h1>机器狗竞赛效率低下</h1>
+<p>对于这种感觉已经不是一天两天了，从大一下开始搞机器人竞赛时便已经发现，搞这种竞赛对自己的职业发展似乎是毫无帮助的，因为我们的工作内容就是枯燥的调参，以及不断地把报错丢给AI，再搬运AI给的答复到机器人，在这期间我们难以看懂技术原理，那些技术也不是本科生应该接触的技术。</p>
+<p>这种情况下，就会感觉自己的效率极低，因为在单位时间内自己基本没学到有认同感的知识，也没有好好放松自己。</p>
+<p>这时我想到老白总结过的一段话，大概是他对于学习效率的总结性概括：</p>
+<p>“</p>
+<p><em>广度优先学习，先广泛了解领域内有什么名词，然后了解这些名词的基础含义，比如说前后端中什么是开发框架、开发框架有什么？搞深度学习先简单了解什么是CNN、Transformer他们最基本的模块结构和运算操作是怎么样的，搞机器人理解什么是寻路、激光SLAM建图以及他们最基本的原理是什么样的等等，基础理论看那种《10分钟解释xxxx》系列就行了，还是不理解就看稍微长一点的学习资料，毕竟有时候为了简化对很多细节做了取舍。然后到你要深入去做某个东西的时候就再深入学习，用科研举例，如果你要用Transformer搭模块，你可能知道早就知道了他本质就是就是向量加权相加，但是这一点是不够的，你还要去深入理解里面的不同的矩阵代表什么意思、维度是如何变化、向量是如何拼接如何运算以及Transformer里面每个模块细节的，还要理解里面的计算公式，虽然现在大模型写公式不成问题，但是等到你开始写论文的时候，为了保证描述准确性这些公式是要你手推验证一遍的</em>。</p>
+<p><em>我总结了一个公式，【工作量 = 工作效率工作时间 + 已有成果】，要把一件事情干好，可以将总工作量视为固定不变的，那么你的变量就是工作效率、工作时间和已有成果，已有成果顾名思义就是把以前的工作拿过来改改再用。此外，你一开始搞你完全不知道或者不熟悉的东西工作效率肯定是很低的，这时候虽然可以通过堆时间硬把他做出来，但是不如想办法提高你的工作效率，然后又有【工作效率 = 学习效率学习时间 + 工作经验】，学习效率受你的学习方法、知识体系等因素影响，假如你理解新知识的效率不变，那就要多花时间去看课看书学习，此外如果你的知识体系越完善、越与你现在学的东西相关，那么学习新知识相当于做一个迁移学习，这很好理解就比如你已经学会了加减法，那么学习乘除法的时候可以理解成进行了多次的加减法，自然而然就能推出来了，相反如果你觉得一个东西非常生涩复杂，拿着大概率说明你没有学习他的前置知识，加减法没学明白怎么直观理解乘除法的？工作经验也不难理解，熟练度上来了做什么事情就很快了。</em></p>
+<p><em>总而言之就是【工作量 = (学习效率学习时间 + 工作经验)工作时间 + 已有成果】，学习效率 ∝学习方法、知识体系等因素，一件事情要做得越好工作量就越大，所以你的目标就是想办法提高公式里的每一个变量。</em></p>
+<p><em>”</em></p>
+<p>我还是比较认同这话的，只能说说的很有道理，但是都是我已经意识到的东西，这对我来说就是一份文字化的总结。</p>
+<h1>什么是高效生活？</h1>
+<p>25届的人太多了，导致总体工作效率很低，其中有能力的，或者说聪明点的，或者说是个正常人的，很少，xzk、cyw、dyh、jy，sww都难说，这些大概也是新生赛中取得较好成绩的同学，由此起码能够看出来他们是比较上进的。</p>
+<p>但是，我不太能在他们身上看出紧迫感来，或者看重时间利用率的那种感觉，我其实也在想，大一大二的时间里，把自己逼迫的太紧张到底是不是一件好事情。逼迫太紧，也许忘了欣赏沿途风景，也许会错过人生中的暑假；过于松弛，又会失去自我对于未来追求的执着，会造成大学四年下来感觉啥也没学到的愧疚。</p>
+<p>但对于此时的我，心底大概有一个答案了，因为我属于是两种情况都经历过的人，大一初期的我就是那种把自己逼得很紧的人，那时的我感觉走路去吃饭都有点浪费时间，我总想把时间榨干；然后慢慢的我和hyh等人玩在一起，他们没有那张紧张感，我也潜移默化的变得松弛了起来，那时的我不会太在一一天是不是啥也没干，每天睡到很晚才起，但那时的我也挺快乐的。然后，现在，我，有点悟道了，我应该追求把时间高效利用这个主旋律，同时需要保持那份松弛，我可以上午学一上午，然后下午我可以打会游戏，吃完晚饭我不着急回实验室，我可以去想去的地方散散步或者买点想吃的，我回到工位可以先看会视频再开始工作。</p>
+<p>现在快要凌晨两点半了，我还是睡不着，于是打算续写玩未完成的杂谈。深夜写这些还真是挺合适呢。<br>
+由于工位被jy睡觉占住了，我选择用手机先记录下来。<br>
+说实话真挺羡慕那些睡眠好的人，躺哪儿都能睡着，不像我深夜里还在这码字。<br>
+其实经历多了，便不会再执着于今天上午浪费了多少时间了，下午又没学啥东西这种问题了。该学习时学习，不要整天被空虚和愧疚充斥，才能保持一个良好的身心健康。学习时保证效率，玩耍时放松心情。看来那句话说的很对，<strong>除去肉体痛苦，人百分之九十九的痛苦都是自身情绪造成的</strong>。把各种东西都看的淡一些，应该会少了很多烦恼。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>安顺一游</title>
+    <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
+<p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
+<h1>旁边的阿姨</h1>
+<p>上客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
+<p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
+<p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
+<h1>没钱打车</h1>
+<p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
+<p>随眼看了下交通，打顺风车还挺划算的。</p>
+<p>（到车站）没有去黄果树的车了；顺风车打不到了；公交车没有去那儿的；打滴怎么要八十啊？我可是去附近的景点玩，凭啥啊。算了，我似乎也不太擅长一个人看山看水，不如今晚去小吃街爽吃算了。</p>
+<p>其实如果有个人陪我我也不用太在意这些了，人多还能A车费。</p>
+<p>去旅行一定要看风景吗？我更想爽吃各种特色小吃。</p>
+<p>（傍晚）总算到顾府街了，大吃特吃时间到。</p>
+<p>额，我突然发现由于感冒，我的嗅觉丧失，味觉丧失了一半，所以我的美食体验会折扣50%  TvT  但是，来都来了。。。</p>
+<h1>彻夜长谈</h1>
+<p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
+<p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
+<p>我的最低目标是以后赚的不能比老爸少。</p>
+<p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
+<p>他是一个很强硬的人，很男人的人。我觉得我也继承了他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，但平时在学校我应该算是偏文静的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
   </entry>
   <entry>
     <title>数据库大作业</title>
@@ -888,6 +995,33 @@ redis(ACID处理非常简单)<br>
       </categories>
       <tags>
         <tag>claude</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服创未晋级思考</title>
+    <url>/2026/05/22/%E6%9C%8D%E5%88%9B%E6%9C%AA%E6%99%8B%E7%BA%A7%E6%80%9D%E8%80%83/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>今年的服创比赛大概是我的最后一舞了（最后一次作为主力开发参赛），得了个省三，也是意料之中的事情。不难过，不高兴。</p>
+<h1>为什么只有省三</h1>
+<p>下面是评委的评论：<br>
+<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260523153547031.png"  alt="f38aac13beea6f49e5817a90851b261c"></p>
+<p>对于专家一：</p>
+<p>市场分析这块确实每咋下功夫，概要文档他也看出来不精炼了是让我哭笑不得，我真以为这些专家不会仔细看文档的，早知道不让lmk写概要文档了，他那AI的我一眼看出来了，确实是不够精炼。<br>
+PPT的话，我真不知道评委们喜欢啥样的PPT，我这和cyj他们的都是简约版的，古法手搓PPT，难道评委喜欢AI风的？好吧这个我暂时还想不通。</p>
+<p>对于专家二：</p>
+<p>说套话的一边去。。。不认真看我的作品我也不认真给你回复</p>
+<p>对于专家三：</p>
+<p>这是真认真看了的，对于他说不好看我一开始还是不认同的，但现在写了两天课设后我真心服口服了，我那界面确实AI味十足啊（原谅我和仝主任当时都不懂什么是AI味前端），毕竟这也是去年的项目来今年参赛了。唉，想想去年那个暑假，我还在手搓python后端，各种功能设计、实现逻辑都是我和仝主任靠两颗不如AI的大脑想的啊，在这智能体盛行的时代，去年的两个老艺术家也只能甘拜下风了。</p>
+<h1>总结</h1>
+<p>缺乏创新点是最大的问题，要是有创新点的话，在概要文档、PPT以及实现中都可以重点拿出来说，也就不怕不精炼的问题了。<br>
+此时又能联想到不可替代性的那个说法了，<strong>只有你在一个领域或者一段关系中具有不可替代性，那你就不会失去重要性。</strong></p>
+<p>该退役了，打了两年竞赛我也乏了，收获的是一些不知道是否真有用的奖项和略超出平常人的工程能力，以及一些可靠的比赛经验，和一群同甘共苦过的人。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>AI时代</tag>
       </tags>
   </entry>
   <entry>
@@ -940,71 +1074,6 @@ redis(ACID处理非常简单)<br>
       </tags>
   </entry>
   <entry>
-    <title>肖佬经验之谈</title>
-    <url>/2026/06/11/%E8%82%96%E4%BD%AC%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>该着重考虑以后的发展方向了，有了舅舅的支持，我也能更放开心去想去做了。</p>
-<p>于是我找到了肖佬聊天，下图只为消除学历焦虑。</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260611165226224.png"  alt="image-20260611165226164"></p>
-<h1>我需要再掌握一门后端语言</h1>
-<p>python语言主要用于研究测，双非学历只能干工程测的，需要在go和java中选一个。</p>
-<p>大厂后端以及原有业务开发agent大多仍是java。</p>
-<p>go目前生态较弱，但更适配agent的发展。</p>
-<p>python后端就是一坨屎，速度慢的要死，真正业务不可能用python上线，但是研究的时候需要做测试还是需要会基础的curl。</p>
-<h1>简历包装</h1>
-<h3 id="奖项">奖项</h3>
-<p>首先奖项在简历上的作用有两个：<br>
-一是在简历筛选中占一点优势，二是在后期议薪时利于涨薪。甚至大厂一般都把竞赛奖项当shit</p>
-<h3 id="技术栈">技术栈</h3>
-<p>然后技术栈，这里就写自己会什么，写够就行，不要怕吹嘘风险。在计算机行业，“精通”这两个字只适用于开创者。</p>
-<h3 id="项目经历">项目经历</h3>
-<p>项目经历，这个比较重要，因为这是面试时主要要问的东西，面试官会先让我说我做过什么项目，在其中干了什么，然后面试官会根据我说的进行追问，这里他会层层深入，所以这里要注意引导。</p>
-<h3 id="实习经历">实习经历</h3>
-<p>对于找第一段实习的我来说，能过就行，不要太挑剔。有了一段实习经验后，会极大的提升后续的学习效率。</p>
-<p>同时不要害怕实习时长的问题，一般面试时说自己三个月或者六个月都行，反正大家都是干一个多月就走人了，也会开实习证明的。</p>
-<h1>面试</h1>
-<p>面试官主要问的：</p>
-<p>简历上的东西面试官其实不咋看，毕竟他要面这个岗位的人，他就按照岗位要求去问就行。</p>
-<p>首先是通用技术，就是git，docker，通信协议等程序员都需要具备的技能的一些底层，但也没那么底层，就是知识点类的东西。这里设计到408的一些相关东西，所以408重要知识点还是要学一下。</p>
-<p>然后是项目经历，这里就引导面试官问自己利己的问题。对于一个项目，就算不是主力开发，也要去熟悉项目，可以吹嘘自己在项目中都干了啥。</p>
-<p>然后就是八股，这个比较重要，还是要背的比较熟悉才行。面试官爱问没办法。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>经验</tag>
-        <tag>就业</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服创未晋级思考</title>
-    <url>/2026/05/22/%E6%9C%8D%E5%88%9B%E6%9C%AA%E6%99%8B%E7%BA%A7%E6%80%9D%E8%80%83/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>今年的服创比赛大概是我的最后一舞了（最后一次作为主力开发参赛），得了个省三，也是意料之中的事情。不难过，不高兴。</p>
-<h1>为什么只有省三</h1>
-<p>下面是评委的评论：<br>
-<img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260523153547031.png"  alt="f38aac13beea6f49e5817a90851b261c"></p>
-<p>对于专家一：</p>
-<p>市场分析这块确实每咋下功夫，概要文档他也看出来不精炼了是让我哭笑不得，我真以为这些专家不会仔细看文档的，早知道不让lmk写概要文档了，他那AI的我一眼看出来了，确实是不够精炼。<br>
-PPT的话，我真不知道评委们喜欢啥样的PPT，我这和cyj他们的都是简约版的，古法手搓PPT，难道评委喜欢AI风的？好吧这个我暂时还想不通。</p>
-<p>对于专家二：</p>
-<p>说套话的一边去。。。不认真看我的作品我也不认真给你回复</p>
-<p>对于专家三：</p>
-<p>这是真认真看了的，对于他说不好看我一开始还是不认同的，但现在写了两天课设后我真心服口服了，我那界面确实AI味十足啊（原谅我和仝主任当时都不懂什么是AI味前端），毕竟这也是去年的项目来今年参赛了。唉，想想去年那个暑假，我还在手搓python后端，各种功能设计、实现逻辑都是我和仝主任靠两颗不如AI的大脑想的啊，在这智能体盛行的时代，去年的两个老艺术家也只能甘拜下风了。</p>
-<h1>总结</h1>
-<p>缺乏创新点是最大的问题，要是有创新点的话，在概要文档、PPT以及实现中都可以重点拿出来说，也就不怕不精炼的问题了。<br>
-此时又能联想到不可替代性的那个说法了，<strong>只有你在一个领域或者一段关系中具有不可替代性，那你就不会失去重要性。</strong></p>
-<p>该退役了，打了两年竞赛我也乏了，收获的是一些不知道是否真有用的奖项和略超出平常人的工程能力，以及一些可靠的比赛经验，和一群同甘共苦过的人。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>AI时代</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>迟来的个人博客</title>
     <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h1>前言</h1>
@@ -1041,6 +1110,44 @@ hexo d    （上传到github仓库）</p>
       </categories>
       <tags>
         <tag>框架使用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>肖佬经验之谈</title>
+    <url>/2026/06/11/%E8%82%96%E4%BD%AC%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>该着重考虑以后的发展方向了，有了舅舅的支持，我也能更放开心去想去做了。</p>
+<p>于是我找到了肖佬聊天，下图只为消除学历焦虑。</p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260611165226224.png"  alt="image-20260611165226164"></p>
+<h1>我需要再掌握一门后端语言</h1>
+<p>python语言主要用于研究测，双非学历只能干工程测的，需要在go和java中选一个。</p>
+<p>大厂后端以及原有业务开发agent大多仍是java。</p>
+<p>go目前生态较弱，但更适配agent的发展。</p>
+<p>python后端就是一坨屎，速度慢的要死，真正业务不可能用python上线，但是研究的时候需要做测试还是需要会基础的curl。</p>
+<h1>简历包装</h1>
+<h3 id="奖项">奖项</h3>
+<p>首先奖项在简历上的作用有两个：<br>
+一是在简历筛选中占一点优势，二是在后期议薪时利于涨薪。甚至大厂一般都把竞赛奖项当shit</p>
+<h3 id="技术栈">技术栈</h3>
+<p>然后技术栈，这里就写自己会什么，写够就行，不要怕吹嘘风险。在计算机行业，“精通”这两个字只适用于开创者。</p>
+<h3 id="项目经历">项目经历</h3>
+<p>项目经历，这个比较重要，因为这是面试时主要要问的东西，面试官会先让我说我做过什么项目，在其中干了什么，然后面试官会根据我说的进行追问，这里他会层层深入，所以这里要注意引导。</p>
+<h3 id="实习经历">实习经历</h3>
+<p>对于找第一段实习的我来说，能过就行，不要太挑剔。有了一段实习经验后，会极大的提升后续的学习效率。</p>
+<p>同时不要害怕实习时长的问题，一般面试时说自己三个月或者六个月都行，反正大家都是干一个多月就走人了，也会开实习证明的。</p>
+<h1>面试</h1>
+<p>面试官主要问的：</p>
+<p>简历上的东西面试官其实不咋看，毕竟他要面这个岗位的人，他就按照岗位要求去问就行。</p>
+<p>首先是通用技术，就是git，docker，通信协议等程序员都需要具备的技能的一些底层，但也没那么底层，就是知识点类的东西。这里设计到408的一些相关东西，所以408重要知识点还是要学一下。</p>
+<p>然后是项目经历，这里就引导面试官问自己利己的问题。对于一个项目，就算不是主力开发，也要去熟悉项目，可以吹嘘自己在项目中都干了啥。</p>
+<p>然后就是八股，这个比较重要，还是要背的比较熟悉才行。面试官爱问没办法。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>经验</tag>
+        <tag>就业</tag>
       </tags>
   </entry>
   <entry>
@@ -1094,99 +1201,5 @@ hexo d    （上传到github仓库）</p>
       <tags>
         <tag>数据库</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Eino初学</title>
-    <url>/2026/07/04/Eino%E5%88%9D%E5%AD%A6/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>此时是已经初步学习了go中的各个主流框架（其实也就gozero、grpc），主要是为了更加深入的了解Sim,我还需学习为go量身打造的agent框架—-Eino，可以粗糙的理解为把langchain工程落地的go版本</p>
-<p>此博客搭配笔记<a href="https://mirage-thought-d06.notion.site/Eino-21d747825dae807ca9b3ff601c655f4a%E9%A3%9F%E7%94%A8%E6%9B%B4%E4%BD%B3">https://mirage-thought-d06.notion.site/Eino-21d747825dae807ca9b3ff601c655f4a食用更佳</a></p>
-<p>这里放一幅图，现在我还看的不是很通透，也许后面回顾时再来看就通透了。</p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260704172457036.png"  alt="image-20260704172456731"></p>
-<h1 id="React-Agent"><a href="#React-Agent" class="headerlink" title="React Agent"></a>React Agent</h1><p>React（Reasoning+Acting）并不是一个框架，而是一种agent设计思想，也就上让agent不断思考并调用工具再思考，直到完成最终目标的过程。</p>
-<p>&#x2F;&#x2F;<em><strong>接下来介绍构建agent的各个组件</strong></em></p>
-<h1 id="ChatModel"><a href="#ChatModel" class="headerlink" title="ChatModel"></a>ChatModel</h1><p>也就是基础的大模型api，能够返回回复、调整参数、多模态交互</p>
-<p>关于ChatModel的使用，和我当时python调用讯飞差不多：</p>
-<p>准备好.env</p>
-<p>引入库，然后实例化模型，传参传入config，设置好返回模式</p>
-<p>同时定义好message结构体，也就是用户输入，定义还系统提示此，然后把该结构体当作input参数传入generate函数，得到返回，如果是流式返回，还得for chunk啥的</p>
-<h1 id="ChatTemplate"><a href="#ChatTemplate" class="headerlink" title="ChatTemplate"></a>ChatTemplate</h1><p>也就是先写一个消息模板，然后后面就只需要传入参数，例如{role}、{task}，就能够嵌入模板形成一份完整的提示词</p>
-<p>&#x2F;&#x2F;<em><strong>然后是RAG的一些介绍，由于之前学过，这里不做赘述</strong></em>，接下来讲编排相关内容</p>
-<h1 id="Chain"><a href="#Chain" class="headerlink" title="Chain"></a>Chain</h1><p>编排分为链式编排和图式编排，链式是图式的一种</p>
-<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注册链条</span></span><br><span class="line">chain := compose.NewChain[<span class="type">string</span>, *schema.Message]()<span class="comment">//这里泛型用[]</span></span><br><span class="line"><span class="comment">//连接起各个节点</span></span><br><span class="line">chain.AppendLambda(lambda).AppendChatModel(model)</span><br><span class="line">r, err := chain.Compile(ctx)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line">answer, err := r.Invoke(ctx, <span class="string">&quot;你好，请告诉我你的名字&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(answer.Content)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>以上是一个极简链式编排，我还能往里面加工具调用节点，也就是需要我先写好工具函数，定义好工具描述，并注入大模型的可调用工具列表中，然后当我输入一段话时，大模型会思考它是否需要调用工具，要的话就会提取我输入中的参数作为工具函数的参数传入工具函数，然后返回结果再发送给大模型，给出回答。所以可以得到这个过程中大模型是思考了两下的。</p>
-<h1 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h1><p>图可以添加更多的东西，与链的初步区别就是加入了分支，我可以创建多个分支节点，然后用一个分支控制节点来决定流程要往哪个分支走，类似于多个if else。代码流程是需要在创建好节点后把节点加入图，然后再把节点加入分支，才算组成图完毕，我上面所说的这些是不加入大模型的情况，后面还能加入大模型、状态、回调，这些就是 graph编排的高级特性了。</p>
-<h3 id="state"><a href="#state" class="headerlink" title="state"></a>state</h3><p>主要用于记忆功能，让各节点共享state</p>
-<h3 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h3><p>让经过每个节点时可以做一次例如打印当前节点名称、输入输出的功能。实时监控的感觉</p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>Eino</tag>
-        <tag>agent</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>八股探索</title>
-    <url>/2026/07/03/%E5%85%AB%E8%82%A1%E6%8E%A2%E7%B4%A2/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于误打误撞收到一份面试邀请，可是我才学不到半个月的golang，真的能通过一个中厂golang后端开发岗的面试吗？首先我学的时间短，其次我没背八股，然后我还没刷力扣算法题，而且go的项目一个都没有，这些事实都指向了这场面试我将被拷打。</p>
-<p>但是肖佬说面试就是看运气，要我赶紧准备八股。我想想，也许面试官会偏向于招培养型人才，潜力型人才，那也许能碰碰运气咯。而且也能涨涨经验。</p>
-<h1 id="goroutine如何防止脏写"><a href="#goroutine如何防止脏写" class="headerlink" title="goroutine如何防止脏写"></a>goroutine如何防止脏写</h1><p>脏写也就是当我两个协程都同时给n++时，n可能只加1</p>
-<p>方法有很多种：</p>
-<p>加Mutex互斥锁：这里就尽量把少的会发生冲突的操作加入锁内，比如网络请求啥的这种协程自己的事情就没必要加入了；</p>
-<p>读多写少的情况加RWMutex读写锁：因为它允许读共享，但Mutex锁住了，就啥都只能单独进行；</p>
-<p>转换操作为原子操作：也就是把n++写成更高级的，更繁琐的代码，那代码中的函数或者实例会强制把某种操作改为原子操作。</p>
-<h1 id="make和new有什么区别"><a href="#make和new有什么区别" class="headerlink" title="make和new有什么区别"></a>make和new有什么区别</h1><p>new是分配内存的，make是初始化的。</p>
-<p>拿 map举例，m :&#x3D; new(map[string]int)，只是在内存中开辟了一个空间给m，且m被当作是零值，这里的m &#x3D; nil，然而给map赋值时，是需要map有哈希表的，此时m仅仅只有个空值nil以及在内存中的地址，其它啥也没有，所以不能被赋值；</p>
-<p>但是用m :&#x3D; make(map[string]int)时，m就被make初始化好了，不仅仅是被分配了内存，还初始化了哈希表啥的基层建筑，就能被赋值。</p>
-<p>这里注意make一般用于slice、map、chan的初始化。</p>
-<h1 id="slice踩坑"><a href="#slice踩坑" class="headerlink" title="slice踩坑"></a>slice踩坑</h1><p>首先，不能把slice理解为数组，而是数组是slice的底层数组，实际上的slcie是一个结构体:</p>
- <div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">    ptr unsafe.Pointer <span class="comment">// 指向底层数组的指针</span></span><br><span class="line">    <span class="built_in">len</span> <span class="type">int</span></span><br><span class="line">    <span class="built_in">cap</span> <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>ptr指针指向底层数组，所以假如s :&#x3D; []int{1，2，3}，那么s &#x3D; s.ptr  &#x3D; &amp;s[0]（切片中第一个元素的地址），然后slice和它底层的数组是内存中两个不同的东西，并不是底层数组是slice的一部分，而是slice的指针可以指向数组的地址。 </p>
-<p><strong>扩容</strong>：当预留的内存空间不够用时，会重新申请一块更大的内存空间并把原数据拷贝过来，原来的内存空间会被GC回收。扩容大小一般是扩容为原来的2倍或者1.25倍</p>
-<h3 id="关于母子切片的内存关系"><a href="#关于母子切片的内存关系" class="headerlink" title="关于母子切片的内存关系"></a>关于母子切片的内存关系</h3><p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260704112921625.png"  alt="image-20260704112914510"></p>
-<p>也就是母子切片共享底层数组，修改其中一个也会影响另一个，但是当子切片append到超出了母切片预留的内存空间，那么它俩就会剥离，不再有关系。</p>
-<h3 id="函数传参方式对于切片的修改"><a href="#函数传参方式对于切片的修改" class="headerlink" title="函数传参方式对于切片的修改"></a>函数传参方式对于切片的修改</h3><p>如果给函数传参传的时slice而不是*slice，那么修改底层数组是可以全局生效，但是修改slice的三个属性就不行，因为go中的函数传参都是值传递，也就是传的是拷贝体，不存在引用传递，然后拷贝体和本体的ptr指针指向的是同一个数组，所以修改那个底层数组就会全局生效。</p>
-<h1 id="GMP调度模型"><a href="#GMP调度模型" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h1><p>线程由操作系统调度，goroutine由go Runtime的GMP模型调度。</p>
-<p>G为 goroutine,M可以理解为操作系统线程，P为逻辑处理器，它们关系为：</p>
-<p>M + P → 执行 G</p>
-<p>p的数量一般等于cpu逻辑核心数量。举例：</p>
-<p>100000 个 G<br>8 个 P<br>十几个或更多 M</p>
-<p>但此时运行的M只有8个</p>
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>八股</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于效率</title>
-    <url>/2026/07/08/%E5%85%B3%E4%BA%8E%E6%95%88%E7%8E%87/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>好久没写杂谈了，也许是这段时间太忙了，忙着复习、忙着学go、操心着机器人竞赛，为什么现在又开始写了呢，也许是又进入了这么一种心境吧。</p>
-<p>我现在是什么心境呢，难以静心学习，刷抖音刷的不爽快，也不想看小说，不想打游戏。有点像深夜失眠时的那样思绪万千的感觉。无法学习，也无法放松。</p>
-<p>也许这种时候，最适合写杂谈了。</p>
-<h1 id="机器狗竞赛效率低下"><a href="#机器狗竞赛效率低下" class="headerlink" title="机器狗竞赛效率低下"></a>机器狗竞赛效率低下</h1><p>对于这种感觉已经不是一天两天了，从大一下开始搞机器人竞赛时便已经发现，搞这种竞赛对自己的职业发展似乎是毫无帮助的，因为我们的工作内容就是枯燥的调参，以及不断地把报错丢给AI，再搬运AI给的答复到机器人，在这期间我们难以看懂技术原理，那些技术也不是本科生应该接触的技术。</p>
-<p>这种情况下，就会感觉自己的效率极低，因为在单位时间内自己基本没学到有认同感的知识，也没有好好放松自己。</p>
-<p>这时我想到老白总结过的一段话，大概是他对于学习效率的总结性概括：</p>
-<p>“</p>
-<p><em>广度优先学习，先广泛了解领域内有什么名词，然后了解这些名词的基础含义，比如说前后端中什么是开发框架、开发框架有什么？搞深度学习先简单了解什么是CNN、Transformer他们最基本的模块结构和运算操作是怎么样的，搞机器人理解什么是寻路、激光SLAM建图以及他们最基本的原理是什么样的等等，基础理论看那种《10分钟解释xxxx》系列就行了，还是不理解就看稍微长一点的学习资料，毕竟有时候为了简化对很多细节做了取舍。然后到你要深入去做某个东西的时候就再深入学习，用科研举例，如果你要用Transformer搭模块，你可能知道早就知道了他本质就是就是向量加权相加，但是这一点是不够的，你还要去深入理解里面的不同的矩阵代表什么意思、维度是如何变化、向量是如何拼接如何运算以及Transformer里面每个模块细节的，还要理解里面的计算公式，虽然现在大模型写公式不成问题，但是等到你开始写论文的时候，为了保证描述准确性这些公式是要你手推验证一遍的</em>。</p>
-<p><em>我总结了一个公式，【工作量 &#x3D; 工作效率工作时间 + 已有成果】，要把一件事情干好，可以将总工作量视为固定不变的，那么你的变量就是工作效率、工作时间和已有成果，已有成果顾名思义就是把以前的工作拿过来改改再用。此外，你一开始搞你完全不知道或者不熟悉的东西工作效率肯定是很低的，这时候虽然可以通过堆时间硬把他做出来，但是不如想办法提高你的工作效率，然后又有【工作效率 &#x3D; 学习效率学习时间 + 工作经验】，学习效率受你的学习方法、知识体系等因素影响，假如你理解新知识的效率不变，那就要多花时间去看课看书学习，此外如果你的知识体系越完善、越与你现在学的东西相关，那么学习新知识相当于做一个迁移学习，这很好理解就比如你已经学会了加减法，那么学习乘除法的时候可以理解成进行了多次的加减法，自然而然就能推出来了，相反如果你觉得一个东西非常生涩复杂，拿着大概率说明你没有学习他的前置知识，加减法没学明白怎么直观理解乘除法的？工作经验也不难理解，熟练度上来了做什么事情就很快了。</em></p>
-<p><em>总而言之就是【工作量 &#x3D; (学习效率学习时间 + 工作经验)工作时间 + 已有成果】，学习效率 ∝学习方法、知识体系等因素，一件事情要做得越好工作量就越大，所以你的目标就是想办法提高公式里的每一个变量。</em></p>
-<p><em>”</em></p>
-<p>我还是比较认同这话的，只能说说的很有道理，但是都是我已经意识到的东西，这对我来说就是一份文字化的总结。</p>
-<h1 id="什么是高效生活？"><a href="#什么是高效生活？" class="headerlink" title="什么是高效生活？"></a>什么是高效生活？</h1><p>25届的人太多了，导致总体工作效率很低，其中有能力的，或者说聪明点的，或者说是个正常人的，很少，xzk、cyw、dyh、jy，sww都难说，这些大概也是新生赛中取得较好成绩的同学，由此起码能够看出来他们是比较上进的。</p>
-<p>但是，我不太能在他们身上看出紧迫感来，或者看重时间利用率的那种感觉，我其实也在想，大一大二的时间里，把自己逼迫的太紧张到底是不是一件好事情。逼迫太紧，也许忘了欣赏沿途风景，也许会错过人生中的暑假；过于松弛，又会失去自我对于未来追求的执着，会造成大学四年下来感觉啥也没学到的愧疚。</p>
-<p>但对于此时的我，心底大概有一个答案了，因为我属于是两种情况都经历过的人，大一初期的我就是那种把自己逼得很紧的人，那时的我感觉走路去吃饭都有点浪费时间，我总想把时间榨干；然后慢慢的我和hyh等人玩在一起，他们没有那张紧张感，我也潜移默化的变得松弛了起来，那时的我不会太在一一天是不是啥也没干，每天睡到很晚才起，但那时的我也挺快乐的。然后，现在，我，有点悟道了，我应该追求把时间高效利用这个主旋律，同时需要保持那份松弛，我可以上午学一上午，然后下午我可以打会游戏，吃完晚饭我不着急回实验室，我可以去想去的地方散散步或者买点想吃的，我回到工位可以先看会视频再开始工作。</p>
-<p>现在快要凌晨两点半了，我还是睡不着，于是打算续写玩未完成的杂谈。深夜写这些还真是挺合适呢。<br>由于工位被jy睡觉占住了，我选择用手机先记录下来。<br>说实话真挺羡慕那些睡眠好的人，躺哪儿都能睡着，不像我深夜里还在这码字。<br>其实经历多了，便不会再执着于今天上午浪费了多少时间了，下午又没学啥东西这种问题了。该学习时学习，不要整天被空虚和愧疚充斥，才能保持一个良好的身心健康。学习时保证效率，玩耍时放松心情。看来那句话说的很对，<strong>除去肉体痛苦，人百分之九十九的痛苦都是自身情绪造成的</strong>。把各种东西都看的淡一些，应该会少了很多烦恼。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
   </entry>
 </search>
