@@ -168,6 +168,37 @@
       </tags>
   </entry>
   <entry>
+    <title>gorm</title>
+    <url>/2026/06/22/gorm/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>简单来说，它是一个开发者工具，能让你用操作 Go 结构体（Struct）和对象的方式来与关系型数据库（如 MySQL、PostgreSQL、SQLite 等）进行交互，而无需编写复杂的 SQL 语句。</p>
+<p>核心思想：将数据库中的“表”映射为 Go 程序中的“结构体”，将表中的“行”映射为结构体的“实例”，将表中的“列”映射为结构体的“字段”。</p>
+<h1 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h1><div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u gorm.io/gorm</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>假如是操作mysql，那么下一步是：</p>
+<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u gorm.io/driver/mysql</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>tips：gorm不是全局安装，而是项目级别的，需要在项目已有**<code>go.mod</code>**文件时才能给项目安装</p>
+<p>这里不得不的提一嘴，go的项目依赖是全局安装的，但不需要担心多个项目依赖冲突的问题，因为在全局缓存目录中，go允许一个库的多个版本同时存在。当项目编译时，go编译器只会根据go.mod去编译对应版本的库</p>
+<p>。。。懒得写了，大体流程和python那些都差不多，只是具有了一些gozero的特性而已。</p>
+<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>就像用sql语句查询特定的字段值<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260622191018448.png"  alt="image-20260622191011309"></p>
+<p>也可以执行原生SQL语句：</p>
+<p>Exec(sql) 执行一个语句，返回受影响的行数，用于 删除数据 或者修改数据</p>
+<p>Raw(sql) Scan() 用于查询数</p>
+<p>如：</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用原生sql Exec修改article表中的一条数据</span></span><br><span class="line">result := l.svcCtx.DB.Exec(<span class="string">&quot;UPDATE article SET title = ? WHERE id = ?&quot;</span>, <span class="string">&quot;原生sql修改数据&quot;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//Raw查询article表中id=2的数据</span></span><br><span class="line">article := []gorm.Article&#123;&#125;</span><br><span class="line">l.svcCtx.DB.Raw(<span class="string">&quot;SELECT * FROM article WHERE id = ?&quot;</span>, <span class="number">2</span>).Scan(&amp;article)</span><br><span class="line"></span><br><span class="line"><span class="comment">//原生sql统计article表的数量</span></span><br><span class="line"><span class="keyword">var</span> count <span class="type">int64</span></span><br><span class="line">result = l.svcCtx.DB.Raw(<span class="string">&quot;SELECT COUNT(*) FROM article&quot;</span>).Scan(&amp;count)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+
+
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gorm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>golang初学</title>
     <url>/2026/06/12/golang%E5%88%9D%E5%AD%A6/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一门语言不够那就学两门，对于完全没学过go但是学过其它语言且有一定的开发经验的我来说，感觉两天学完基本语法没问题。</p>
@@ -544,37 +575,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gorm</title>
-    <url>/2026/06/22/gorm/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>简单来说，它是一个开发者工具，能让你用操作 Go 结构体（Struct）和对象的方式来与关系型数据库（如 MySQL、PostgreSQL、SQLite 等）进行交互，而无需编写复杂的 SQL 语句。</p>
-<p>核心思想：将数据库中的“表”映射为 Go 程序中的“结构体”，将表中的“行”映射为结构体的“实例”，将表中的“列”映射为结构体的“字段”。</p>
-<h1 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h1><div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u gorm.io/gorm</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>假如是操作mysql，那么下一步是：</p>
-<div class="code-container" code-lang="Bash"><div class="codebox"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u gorm.io/driver/mysql</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-<p>tips：gorm不是全局安装，而是项目级别的，需要在项目已有**<code>go.mod</code>**文件时才能给项目安装</p>
-<p>这里不得不的提一嘴，go的项目依赖是全局安装的，但不需要担心多个项目依赖冲突的问题，因为在全局缓存目录中，go允许一个库的多个版本同时存在。当项目编译时，go编译器只会根据go.mod去编译对应版本的库</p>
-<p>。。。懒得写了，大体流程和python那些都差不多，只是具有了一些gozero的特性而已。</p>
-<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>就像用sql语句查询特定的字段值<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260622191018448.png"  alt="image-20260622191011309"></p>
-<p>也可以执行原生SQL语句：</p>
-<p>Exec(sql) 执行一个语句，返回受影响的行数，用于 删除数据 或者修改数据</p>
-<p>Raw(sql) Scan() 用于查询数</p>
-<p>如：</p>
-<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用原生sql Exec修改article表中的一条数据</span></span><br><span class="line">result := l.svcCtx.DB.Exec(<span class="string">&quot;UPDATE article SET title = ? WHERE id = ?&quot;</span>, <span class="string">&quot;原生sql修改数据&quot;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//Raw查询article表中id=2的数据</span></span><br><span class="line">article := []gorm.Article&#123;&#125;</span><br><span class="line">l.svcCtx.DB.Raw(<span class="string">&quot;SELECT * FROM article WHERE id = ?&quot;</span>, <span class="number">2</span>).Scan(&amp;article)</span><br><span class="line"></span><br><span class="line"><span class="comment">//原生sql统计article表的数量</span></span><br><span class="line"><span class="keyword">var</span> count <span class="type">int64</span></span><br><span class="line">result = l.svcCtx.DB.Raw(<span class="string">&quot;SELECT COUNT(*) FROM article&quot;</span>).Scan(&amp;count)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
-
-
-
-]]></content>
-      <categories>
-        <category>开发</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>gorm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>uni-app初学</title>
     <url>/2026/04/20/uni-app%E5%88%9D%E5%AD%A6/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8%E3%80%82">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用。</a></p>
@@ -629,33 +629,6 @@
       </tags>
   </entry>
   <entry>
-    <title>做一张行测卷</title>
-    <url>/2026/06/10/%E5%81%9A%E4%B8%80%E5%BC%A0%E8%A1%8C%E6%B5%8B%E5%8D%B7/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>家里一直希望我考公， 可我总是那么抗拒。首先我考公学习上没多少天赋，即不擅长那种题型，其次我不喜欢公务员的生活，那种一考定终身的事情是不是太禁锢人了，我反而更想自由就职。</p>
-<p>但舅舅都提过几次公安网警了，查了一些资料，大概就是有些岗位也需要用到计算机技术，不至于会浪费现在所学到的技术知识。</p>
-<p>那么就做一张行测卷子试试看，到底适不适合走这条路。</p>
-<h1 id="网课速通"><a href="#网课速通" class="headerlink" title="网课速通"></a>网课速通</h1><p>直接做题肯定是艰难又艰巨的，之前了解了下判断推理就能得出做行测还是有很多的技巧的，学了和不学差距真挺大。</p>
-<p>让我先去找一个时长少的网课看看。<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610092036040.png"  alt="image-20260610092028938"></p>
-<p>emm,上午九点，5人正在看啥意思。我寻思今天距离国考还有很长时间吧，他们要考公不应该看系统课么。难不成有情况和我一样的？那真要祝另外四个人能尽早找到自己的心之所向了。</p>
-<p>看了十几分钟，我又回来了，感觉没啥效果，因为考察的素养和高中语文有点像，然而素养这个东西像英语一样，没法速成，我还是直接去做卷子吧。</p>
-<h1 id="小憩"><a href="#小憩" class="headerlink" title="小憩"></a>小憩</h1><p>不是做完试卷了，而是手写笔没电了。那么就利用这个小憩时间写一下当前的感想。</p>
-<p>差不多用了一个小时，做了50道题，其中有大概40道是完全不会的。这也正常，关键问题是，我难以进入心流状态。</p>
-<p>先不管题目正确率的问题，我要检测自己能否学的进行测，就得测试自己是不是容易心流，可我每道题要读好几遍才能理解题意，很多东西我都看不懂。这可能有两种原因：<br>1、我因为不知道这个知识点导致我大脑无法思考，进入看天书状态<br>2、我对这类题型完全提不起兴趣，对不不敢兴趣的东西难以集中注意力</p>
-<p>不管是哪种原因，都指向了我不擅长考公的事实。</p>
-<p>然后做到选词填空的时候，我冒出一个想法。只有准确理解某个词的意思才能精准选中答案，如果我形成这么一个用词精准的思维，那么会失去一种幽默性，我整个人会变得无聊起来。因为生活中用词不准确或者瞎用其实是一种幽默性行为，我不想丧失这么一个人格趣味点。</p>
-<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>并非做完了试卷，而是做不下去了，时间走完两个小时我才做一半题目，真的举步维艰。而且也到饭点了，然后就粗略的看了看后面的题型，题型都是见过的，那种小学奥数题、图表分析题（依旧题目要看好几遍才能看懂，这种感觉就是不在状态的感觉）。</p>
-<p>索然无味。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没必要去批改了，也没必要去深挖做题目做的不顺利的原因。总之能很明确的发掘到，我对考公不感兴趣，甚至有点抗拒。</p>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>考公</tag>
-        <tag>行测</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vibecoding项目迭代</title>
     <url>/2026/04/08/vibecoding%E9%A1%B9%E7%9B%AE%E8%BF%AD%E4%BB%A3/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上创业课太无聊了，我居然点进了哔站刷视频，于是乎就看到这么个视频【小白AI编程进阶：不写一行代码，教你Vibecoding项目完美升级！】<a href="https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e%E3%80%82%E5%94%89%EF%BC%8Cvibecoding%E7%9A%84%E6%97%B6%E4%BB%A3%EF%BC%8C%E4%B8%8D%E8%B7%9F%E4%B8%8A%E5%8E%BB%E5%AD%A6%E4%B8%80%E5%AD%A6%EF%BC%8C%E8%B7%AF%E8%BE%B9%E7%9A%84%E5%A4%A7%E7%88%B7%E5%BE%85%E4%BC%9A%E9%83%BD%E6%AF%94%E6%88%91%E6%9B%B4%E4%BC%9A%E7%BC%96%E7%A8%8B%E4%BA%86%E3%80%82">https://www.bilibili.com/video/BV16CXTBDEAc?vd_source=2d766142e23921a5dff311236709cd7e。唉，vibecoding的时代，不跟上去学一学，路边的大爷待会都比我更会编程了。</a></p>
@@ -687,6 +660,33 @@
       </categories>
       <tags>
         <tag>vibecoding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>做一张行测卷</title>
+    <url>/2026/06/10/%E5%81%9A%E4%B8%80%E5%BC%A0%E8%A1%8C%E6%B5%8B%E5%8D%B7/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>家里一直希望我考公， 可我总是那么抗拒。首先我考公学习上没多少天赋，即不擅长那种题型，其次我不喜欢公务员的生活，那种一考定终身的事情是不是太禁锢人了，我反而更想自由就职。</p>
+<p>但舅舅都提过几次公安网警了，查了一些资料，大概就是有些岗位也需要用到计算机技术，不至于会浪费现在所学到的技术知识。</p>
+<p>那么就做一张行测卷子试试看，到底适不适合走这条路。</p>
+<h1 id="网课速通"><a href="#网课速通" class="headerlink" title="网课速通"></a>网课速通</h1><p>直接做题肯定是艰难又艰巨的，之前了解了下判断推理就能得出做行测还是有很多的技巧的，学了和不学差距真挺大。</p>
+<p>让我先去找一个时长少的网课看看。<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260610092036040.png"  alt="image-20260610092028938"></p>
+<p>emm,上午九点，5人正在看啥意思。我寻思今天距离国考还有很长时间吧，他们要考公不应该看系统课么。难不成有情况和我一样的？那真要祝另外四个人能尽早找到自己的心之所向了。</p>
+<p>看了十几分钟，我又回来了，感觉没啥效果，因为考察的素养和高中语文有点像，然而素养这个东西像英语一样，没法速成，我还是直接去做卷子吧。</p>
+<h1 id="小憩"><a href="#小憩" class="headerlink" title="小憩"></a>小憩</h1><p>不是做完试卷了，而是手写笔没电了。那么就利用这个小憩时间写一下当前的感想。</p>
+<p>差不多用了一个小时，做了50道题，其中有大概40道是完全不会的。这也正常，关键问题是，我难以进入心流状态。</p>
+<p>先不管题目正确率的问题，我要检测自己能否学的进行测，就得测试自己是不是容易心流，可我每道题要读好几遍才能理解题意，很多东西我都看不懂。这可能有两种原因：<br>1、我因为不知道这个知识点导致我大脑无法思考，进入看天书状态<br>2、我对这类题型完全提不起兴趣，对不不敢兴趣的东西难以集中注意力</p>
+<p>不管是哪种原因，都指向了我不擅长考公的事实。</p>
+<p>然后做到选词填空的时候，我冒出一个想法。只有准确理解某个词的意思才能精准选中答案，如果我形成这么一个用词精准的思维，那么会失去一种幽默性，我整个人会变得无聊起来。因为生活中用词不准确或者瞎用其实是一种幽默性行为，我不想丧失这么一个人格趣味点。</p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>并非做完了试卷，而是做不下去了，时间走完两个小时我才做一半题目，真的举步维艰。而且也到饭点了，然后就粗略的看了看后面的题型，题型都是见过的，那种小学奥数题、图表分析题（依旧题目要看好几遍才能看懂，这种感觉就是不在状态的感觉）。</p>
+<p>索然无味。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>没必要去批改了，也没必要去深挖做题目做的不顺利的原因。总之能很明确的发掘到，我对考公不感兴趣，甚至有点抗拒。</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>考公</tag>
+        <tag>行测</tag>
       </tags>
   </entry>
   <entry>
@@ -729,30 +729,6 @@
         <tag>go</tag>
         <tag>八股</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>关于效率</title>
-    <url>/2026/07/08/%E5%85%B3%E4%BA%8E%E6%95%88%E7%8E%87/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>好久没写杂谈了，也许是这段时间太忙了，忙着复习、忙着学go、操心着机器人竞赛，为什么现在又开始写了呢，也许是又进入了这么一种心境吧。</p>
-<p>我现在是什么心境呢，难以静心学习，刷抖音刷的不爽快，也不想看小说，不想打游戏。有点像深夜失眠时的那样思绪万千的感觉。无法学习，也无法放松。</p>
-<p>也许这种时候，最适合写杂谈了。</p>
-<h1 id="机器狗竞赛效率低下"><a href="#机器狗竞赛效率低下" class="headerlink" title="机器狗竞赛效率低下"></a>机器狗竞赛效率低下</h1><p>对于这种感觉已经不是一天两天了，从大一下开始搞机器人竞赛时便已经发现，搞这种竞赛对自己的职业发展似乎是毫无帮助的，因为我们的工作内容就是枯燥的调参，以及不断地把报错丢给AI，再搬运AI给的答复到机器人，在这期间我们难以看懂技术原理，那些技术也不是本科生应该接触的技术。</p>
-<p>这种情况下，就会感觉自己的效率极低，因为在单位时间内自己基本没学到有认同感的知识，也没有好好放松自己。</p>
-<p>这时我想到老白总结过的一段话，大概是他对于学习效率的总结性概括：</p>
-<p>“</p>
-<p><em>广度优先学习，先广泛了解领域内有什么名词，然后了解这些名词的基础含义，比如说前后端中什么是开发框架、开发框架有什么？搞深度学习先简单了解什么是CNN、Transformer他们最基本的模块结构和运算操作是怎么样的，搞机器人理解什么是寻路、激光SLAM建图以及他们最基本的原理是什么样的等等，基础理论看那种《10分钟解释xxxx》系列就行了，还是不理解就看稍微长一点的学习资料，毕竟有时候为了简化对很多细节做了取舍。然后到你要深入去做某个东西的时候就再深入学习，用科研举例，如果你要用Transformer搭模块，你可能知道早就知道了他本质就是就是向量加权相加，但是这一点是不够的，你还要去深入理解里面的不同的矩阵代表什么意思、维度是如何变化、向量是如何拼接如何运算以及Transformer里面每个模块细节的，还要理解里面的计算公式，虽然现在大模型写公式不成问题，但是等到你开始写论文的时候，为了保证描述准确性这些公式是要你手推验证一遍的</em>。</p>
-<p><em>我总结了一个公式，【工作量 &#x3D; 工作效率工作时间 + 已有成果】，要把一件事情干好，可以将总工作量视为固定不变的，那么你的变量就是工作效率、工作时间和已有成果，已有成果顾名思义就是把以前的工作拿过来改改再用。此外，你一开始搞你完全不知道或者不熟悉的东西工作效率肯定是很低的，这时候虽然可以通过堆时间硬把他做出来，但是不如想办法提高你的工作效率，然后又有【工作效率 &#x3D; 学习效率学习时间 + 工作经验】，学习效率受你的学习方法、知识体系等因素影响，假如你理解新知识的效率不变，那就要多花时间去看课看书学习，此外如果你的知识体系越完善、越与你现在学的东西相关，那么学习新知识相当于做一个迁移学习，这很好理解就比如你已经学会了加减法，那么学习乘除法的时候可以理解成进行了多次的加减法，自然而然就能推出来了，相反如果你觉得一个东西非常生涩复杂，拿着大概率说明你没有学习他的前置知识，加减法没学明白怎么直观理解乘除法的？工作经验也不难理解，熟练度上来了做什么事情就很快了。</em></p>
-<p><em>总而言之就是【工作量 &#x3D; (学习效率学习时间 + 工作经验)工作时间 + 已有成果】，学习效率 ∝学习方法、知识体系等因素，一件事情要做得越好工作量就越大，所以你的目标就是想办法提高公式里的每一个变量。</em></p>
-<p><em>”</em></p>
-<p>我还是比较认同这话的，只能说说的很有道理，但是都是我已经意识到的东西，这对我来说就是一份文字化的总结。</p>
-<h1 id="什么是高效生活？"><a href="#什么是高效生活？" class="headerlink" title="什么是高效生活？"></a>什么是高效生活？</h1><p>25届的人太多了，导致总体工作效率很低，其中有能力的，或者说聪明点的，或者说是个正常人的，很少，xzk、cyw、dyh、jy，sww都难说，这些大概也是新生赛中取得较好成绩的同学，由此起码能够看出来他们是比较上进的。</p>
-<p>但是，我不太能在他们身上看出紧迫感来，或者看重时间利用率的那种感觉，我其实也在想，大一大二的时间里，把自己逼迫的太紧张到底是不是一件好事情。逼迫太紧，也许忘了欣赏沿途风景，也许会错过人生中的暑假；过于松弛，又会失去自我对于未来追求的执着，会造成大学四年下来感觉啥也没学到的愧疚。</p>
-<p>但对于此时的我，心底大概有一个答案了，因为我属于是两种情况都经历过的人，大一初期的我就是那种把自己逼得很紧的人，那时的我感觉走路去吃饭都有点浪费时间，我总想把时间榨干；然后慢慢的我和hyh等人玩在一起，他们没有那张紧张感，我也潜移默化的变得松弛了起来，那时的我不会太在一一天是不是啥也没干，每天睡到很晚才起，但那时的我也挺快乐的。然后，现在，我，有点悟道了，我应该追求把时间高效利用这个主旋律，同时需要保持那份松弛，我可以上午学一上午，然后下午我可以打会游戏，吃完晚饭我不着急回实验室，我可以去想去的地方散散步或者买点想吃的，我回到工位可以先看会视频再开始工作。</p>
-<p>现在快要凌晨两点半了，我还是睡不着，于是打算续写玩未完成的杂谈。深夜写这些还真是挺合适呢。<br>由于工位被jy睡觉占住了，我选择用手机先记录下来。<br>说实话真挺羡慕那些睡眠好的人，躺哪儿都能睡着，不像我深夜里还在这码字。<br>其实经历多了，便不会再执着于今天上午浪费了多少时间了，下午又没学啥东西这种问题了。该学习时学习，不要整天被空虚和愧疚充斥，才能保持一个良好的身心健康。学习时保证效率，玩耍时放松心情。看来那句话说的很对，<strong>除去肉体痛苦，人百分之九十九的痛苦都是自身情绪造成的</strong>。把各种东西都看的淡一些，应该会少了很多烦恼。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
   </entry>
   <entry>
     <title>关于Vue3和Spring Boot的模糊记忆</title>
@@ -822,25 +798,24 @@
       </tags>
   </entry>
   <entry>
-    <title>安顺一游</title>
-    <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
-<p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
-<h1 id="旁边的阿姨"><a href="#旁边的阿姨" class="headerlink" title="旁边的阿姨"></a>旁边的阿姨</h1><p>上客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
-<p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
-<p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
-<h1 id="没钱打车"><a href="#没钱打车" class="headerlink" title="没钱打车"></a>没钱打车</h1><p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
-<p>随眼看了下交通，打顺风车还挺划算的。</p>
-<p>（到车站）没有去黄果树的车了；顺风车打不到了；公交车没有去那儿的；打滴怎么要八十啊？我可是去附近的景点玩，凭啥啊。算了，我似乎也不太擅长一个人看山看水，不如今晚去小吃街爽吃算了。</p>
-<p>其实如果有个人陪我我也不用太在意这些了，人多还能A车费。</p>
-<p>去旅行一定要看风景吗？我更想爽吃各种特色小吃。</p>
-<p>（傍晚）总算到顾府街了，大吃特吃时间到。</p>
-<p>额，我突然发现由于感冒，我的嗅觉丧失，味觉丧失了一半，所以我的美食体验会折扣50%  TvT  但是，来都来了。。。</p>
-<h1 id="彻夜长谈"><a href="#彻夜长谈" class="headerlink" title="彻夜长谈"></a>彻夜长谈</h1><p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
-<p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
-<p>我的最低目标是以后赚的不能比老爸少。</p>
-<p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
-<p>他是一个很强硬的人，很男人的人。我觉得我也继承了他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，但平时在学校我应该算是偏文静的。</p>
+    <title>关于效率</title>
+    <url>/2026/07/08/%E5%85%B3%E4%BA%8E%E6%95%88%E7%8E%87/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>好久没写杂谈了，也许是这段时间太忙了，忙着复习、忙着学go、操心着机器人竞赛，为什么现在又开始写了呢，也许是又进入了这么一种心境吧。</p>
+<p>我现在是什么心境呢，难以静心学习，刷抖音刷的不爽快，也不想看小说，不想打游戏。有点像深夜失眠时的那样思绪万千的感觉。无法学习，也无法放松。</p>
+<p>也许这种时候，最适合写杂谈了。</p>
+<h1 id="机器狗竞赛效率低下"><a href="#机器狗竞赛效率低下" class="headerlink" title="机器狗竞赛效率低下"></a>机器狗竞赛效率低下</h1><p>对于这种感觉已经不是一天两天了，从大一下开始搞机器人竞赛时便已经发现，搞这种竞赛对自己的职业发展似乎是毫无帮助的，因为我们的工作内容就是枯燥的调参，以及不断地把报错丢给AI，再搬运AI给的答复到机器人，在这期间我们难以看懂技术原理，那些技术也不是本科生应该接触的技术。</p>
+<p>这种情况下，就会感觉自己的效率极低，因为在单位时间内自己基本没学到有认同感的知识，也没有好好放松自己。</p>
+<p>这时我想到老白总结过的一段话，大概是他对于学习效率的总结性概括：</p>
+<p>“</p>
+<p><em>广度优先学习，先广泛了解领域内有什么名词，然后了解这些名词的基础含义，比如说前后端中什么是开发框架、开发框架有什么？搞深度学习先简单了解什么是CNN、Transformer他们最基本的模块结构和运算操作是怎么样的，搞机器人理解什么是寻路、激光SLAM建图以及他们最基本的原理是什么样的等等，基础理论看那种《10分钟解释xxxx》系列就行了，还是不理解就看稍微长一点的学习资料，毕竟有时候为了简化对很多细节做了取舍。然后到你要深入去做某个东西的时候就再深入学习，用科研举例，如果你要用Transformer搭模块，你可能知道早就知道了他本质就是就是向量加权相加，但是这一点是不够的，你还要去深入理解里面的不同的矩阵代表什么意思、维度是如何变化、向量是如何拼接如何运算以及Transformer里面每个模块细节的，还要理解里面的计算公式，虽然现在大模型写公式不成问题，但是等到你开始写论文的时候，为了保证描述准确性这些公式是要你手推验证一遍的</em>。</p>
+<p><em>我总结了一个公式，【工作量 &#x3D; 工作效率工作时间 + 已有成果】，要把一件事情干好，可以将总工作量视为固定不变的，那么你的变量就是工作效率、工作时间和已有成果，已有成果顾名思义就是把以前的工作拿过来改改再用。此外，你一开始搞你完全不知道或者不熟悉的东西工作效率肯定是很低的，这时候虽然可以通过堆时间硬把他做出来，但是不如想办法提高你的工作效率，然后又有【工作效率 &#x3D; 学习效率学习时间 + 工作经验】，学习效率受你的学习方法、知识体系等因素影响，假如你理解新知识的效率不变，那就要多花时间去看课看书学习，此外如果你的知识体系越完善、越与你现在学的东西相关，那么学习新知识相当于做一个迁移学习，这很好理解就比如你已经学会了加减法，那么学习乘除法的时候可以理解成进行了多次的加减法，自然而然就能推出来了，相反如果你觉得一个东西非常生涩复杂，拿着大概率说明你没有学习他的前置知识，加减法没学明白怎么直观理解乘除法的？工作经验也不难理解，熟练度上来了做什么事情就很快了。</em></p>
+<p><em>总而言之就是【工作量 &#x3D; (学习效率学习时间 + 工作经验)工作时间 + 已有成果】，学习效率 ∝学习方法、知识体系等因素，一件事情要做得越好工作量就越大，所以你的目标就是想办法提高公式里的每一个变量。</em></p>
+<p><em>”</em></p>
+<p>我还是比较认同这话的，只能说说的很有道理，但是都是我已经意识到的东西，这对我来说就是一份文字化的总结。</p>
+<h1 id="什么是高效生活？"><a href="#什么是高效生活？" class="headerlink" title="什么是高效生活？"></a>什么是高效生活？</h1><p>25届的人太多了，导致总体工作效率很低，其中有能力的，或者说聪明点的，或者说是个正常人的，很少，xzk、cyw、dyh、jy，sww都难说，这些大概也是新生赛中取得较好成绩的同学，由此起码能够看出来他们是比较上进的。</p>
+<p>但是，我不太能在他们身上看出紧迫感来，或者看重时间利用率的那种感觉，我其实也在想，大一大二的时间里，把自己逼迫的太紧张到底是不是一件好事情。逼迫太紧，也许忘了欣赏沿途风景，也许会错过人生中的暑假；过于松弛，又会失去自我对于未来追求的执着，会造成大学四年下来感觉啥也没学到的愧疚。</p>
+<p>但对于此时的我，心底大概有一个答案了，因为我属于是两种情况都经历过的人，大一初期的我就是那种把自己逼得很紧的人，那时的我感觉走路去吃饭都有点浪费时间，我总想把时间榨干；然后慢慢的我和hyh等人玩在一起，他们没有那张紧张感，我也潜移默化的变得松弛了起来，那时的我不会太在一一天是不是啥也没干，每天睡到很晚才起，但那时的我也挺快乐的。然后，现在，我，有点悟道了，我应该追求把时间高效利用这个主旋律，同时需要保持那份松弛，我可以上午学一上午，然后下午我可以打会游戏，吃完晚饭我不着急回实验室，我可以去想去的地方散散步或者买点想吃的，我回到工位可以先看会视频再开始工作。</p>
+<p>现在快要凌晨两点半了，我还是睡不着，于是打算续写玩未完成的杂谈。深夜写这些还真是挺合适呢。<br>由于工位被jy睡觉占住了，我选择用手机先记录下来。<br>说实话真挺羡慕那些睡眠好的人，躺哪儿都能睡着，不像我深夜里还在这码字。<br>其实经历多了，便不会再执着于今天上午浪费了多少时间了，下午又没学啥东西这种问题了。该学习时学习，不要整天被空虚和愧疚充斥，才能保持一个良好的身心健康。学习时保证效率，玩耍时放松心情。看来那句话说的很对，<strong>除去肉体痛苦，人百分之九十九的痛苦都是自身情绪造成的</strong>。把各种东西都看的淡一些，应该会少了很多烦恼。</p>
 ]]></content>
       <categories>
         <category>杂谈</category>
@@ -873,6 +848,31 @@
       </tags>
   </entry>
   <entry>
+    <title>安顺一游</title>
+    <url>/2026/04/07/%E5%AE%89%E9%A1%BA%E4%B8%80%E6%B8%B8/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>清明放假，本来打算宅在学校三天的，但是早上起床刷抖音时（这个坏习惯迟早要戒掉）看到fyc去武汉了，再加上ltc去南昌以及朋友圈大伙都瞬移了，在这种信息冲击下，立马call老爸，安排了一场随车旅行（反正我迟早要来一次的）。</p>
+<p>此篇仅记录所思所想之事，并非叙事文（懒得回忆了）。</p>
+<h1 id="旁边的阿姨"><a href="#旁边的阿姨" class="headerlink" title="旁边的阿姨"></a>旁边的阿姨</h1><p>上客车后，由于我没买票，被临时安排坐在最近的一个座位，旁边是个中年妇女，夜很黑，我看不清她的模样，只见她望着窗外，不知在想啥。坐下后我习惯性地扫视周围环境，和火车很像，几乎全中老年人，肉眼可见的破败，能够轻易的透过外表看到他们生活的辛苦与贫穷。<strong>上帝给了我一颗悯之心，却没有给我解救众生的能力</strong>。我握紧手中那两颗茶叶蛋，突然很想分给旁边的阿姨一个，但我给她后她怎么吃，根本不方便啊；她会不会认为这是施舍；我真的这么有爱心吗。总之最终我没能给出去。</p>
+<p>车声摇摇晃晃，一下就陷入了睡眠。。。再醒来，她低头，用粗糙的手法划动着手机屏幕。我要去驾驶舱坐了，所以我起身离开。但当我离开后的一秒，我的余光瞥见，她挪身到了我原来的位置，迅速又拘谨，像怕犯错的老鼠。。。为什么？她是不是坐在窗边不舒服，她是不是很想离开位置走动，她是不是害怕开口所以等我离开才动身？我一时有种说不出的感觉，描述不出，只是感觉她好像很害怕这个世界。</p>
+<p>中国真的已经全面小康了吗？真的已经全面脱贫了吗？他们生在中国，真的幸福吗？</p>
+<h1 id="没钱打车"><a href="#没钱打车" class="headerlink" title="没钱打车"></a>没钱打车</h1><p>来都来安顺了，不去看看黄果树、龙宫、大圣之眼有点亏吧。</p>
+<p>随眼看了下交通，打顺风车还挺划算的。</p>
+<p>（到车站）没有去黄果树的车了；顺风车打不到了；公交车没有去那儿的；打滴怎么要八十啊？我可是去附近的景点玩，凭啥啊。算了，我似乎也不太擅长一个人看山看水，不如今晚去小吃街爽吃算了。</p>
+<p>其实如果有个人陪我我也不用太在意这些了，人多还能A车费。</p>
+<p>去旅行一定要看风景吗？我更想爽吃各种特色小吃。</p>
+<p>（傍晚）总算到顾府街了，大吃特吃时间到。</p>
+<p>额，我突然发现由于感冒，我的嗅觉丧失，味觉丧失了一半，所以我的美食体验会折扣50%  TvT  但是，来都来了。。。</p>
+<h1 id="彻夜长谈"><a href="#彻夜长谈" class="headerlink" title="彻夜长谈"></a>彻夜长谈</h1><p>很久没有和老爸彻夜谈话了，好像也从来没有过。这一晚我更加了解了老爸年轻以来的经历。不写这了，我应该能永久记住。</p>
+<p>其实老爸除了赚不到太多钱，还挺有魅力的。如果我和他同龄的话，我很乐意与他做兄弟。</p>
+<p>我的最低目标是以后赚的不能比老爸少。</p>
+<p>我读书吃的苦真的，不如他工作的吃的苦一根啊。</p>
+<p>他是一个很强硬的人，很男人的人。我觉得我也继承了他这份强硬的基因，然后在读书多年的影响下（我认为读书会让人变文静），达到了一种恰到好处的平衡，但平时在学校我应该算是偏文静的。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+  </entry>
+  <entry>
     <title>数据库大作业</title>
     <url>/2026/05/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大作业是不可能自己手搓的，所以就打算用agent辅助，刚好探索下vibe writing。</p>
@@ -903,6 +903,27 @@
       </categories>
       <tags>
         <tag>claude</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服创未晋级思考</title>
+    <url>/2026/05/22/%E6%9C%8D%E5%88%9B%E6%9C%AA%E6%99%8B%E7%BA%A7%E6%80%9D%E8%80%83/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今年的服创比赛大概是我的最后一舞了（最后一次作为主力开发参赛），得了个省三，也是意料之中的事情。不难过，不高兴。</p>
+<h1 id="为什么只有省三"><a href="#为什么只有省三" class="headerlink" title="为什么只有省三"></a>为什么只有省三</h1><p>下面是评委的评论：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260523153547031.png"  alt="f38aac13beea6f49e5817a90851b261c"></p>
+<p>对于专家一：</p>
+<p>市场分析这块确实每咋下功夫，概要文档他也看出来不精炼了是让我哭笑不得，我真以为这些专家不会仔细看文档的，早知道不让lmk写概要文档了，他那AI的我一眼看出来了，确实是不够精炼。<br>PPT的话，我真不知道评委们喜欢啥样的PPT，我这和cyj他们的都是简约版的，古法手搓PPT，难道评委喜欢AI风的？好吧这个我暂时还想不通。</p>
+<p>对于专家二：</p>
+<p>说套话的一边去。。。不认真看我的作品我也不认真给你回复</p>
+<p>对于专家三：</p>
+<p>这是真认真看了的，对于他说不好看我一开始还是不认同的，但现在写了两天课设后我真心服口服了，我那界面确实AI味十足啊（原谅我和仝主任当时都不懂什么是AI味前端），毕竟这也是去年的项目来今年参赛了。唉，想想去年那个暑假，我还在手搓python后端，各种功能设计、实现逻辑都是我和仝主任靠两颗不如AI的大脑想的啊，在这智能体盛行的时代，去年的两个老艺术家也只能甘拜下风了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>缺乏创新点是最大的问题，要是有创新点的话，在概要文档、PPT以及实现中都可以重点拿出来说，也就不怕不精炼的问题了。<br>此时又能联想到不可替代性的那个说法了，<strong>只有你在一个领域或者一段关系中具有不可替代性，那你就不会失去重要性。</strong></p>
+<p>该退役了，打了两年竞赛我也乏了，收获的是一些不知道是否真有用的奖项和略超出平常人的工程能力，以及一些可靠的比赛经验，和一群同甘共苦过的人。</p>
+]]></content>
+      <categories>
+        <category>杂谈</category>
+      </categories>
+      <tags>
+        <tag>AI时代</tag>
       </tags>
   </entry>
   <entry>
@@ -963,6 +984,34 @@
       </tags>
   </entry>
   <entry>
+    <title>迟来的个人博客</title>
+    <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
+<p>感觉像一名顶尖、可爱的黑客成长史，我们总说学过的东西容易忘，那这样记下来不就好了。但又说忘了当场查就行，但仔细想了下，其实博客不一定当备忘录用，也可以当笔记本、日记本，总之当我仔细地去看下别人的博客时，总能感受到这博客大有用处，每次点进一个博客网站，像是走进了别人的赛博家园，而我也想有这么一个家。</p>
+<p>学了快两年计算机了才开始搭博客，我难道要把学过的东西全整理上来？这么一想有点为时已晚的感觉，但<strong>当我感觉是否晚了的时候，恰好是最早的时候</strong>，那么说干就干吧！</p>
+<h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
+<p>主要卡在上传到github然后公网访问时，图片没渲染出来，原来是执行hexo g时未成功生成，因为图片路径的处理问题，和AI拉扯半天，说的越多它越发癫，最后新开了个会话成功解决。</p>
+<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
+<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214621930.png"  alt="image-20260408214621485"></p>
+<h1 id="之后写一篇博客并完成上传的流程"><a href="#之后写一篇博客并完成上传的流程" class="headerlink" title="之后写一篇博客并完成上传的流程"></a>之后写一篇博客并完成上传的流程</h1><ol>
+<li><p>在blog目录下开终端</p>
+</li>
+<li><p>执行hexo new “文件名（我喜欢用标题）”</p>
+</li>
+<li><p>打开新生成的.md文件，开始编写，写完后记得保存</p>
+</li>
+<li><p>回到终端依次执行<br>hexo clean    （清理缓存）<br>hexo g    (生成静态页面)<br>hexo d    （上传到github仓库）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>小技能</category>
+      </categories>
+      <tags>
+        <tag>框架使用</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>适用于python的数据库框架sqlalchemy</title>
     <url>/2026/04/18/%E9%80%82%E7%94%A8%E4%BA%8Epython%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6sqlalchemy/</url>
     <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>本博客借鉴于<a href="https://www.yuque.com/hynever/rd5ufc#%EF%BC%8C%E5%8F%AF%E6%90%AD%E9%85%8D%E9%A3%9F%E7%94%A8">https://www.yuque.com/hynever/rd5ufc?#，可搭配食用</a></p>
@@ -1009,55 +1058,6 @@
       </categories>
       <tags>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服创未晋级思考</title>
-    <url>/2026/05/22/%E6%9C%8D%E5%88%9B%E6%9C%AA%E6%99%8B%E7%BA%A7%E6%80%9D%E8%80%83/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今年的服创比赛大概是我的最后一舞了（最后一次作为主力开发参赛），得了个省三，也是意料之中的事情。不难过，不高兴。</p>
-<h1 id="为什么只有省三"><a href="#为什么只有省三" class="headerlink" title="为什么只有省三"></a>为什么只有省三</h1><p>下面是评委的评论：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260523153547031.png"  alt="f38aac13beea6f49e5817a90851b261c"></p>
-<p>对于专家一：</p>
-<p>市场分析这块确实每咋下功夫，概要文档他也看出来不精炼了是让我哭笑不得，我真以为这些专家不会仔细看文档的，早知道不让lmk写概要文档了，他那AI的我一眼看出来了，确实是不够精炼。<br>PPT的话，我真不知道评委们喜欢啥样的PPT，我这和cyj他们的都是简约版的，古法手搓PPT，难道评委喜欢AI风的？好吧这个我暂时还想不通。</p>
-<p>对于专家二：</p>
-<p>说套话的一边去。。。不认真看我的作品我也不认真给你回复</p>
-<p>对于专家三：</p>
-<p>这是真认真看了的，对于他说不好看我一开始还是不认同的，但现在写了两天课设后我真心服口服了，我那界面确实AI味十足啊（原谅我和仝主任当时都不懂什么是AI味前端），毕竟这也是去年的项目来今年参赛了。唉，想想去年那个暑假，我还在手搓python后端，各种功能设计、实现逻辑都是我和仝主任靠两颗不如AI的大脑想的啊，在这智能体盛行的时代，去年的两个老艺术家也只能甘拜下风了。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>缺乏创新点是最大的问题，要是有创新点的话，在概要文档、PPT以及实现中都可以重点拿出来说，也就不怕不精炼的问题了。<br>此时又能联想到不可替代性的那个说法了，<strong>只有你在一个领域或者一段关系中具有不可替代性，那你就不会失去重要性。</strong></p>
-<p>该退役了，打了两年竞赛我也乏了，收获的是一些不知道是否真有用的奖项和略超出平常人的工程能力，以及一些可靠的比赛经验，和一群同甘共苦过的人。</p>
-]]></content>
-      <categories>
-        <category>杂谈</category>
-      </categories>
-      <tags>
-        <tag>AI时代</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>迟来的个人博客</title>
-    <url>/2026/04/02/%E8%BF%9F%E6%9D%A5%E7%9A%84%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>似乎程序员搞开发第一件事就是搭博客，导师制选题也有个人博客，这词耳朵都要听烂了，我压根不想搞也没当回事。直到。。。马代湘给我分享了他的博客，我似乎发现了新世界。</p>
-<p>感觉像一名顶尖、可爱的黑客成长史，我们总说学过的东西容易忘，那这样记下来不就好了。但又说忘了当场查就行，但仔细想了下，其实博客不一定当备忘录用，也可以当笔记本、日记本，总之当我仔细地去看下别人的博客时，总能感受到这博客大有用处，每次点进一个博客网站，像是走进了别人的赛博家园，而我也想有这么一个家。</p>
-<p>学了快两年计算机了才开始搭博客，我难道要把学过的东西全整理上来？这么一想有点为时已晚的感觉，但<strong>当我感觉是否晚了的时候，恰好是最早的时候</strong>，那么说干就干吧！</p>
-<h1 id="hexo搭建个人博客"><a href="#hexo搭建个人博客" class="headerlink" title="hexo搭建个人博客"></a>hexo搭建个人博客</h1><p>hexo是一个专门用来搭建博客的框架，省的自己古法编程敲个破烂出来。怎么搭呢？见<a href="https://zhuanlan.zhihu.com/p/1908161067479183613">Hexo个人博客搭建及上线全流程 - 知乎</a>，期间遇到一些小bug基本问问AI都能解决。</p>
-<p>主要卡在上传到github然后公网访问时，图片没渲染出来，原来是执行hexo g时未成功生成，因为图片路径的处理问题，和AI拉扯半天，说的越多它越发癫，最后新开了个会话成功解决。</p>
-<p>目前这个页面还是有点丑，打算后期慢慢再优化一下，此时记录一下它最初的样子：<br><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214559161.png"  alt="image-20260408214558566"></p>
-<p><img   lazyload src="/assets/images/Meow-Loading.webp" data-lazy-src="https://raw.githubusercontent.com/Hafsun/blogs_pic/main/images20260408214621930.png"  alt="image-20260408214621485"></p>
-<h1 id="之后写一篇博客并完成上传的流程"><a href="#之后写一篇博客并完成上传的流程" class="headerlink" title="之后写一篇博客并完成上传的流程"></a>之后写一篇博客并完成上传的流程</h1><ol>
-<li><p>在blog目录下开终端</p>
-</li>
-<li><p>执行hexo new “文件名（我喜欢用标题）”</p>
-</li>
-<li><p>打开新生成的.md文件，开始编写，写完后记得保存</p>
-</li>
-<li><p>回到终端依次执行<br>hexo clean    （清理缓存）<br>hexo g    (生成静态页面)<br>hexo d    （上传到github仓库）</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>小技能</category>
-      </categories>
-      <tags>
-        <tag>框架使用</tag>
       </tags>
   </entry>
 </search>
