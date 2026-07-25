@@ -56,6 +56,51 @@
 <h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><p>我先要在auth的.api文件中的userserver组中写上中间件，也就是获取用户信息的路由绑定了一个中间件，然后在goctl api命令生成的routes.go文件中查看到user&#x2F;info的路由是有个中间件的，此时我还需要写authmiddleware的实现代码，也就是app&#x2F;middleware&#x2F;auth_middleware.go，这个文件主要为svc&#x2F;serviece_contex.go服务，中间件构造函数需要用到AuthService接口（这是直接导入了client然后直接用了，rpc的client也确实是这么用的），然后返回AuthMiddleware结构体，然后给这个结构体实现Handle函数，在Handle函数中，我写了具体的token验证逻辑，然后把user_id等信息注入contex中，然后这个ctx中的user_id等信息就可以被网关层的 logci层的函数使用或者通过proto显示传递给rpc层的logic层函数使用。在这个过程中，ServiceContext 调用auth_middleware.go 的构造函数，把 RPC 客户端注入进去，生成中间件并存入自身，供routes.go注册。该中间件拦截 HTTP 请求、验证 token、将 user_id 注入 context。网关 Logic 层从 context 取 user_id，再通过 proto 字段显式传给下游 RPC 服务。中间件只在网关层生效，不到 RPC 层。</p>
 <p>这里可以注意到，rpc层提供的下游服务，是可以直接通过client被上层网关层导入然后直接用的，唯一中间层（网关层的svc）只是把把网关层的中间件和rpc层的客户端集中起来，避免logic包重复创建，毕竟logic包很多地方都用上了ctx中的东西</p>
 <h1 id="读写文件tool"><a href="#读写文件tool" class="headerlink" title="读写文件tool"></a>读写文件tool</h1><p>只是简单的在已有的tools工具集中拓展读写文件的tool，这个tools就是agent在执行任务中，可以选择性调用的工具，其它两个工具分别是对商品海选的searchProducts以及对选出来的商品进行洗选的selectBundle。</p>
+<h1 id="agent沙箱"><a href="#agent沙箱" class="headerlink" title="agent沙箱"></a>agent沙箱</h1><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>LLM 工具已支持 read_file &#x2F; write_file，但当前直接基于路径读写文件，存在越权读写风险。</p>
+<p>任务</p>
+<ul>
+<li><p>增加 Agent 文件工具工作目录配置，例如 workspace&#x2F;agent。</p>
+<p>限制 read_file &#x2F; write_file 只能访问工作目录内文件。</p>
+<p>拒绝 ..、绝对路径、软链逃逸等路径。</p>
+<p>限制单文件最大读取大小。</p>
+<p>限制可写文件后缀，例如 .json、.md、.txt。</p>
+<p>增加文件工具单测。</p>
+<p>更新 LLM prompt 中关于文件路径的说明。</p>
+</li>
+</ul>
+<p>验收标准</p>
+<ul>
+<li><p>读取 ..&#x2F;..&#x2F;.env 被拒绝。</p>
+<p>写入工作目录内 recommendations&#x2F;demo.md 成功。</p>
+<p>超大文件读取返回明确错误。</p>
+<p>文件工具测试覆盖正常路径和拒绝路径。</p>
+</li>
+</ul>
+<h3 id="面试回答"><a href="#面试回答" class="headerlink" title="面试回答"></a>面试回答</h3><p>1、请你先用两分钟介绍这次任务的背景、原有实现存在什么风险，以及你的整体解决方案。<br>答：原来的 <code>read_file</code> 和 <code>write_file</code> 会直接使用 LLM 提供的路径调用 <code>os.ReadFile</code> 和 <code>os.WriteFile</code>。由于模型输入不可信，可能通过绝对路径、<code>..</code> 路径穿越或软链接读取 <code>.env</code> 等敏感文件，甚至覆盖服务配置和源码。</p>
+<p>我的方案是增加应用层受限工作目录，所有文件路径必须是该目录下的相对路径。同时拒绝绝对路径和 <code>..</code>，解析软链接后再次检查真实路径是否仍在工作目录内。此外还限制了单文件读取大小和可写文件后缀，并补充了对应的安全测试。</p>
+<p>2、只把用户路径和工作目录用 <code>filepath.Join</code> 拼接起来，为什么仍然不安全？你是如何防止路径逃逸的？<br>答：<code>filepath.Join</code> 会自动清理路径，因此将工作目录和 <code>../../.env</code> 拼接后，结果可能已经位于工作目录之外。即使拒绝了 <code>..</code>，攻击者仍可能通过软链接跳转到外部目录。</p>
+<p>我的实现先进行词法校验，拒绝空路径、空字节、绝对路径、Windows 盘符和任何 <code>..</code> 路径段，同时统一处理 <code>/</code> 和 <code>\</code>。之后使用 <code>filepath.EvalSymlinks</code> 解析真实路径，再通过 <code>filepath.Rel</code> 判断目标是否仍然位于工作目录内。</p>
+<p>3、<code>EvalSymlinks</code> 要求目标路径已经存在，但 <code>write_file</code> 需要创建新文件。对于尚不存在的写入目标，你是怎么检查软链接逃逸的？<br>答：新文件本身不存在，所以不能直接对目标文件执行 <code>EvalSymlinks</code>。我的处理方式是从工作目录开始，逐级检查目标文件的父目录。</p>
+<p>每一级目录都通过 <code>Lstat</code> 判断类型。如果目录不存在，就在已经验证安全的父目录下创建；如果是软链接，就解析真实目标并确认它仍在工作目录内；如果不是目录，则拒绝访问。父目录全部验证通过后，再创建目标文件。如果目标文件已经存在且是软链接，还会单独解析并检查它的真实目标。</p>
+<p>4、为什么读取文件时既检查了 <code>Stat().Size()</code>，又使用 <code>io.LimitReader</code> 限制实际读取量？只做其中一个不行吗？<br>答：<code>Stat().Size()</code> 用于在读取前快速拒绝已经超过限制的文件，避免不必要的 I&#x2F;O 和内存分配。但文件可能在 <code>Stat</code> 检查完成后或读取过程中继续增长，所以不能只依赖文件元数据。</p>
+<p>实际读取时再使用 <code>io.LimitReader(maxReadBytes+1)</code> 设置硬上限。多读取一个字节是为了判断文件是否真正超过限制。这样既能快速失败，也能防止检查和读取之间文件内容发生变化。</p>
+<p>5、既然已经在 Prompt 中告诉模型不要使用绝对路径和 <code>..</code>，为什么代码中还需要进行严格校验？<br>答：Prompt 对模型的限制是概率性的，不能作为安全边界。模型可能理解错误，也可能受到用户恶意输入或 Prompt Injection 的影响，因此模型生成的工具参数必须被视为不可信输入。</p>
+<p>Prompt 的作用是引导模型正确使用工具，而代码的作用是强制执行安全策略。即使模型违反 Prompt，底层文件操作也必须拒绝非法路径。</p>
+<p>6、<code>write_file</code> 为什么要限制文件后缀？具体实现时，如何处理 <code>.JSON</code> 这种大小写形式，以及 <code>report.md.exe</code> 这种多重后缀？<br>答：限制写入后缀是为了遵循最小权限原则。当前业务只需要保存用户偏好、推荐报告和普通文本，没有必要允许模型写入 Go 源码、Shell 脚本、服务配置或可执行文件。</p>
+<p>实现时会将配置和输入后缀统一转换成小写，因此 <code>.JSON</code> 可以匹配 <code>.json</code>。文件后缀通过 <code>filepath.Ext</code> 获取最后一段，所以 <code>report.md.exe</code> 得到的是 <code>.exe</code>，不会因为中间包含 <code>.md</code> 而绕过白名单。</p>
+<p>7、为什么没有把所有安全检查继续写在 <code>llm/tools.go</code> 里，而是单独新增了 <code>internal/filetools</code> 包？这样设计有什么好处？<br>答：<code>llm/tools.go</code> 的职责应该是定义 Eino 工具、注册 handler，并将工具结果返回给模型，不应该同时承担复杂的文件系统安全逻辑。</p>
+<p>将路径校验和文件读写抽到 <code>internal/filetools</code> 后，可以降低 Agent 编排和文件安全策略之间的耦合。以后修改工作目录、读取上限或软链接检查时，只需要修改这个包。同时可以直接针对 <code>Workspace</code> 编写单元测试，不需要启动 LLM 或构造完整的 ReAct Agent。</p>
+<p>8、<code>FileTools</code> 配置是如何从 <code>config.yaml</code> 一直传递到 <code>read_file</code> &#x2F; <code>write_file</code> handler 的？为什么还要提供默认值？<br>答：<code>config.yaml</code> 首先被加载到 <code>internal/config.Config.FileTools</code>，然后 <code>ServiceContext</code> 在创建 LLM Agent 时将 <code>c.FileTools</code> 传给 <code>llm.NewAgent</code>。<code>NewAgent</code> 使用该配置创建 <code>filetools.Workspace</code> 并保存在 Agent 中。每次运行时，Agent 将 Workspace 传给 <code>businessTools</code>，最终由 <code>read_file</code> 和 <code>write_file</code> 的 handler 闭包使用。</p>
+<p>提供默认值是为了让旧部署在没有新增配置时仍然可以正常启动，同时默认就是安全状态。默认工作目录是 <code>workspace/agent</code>，最大读取大小是 1 MiB，可写后缀为 <code>.json</code>、<code>.md</code> 和 <code>.txt</code>。如果用户显式提供了无效配置，则应该尽早失败，而不是放开限制。</p>
+<p>9、你为文件工具设计了哪些测试？为什么这些测试能够证明正常路径可用，同时主要攻击路径会被拒绝？<br>答：正常路径测试会向 <code>recommendations/demo.md</code> 写入内容，检查写入字节数，然后重新读取并验证内容一致，证明工作目录内的正常业务功能可用。</p>
+<p>拒绝路径测试覆盖了 <code>../../.env</code>、<code>../outside.txt</code>、嵌套 <code>..</code>、Linux 绝对路径和 Windows 盘符路径。此外还测试了非法写入后缀、超大文件读取和软链接逃逸。测试不仅断言这些操作返回错误，还会在软链接写入失败后检查工作目录外没有产生文件，从而验证没有外部副作用。</p>
+<p>10、当前实现是否已经绝对安全？还存在哪些残余风险？如果安全等级进一步提高，你会怎么改进？<br>答：不存在绝对安全。当前方案已经降低了路径穿越和软链接逃逸风险，但路径检查和真正写入之间仍然存在 TOCTOU 竞争窗口。另外，目前只限制了读取大小，还没有限制单次写入大小、文件数量和工作目录总容量。</p>
+<p>当前工作目录也是服务级共享目录，没有按用户或会话隔离。后缀白名单只能检查文件名，不能证明文件内容安全。如果需要进一步提高安全等级，可以使用 Linux 的 <code>openat</code>、目录文件描述符和 <code>O_NOFOLLOW</code> 原子打开文件，增加写入大小和磁盘配额，并按用户或会话创建独立工作目录。部署层还可以使用低权限账号或容器挂载进行隔离。</p>
+<p>11、这个 PR 会带来哪些兼容性变化？Merger 在审核和上线时最需要关注什么？<br>答：这个 PR 会收紧原有文件工具行为。以前可以访问任意进程可访问路径，现在只能访问 <code>FileTools.Workspace</code> 下的相对路径。绝对路径、<code>..</code> 和软链接逃逸都会失败。超过 1 MiB 的文件默认无法读取，写入默认只允许 <code>.json</code>、<code>.md</code> 和 <code>.txt</code>。</p>
+<p>例如工作目录是 <code>workspace/agent</code> 时，模型应该传 <code>recommendations/demo.md</code>，不能传 <code>workspace/agent/recommendations/demo.md</code>。Merger 需要确认默认工作目录是否符合服务实际启动目录、运行用户是否有写权限、业务是否需要更大的读取上限或其他文件后缀。多实例部署时还需要注意本地工作目录默认不共享。</p>
+<p>12、项目要求“不要过于复杂化”。你的实现新增了独立包、配置和较多路径检查。你如何说明这不是过度设计？<br>答：这次新增的复杂度都有明确需求或对应的攻击风险，不是为了未来可能出现的场景提前设计。</p>
+<p>独立 <code>filetools</code> 包用于隔离安全职责和提高可测试性；配置通过项目已有的 <code>Config → ServiceContext → Agent</code> 链路注入，没有引入新的配置体系；不同路径检查分别对应绝对路径、<code>..</code>、跨平台路径和软链接逃逸，并不是重复校验。</p>
+<p>同时我也控制了实现范围，没有引入完整虚拟文件系统、复杂权限模型、第三方依赖或 Linux 专属的 <code>openat</code> 封装。当前方案主要使用 Go 标准库，在安全性、可维护性和实现成本之间做了适合项目当前阶段的取舍。</p>
 ]]></content>
       <categories>
         <category>开发</category>
@@ -1058,6 +1103,75 @@
       </categories>
       <tags>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣一百题</title>
+    <url>/2026/07/23/%E5%8A%9B%E6%89%A3%E4%B8%80%E7%99%BE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>兜兜转转，还是离不开写算法题的命运，新生赛那会刷了那么多算法题，只希望功力不要完全散尽。我想我还是比较有天赋的，毕竟是新生赛第八（不犯贱的话起码前五了），现在开始这一百题征程吧。</p>
+<h1 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h1><div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> p, ok := hashTable[q]; ok &#123;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这里运用判断哈希表中是否存在某个键为q的时间复杂度是O（1），并把值赋值给p，然后执行ok语句。<br>可以用在查找补数等场景中。</p>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> _, str := <span class="keyword">range</span> strs&#123;</span><br><span class="line">        s := []<span class="type">byte</span>(str)</span><br><span class="line">        sort.Slice(s, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;<span class="keyword">return</span> s[i] &lt; s[j]&#125;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>这段代码可以给str按ascii大小排序，例如把“eat”排序为“aet”，排序复杂度是nlogn（n为len(s)）</p>
+]]></content>
+      <categories>
+        <category>就业</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>权限管理系统开发</title>
+    <url>/2026/07/22/%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>权限管理是一个企业级项目的底座，必不可少，我想通过一个具体项目，系统学习一下权限管理模块的开发。</p>
+<h1 id="RBAC"><a href="#RBAC" class="headerlink" title="RBAC"></a>RBAC</h1><p>RBAC（Role-Based Access Control）: 基于角色的访问控制，它通过角色这一中间层来管理权限。</p>
+<p>用户(User) → 角色(Role) → 权限(Permission) → 资源(Resource)</p>
+<h1 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h1><p>由于每次查询或者操作数据库时，都需要先建立tcp连接、身份认证、数据库初始会话等操作，开销很大，所以建立一个中间层，也就是连接池。</p>
+<p>以后每次的工作流程：</p>
+<p>请求到来<br>   ↓<br>从连接池获取一个空闲连接<br>   ↓<br>执行 SQL<br>   ↓<br>连接归还连接池</p>
+<p><strong>连接池主要解决三个问题：</strong></p>
+<ul>
+<li><strong>减少建连开销</strong></li>
+<li><strong>限制数据库连接数量</strong></li>
+<li><strong>复用已有连接，提高并发性能</strong></li>
+</ul>
+<div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db, err := sql.Open(<span class="string">&quot;mysql&quot;</span>, dsn)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.SetMaxOpenConns(<span class="number">100</span>)           <span class="comment">// 最大连接总数</span></span><br><span class="line">db.SetMaxIdleConns(<span class="number">20</span>)            <span class="comment">// 最大空闲连接数</span></span><br><span class="line">db.SetConnMaxLifetime(time.Hour)  <span class="comment">// 连接最大生命周期</span></span><br><span class="line">db.SetConnMaxIdleTime(<span class="number">10</span> * time.Minute)</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<h1 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h1><p>日志系统是一个系统必不可少的东西，它负责记录应用程序的运行状态、错误信息和操作日志。本项目使用Zap作为日志库，配合Lumberjack实现日志轮转功能，提供了高性能的日志记录能力。</p>
+<p>用一个logger.go文件来配置日志系统，我发现这些数据库啊，日志啊，这些都是简单的用一个文件就搞定了，里面一般先写个Init函数，在被其它包导入时自动执行，也就是日志系统自己的配置操作，例如配置日志轮转、编码器、设置级别、创建core(日志运转逻辑核心)，然后写日志系统能够向外提供的函数，如Info记录日志信息（张三登录，登陆成功，张三进入管理界面等），然后Error记录报错信息。</p>
+<h1 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h1><p>权限管理模块基于Casbin实现RBAC（基于角色的访问控制）权限系统，提供了灵活的权限控制能力。Casbin是一个权限控制框架，支持多种访问控制模型，主要用于判断：</p>
+<blockquote>
+<p>谁，能不能在某个界面，执行某个操作，能就返回True</p>
+</blockquote>
+<p>它与RBAC模型配合工作</p>
+<h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><p>也就是各种medel，主要就是定义结构体及json字段映射，有些还要在里面写开放函数。</p>
+<h1 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h1><p>用户认证模块基于JWT（JSON Web Token）实现无状态的用户认证机制。</p>
+<p>JWT包含用户信息，无需在服务器端存储会话状态。</p>
+<p>由三部分组成，用户信息主要放在第二部分（payload），例如用户id，签名时间、生效时间、过期时间等。它最终返回一个有有效期的token，文件中还写了验证jwt token的函数。</p>
+<h1 id="数据访问层"><a href="#数据访问层" class="headerlink" title="数据访问层"></a>数据访问层</h1><h3 id="基础仓库"><a href="#基础仓库" class="headerlink" title="基础仓库"></a>基础仓库</h3><p>由于每个模型都有自己的仓库，所以设置一个基础仓库，提供基础的CRUD，减少代码耦合。</p>
+<p>基础仓库提供了通用的数据访问操作，使用泛型设计，为所有业务模型提供统一的CRUD操作接口。通过继承基础仓库，可以快速实现各种业务模型的数据访问层。</p>
+<h1 id="业务层调用仓库层"><a href="#业务层调用仓库层" class="headerlink" title="业务层调用仓库层"></a>业务层调用仓库层</h1><p>比如用户服务，这个服务中是需要调用多张表的，每张表对应一个仓库（用户仓库，角色仓库，权限仓库），每个仓库对外暴漏自己的接口，也就是说用户服务是集成了各个仓库的接口的，所以用户服务可以通过每个仓库的接口来对每个仓库进行操作。毕竟各个仓库的接口也集成了仓库的CRUD等操作。</p>
+<p>所以有一天你想把 MySQL 换成 PostgreSQL，只需重写一个 <code>postgresUserRepository</code>，Service 层一行代码不用改 — 因为 Service 只认 <code>UserRepository</code> 接口，不认具体实现</p>
+<h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><p>如jwt验证流程、跨域放行、权限检查、日志</p>
+<h1 id="对于一个参数c-gin-Context"><a href="#对于一个参数c-gin-Context" class="headerlink" title="对于一个参数c *gin.Context"></a>对于一个参数c *gin.Context</h1><p>c *gin.Context是每个请求一个独立的c，而不是全局唯一一个c。</p>
+<p>请求到达<br>  ↓<br>Gin 创建 c (属于张三的这个请求)<br>  ↓<br>Logger(c)      ← 同一个 c<br>  ↓<br>Cors(c)        ← 同一个 c<br>  ↓<br>JWTAuth(c)     ← 同一个 c，往 c 里 Set(“user_id”, 1)<br>  ↓<br>GetUsers(c)    ← 同一个 c，能 Get(“user_id”) 取到 1<br>  ↓<br>Success(c, …) ← 同一个 c</p>
+<h1 id="API处理层（handler）"><a href="#API处理层（handler）" class="headerlink" title="API处理层（handler）"></a>API处理层（handler）</h1><p>也就是处理请求的，错误了要返回错误码；参数c就是在这里创建的</p>
+<h1 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h1><p>写初始化函数，包括所有handlers和所有routes</p>
+<h1 id="main函数"><a href="#main函数" class="headerlink" title="main函数"></a>main函数</h1><p>完成所有的初始化，启动服务器，并添加一个健康检查接口。</p>
+<p>健康检查接口就是服务的”心跳”——启动后浏览器&#x2F;curl 访问一下 <code>localhost:8080/health</code>，返回 <code>&#123;&quot;status&quot;:&quot;ok&quot;&#125;</code> 就说明服务正常运行。</p>
+]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gorm</tag>
+        <tag>鉴权</tag>
+        <tag>gin</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
 </search>
