@@ -43,7 +43,13 @@
     <url>/2026/07/16/Sim%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要学的基础内容都已经过完了，接下来得上手做了，知行合一，以致良知。</p>
 <p>先从简单的issue开始。</p>
-<h1 id="uuid生成器"><a href="#uuid生成器" class="headerlink" title="uuid生成器"></a>uuid生成器</h1><p>这是肖佬给我派的第一个开发任务，开发uuid基层设施，让每个model表能够生成自己的唯一主键。</p>
+<h1 id="请求打进到得到响应的链路"><a href="#请求打进到得到响应的链路" class="headerlink" title="请求打进到得到响应的链路"></a>请求打进到得到响应的链路</h1><p>以用户登录为例：</p>
+<div class="code-container" code-lang="Plaintext"><div class="codebox"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─ 文件1: username_login_handler.go ──────────────────────────┐</span><br><span class="line">│  HTTP 入口，解析 JSON → 调用文件2                              │</span><br><span class="line">│  l := auth.NewUsernameLoginLogic(ctx, svcCtx)                │</span><br><span class="line">│  resp, err := l.UsernameLogin(in)   // → types.LoginResp     │</span><br><span class="line">└──────────────┬───────────────────────────────────────────────┘</span><br><span class="line">               │</span><br><span class="line">┌─ 文件2: cmd/app/.../username_login_logic.go ─────────────────┐</span><br><span class="line">│  HTTP Logic，类型转换（types.UsernameLoginReq → pb.UsernameLoginReq）│</span><br><span class="line">│  rpcResp, err := l.svcCtx.AuthClient.UsernameLogin(...)      │</span><br><span class="line">│  return &amp;types.LoginResp&#123;Token: rpcResp.Token, ...&#125;          │</span><br><span class="line">└──────────────┬───────────────────────────────────────────────┘</span><br><span class="line">               │ 通过 AuthService 接口调用</span><br><span class="line">┌─ 文件3: auth_service.go (client 包装) ───────────────────────┐</span><br><span class="line">│  defaultAuthService.UsernameLogin()                          │</span><br><span class="line">│  → pb.NewAuthServiceClient(m.cli.Conn()).UsernameLogin()     │</span><br><span class="line">│  → 序列化请求，通过 gRPC 发到 auth-rpc 服务端                  │</span><br><span class="line">│  → 返回值类型: *pb.LoginResp                                 │</span><br><span class="line">└──────────────┬─── gRPC 网络 ───┬─────────────────────────────┘</span><br><span class="line">               │                  │</span><br><span class="line">┌─ 文件4: auth_service_server.go ──────────────────────────────┐</span><br><span class="line">│  gRPC Server 骨架，反序列化 → 调用文件5                        │</span><br><span class="line">│  l := authservicelogic.NewUsernameLoginLogic(ctx, s.svcCtx)  │</span><br><span class="line">│  return l.UsernameLogin(in)   // → *pb.LoginResp             │</span><br><span class="line">└──────────────┬───────────────────────────────────────────────┘</span><br><span class="line">               │</span><br><span class="line">┌─ 文件5: username_login_logic.go (核心实现) ───────────────────┐</span><br><span class="line">│  查数据库 → 验密码 → 生成 JWT                                  │</span><br><span class="line">│  return &amp;pb.LoginResp&#123;UserId: ..., Token: ..., Role: ...&#125;    │</span><br><span class="line">└──────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+<p>关键观察：文件3中 <code>pb.NewAuthServiceClient(m.cli.Conn()).UsernameLogin()</code> 返回的就是 <code>(*pb.LoginResp, error)</code>——而文件5恰好也返回 <code>(*pb.LoginResp, error)</code>。这不是巧合，是因为 <strong>gRPC 框架通过 proto 文件保证了客户端存根和服务端骨架使用相同的消息类型</strong>。文件3的客户端存根和服务端文件4+5用同一个 <code>pb.LoginResp</code>，所以链路两端的类型天然对齐。</p>
+<h1 id="context-context与svc-ServiceContext区分"><a href="#context-context与svc-ServiceContext区分" class="headerlink" title="context.context与svc.ServiceContext区分"></a>context.context与svc.ServiceContext区分</h1><p>第一个ctx是请求中的ctx，每个请求都会新建一个ctx，存储uer_id, role, token；<br>第二个ctx是每个服务的依赖组装ctx，它会被main创建全进程唯一实例，然后把这个ctx传给所有server，如mall中的订单server和商品server，然后下游的logic通过*引用这个实例，把它存为自己的字段，然后就可以通过这个字段访问里面的各个依赖如redis、db</p>
+<h1 id="uuid生成器"><a href="#uuid生成器" class="headerlink" title="uuid生成器"></a>uuid生成器</h1><p>为什么要设计这个包：<br>传统数据库的主键一般是自增的123456，在分布式的环境下容易冲突，uuid全局唯一，永不冲突，而且还带表名前缀，易辨识。</p>
+<p>这是肖佬给我派的第一个开发任务，开发uuid基层设施，让每个model表能够生成自己的唯一主键。</p>
 <p>我是用Codex写的代码，肖佬给的答复是写的过于复杂，其实也确实。我自己是能理解的，但是让新人来理解确实要费神些，这种小小的中间件写简单的就行了。所以说，写简单的东西用太厉害的AI也许有失偏颇。</p>
 <p>肖佬写的很简单，就是下游提供三个通用函数，分别是标准uuid、编码后22位uuid、带前缀uuid。然后这三个函数也写的很简答，一两行可以搞定，不用搞什么写写一个生成器函数，然后再用生成器函数生成生成uuid的函数。</p>
 <p>然后logic调用层就是直接引入infra&#x2F;uuid包，然后直接调用函数得到结果。不需要什么BeforeCreate自动补主键钩子，直接显示赋值就行，不能过度设计了。</p>
@@ -55,7 +61,7 @@
 <p>这个任务我保存在了本地分支：feat&#x2F;logout&#x2F;hfs，但是还没完整实现，还差具体的token验证逻辑。</p>
 <h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><p>我先要在auth的.api文件中的userserver组中写上中间件，也就是获取用户信息的路由绑定了一个中间件，然后在goctl api命令生成的routes.go文件中查看到user&#x2F;info的路由是有个中间件的，此时我还需要写authmiddleware的实现代码，也就是app&#x2F;middleware&#x2F;auth_middleware.go，这个文件主要为svc&#x2F;serviece_contex.go服务，中间件构造函数需要用到AuthService接口（这是直接导入了client然后直接用了，rpc的client也确实是这么用的），然后返回AuthMiddleware结构体，然后给这个结构体实现Handle函数，在Handle函数中，我写了具体的token验证逻辑，然后把user_id等信息注入contex中，然后这个ctx中的user_id等信息就可以被网关层的 logci层的函数使用或者通过proto显示传递给rpc层的logic层函数使用。在这个过程中，ServiceContext 调用auth_middleware.go 的构造函数，把 RPC 客户端注入进去，生成中间件并存入自身，供routes.go注册。该中间件拦截 HTTP 请求、验证 token、将 user_id 注入 context。网关 Logic 层从 context 取 user_id，再通过 proto 字段显式传给下游 RPC 服务。中间件只在网关层生效，不到 RPC 层。</p>
 <p>这里可以注意到，rpc层提供的下游服务，是可以直接通过client被上层网关层导入然后直接用的，唯一中间层（网关层的svc）只是把把网关层的中间件和rpc层的客户端集中起来，避免logic包重复创建，毕竟logic包很多地方都用上了ctx中的东西</p>
-<h1 id="读写文件tool"><a href="#读写文件tool" class="headerlink" title="读写文件tool"></a>读写文件tool</h1><p>只是简单的在已有的tools工具集中拓展读写文件的tool，这个tools就是agent在执行任务中，可以选择性调用的工具，其它两个工具分别是对商品海选的searchProducts以及对选出来的商品进行洗选的selectBundle。</p>
+<h1 id="读写文件tool"><a href="#读写文件tool" class="headerlink" title="读写文件tool"></a>读写文件tool</h1><p>只是简单的在已有的tools工具集中拓展读写文件的tool，这个tools就是agent在执行任务中，可以选择性调用的工具，其它两个工具分别是对商品海选的searchProducts以及对选出来的商品进行筛选的selectBundle。</p>
 <h1 id="agent沙箱"><a href="#agent沙箱" class="headerlink" title="agent沙箱"></a>agent沙箱</h1><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>LLM 工具已支持 read_file &#x2F; write_file，但当前直接基于路径读写文件，存在越权读写风险。</p>
 <p>任务</p>
 <ul>
@@ -101,6 +107,120 @@
 <p>12、项目要求“不要过于复杂化”。你的实现新增了独立包、配置和较多路径检查。你如何说明这不是过度设计？<br>答：这次新增的复杂度都有明确需求或对应的攻击风险，不是为了未来可能出现的场景提前设计。</p>
 <p>独立 <code>filetools</code> 包用于隔离安全职责和提高可测试性；配置通过项目已有的 <code>Config → ServiceContext → Agent</code> 链路注入，没有引入新的配置体系；不同路径检查分别对应绝对路径、<code>..</code>、跨平台路径和软链接逃逸，并不是重复校验。</p>
 <p>同时我也控制了实现范围，没有引入完整虚拟文件系统、复杂权限模型、第三方依赖或 Linux 专属的 <code>openat</code> 封装。当前方案主要使用 Go 标准库，在安全性、可维护性和实现成本之间做了适合项目当前阶段的取舍。</p>
+<h1 id="request封装"><a href="#request封装" class="headerlink" title="request封装"></a>request封装</h1><h2 id="背景-1"><a href="#背景-1" class="headerlink" title="背景"></a>背景</h2><p>目前项目中用户身份和请求信息主要通过 <code>context.Context</code> 传递，包括：</p>
+<ul>
+<li>用户 Token</li>
+<li>用户 ID</li>
+<li>用户角色</li>
+<li>Authorization 等请求头</li>
+<li>Request ID、客户端 IP、User-Agent 等业务上下文</li>
+</ul>
+<p>现有代码通常直接调用 <code>ctx.Value(&quot;user_id&quot;)</code>、<code>ctx.Value(&quot;token&quot;)</code> 获取数据，存<br>在以下问题：</p>
+<ol>
+<li><p>Context Key 和类型断言分散，容易出现拼写或类型错误。</p>
+</li>
+<li><p>各业务模块需要重复编写解析逻辑。</p>
+</li>
+<li><p>后续增加请求级字段时，需要修改多个业务模块。</p>
+</li>
+<li><p>直接使用字符串作为 Context Key 容易产生冲突。</p>
+</li>
+</ol>
+<p>这个任务主要目的是让各拦截器，中间件等在读取ctx中的目标字段时不用自己传key，因为自己容易写错，所以request包提供统一存取ctx中变量的方法。</p>
+<p>首先我得明确，infra下的拦截器是给grpc用于验证的，cmd中的中间件是给HTTP用于验证的，二者的验证互不相关。</p>
+<p>信息注入Context和从Context中读取信息有说法的。</p>
+<p>每次业务（拦截器、中间件等）要往Contex中注入时，会先克隆一份Context，然后往克隆体中写，每次读也是从最后的克隆体中找，找不到再往之前的找。<br>然后这里就存在一个私有的contextKey，用于在Context中存有request信息的一个唯一标识。</p>
+<p>我不得不再提一下server拦截器（auth_interceptor）和clietn拦截器（client_interceptor），它们在grpc的请求链路中职责不同，client只负责把当前ctx信息注入metadata（搬运），而server拦截器负责验证身份信息，然后把身份信息注入ctx</p>
+<p><strong>面试回答</strong></p>
+<h2 id="1-为什么要封装-infra-request，只使用强类型-Context-Key-不够吗？"><a href="#1-为什么要封装-infra-request，只使用强类型-Context-Key-不够吗？" class="headerlink" title="1. 为什么要封装 infra/request，只使用强类型 Context Key 不够吗？"></a>1. 为什么要封装 <code>infra/request</code>，只使用强类型 Context Key 不够吗？</h2><p>标准答案：</p>
+<blockquote>
+<p>原来的问题不只是字符串 Key 可能冲突，还包括请求字段分散、类型断言重复</p>
+<p>包内私有的强类型 Key 确实可以解决 Key 冲突，但如果 UserID、Token、Role 仍然使用多个独立 Key，业务代码还是需要分别读取和断言，新增字段时也要修改多个地方。</p>
+</blockquote>
+<h2 id="2-如何保证-Context-中的-Request-不会被业务代码修改？"><a href="#2-如何保证-Context-中的-Request-不会被业务代码修改？" class="headerlink" title="2. 如何保证 Context 中的 Request 不会被业务代码修改？"></a>2. 如何保证 Context 中的 <code>Request</code> 不会被业务代码修改？</h2><p>标准答案：</p>
+<blockquote>
+<p>我使用了防御性复制。</p>
+<p><code>NewContext</code> 注入时不会直接保存调用方传入的指针，而是先复制一份；<code>FromContext</code> 读取时也不会返回内部指针，而是再次返回副本。</p>
+<p>另外，只复制结构体还不够，因为 <code>Headers</code> 是 map，结构体浅拷贝后仍然共享同一个底层 map，所以还需要单独复制 Header map。</p>
+<p>最终通过“注入时复制、读取时复制、map 深拷贝”，保证调用方修改原对象或读取结果时，都不会影响 Context 内部保存的数据。这里实现的是防御性不可变。</p>
+</blockquote>
+<h2 id="3-为什么请求解析层不直接校验-JWT？"><a href="#3-为什么请求解析层不直接校验-JWT？" class="headerlink" title="3. 为什么请求解析层不直接校验 JWT？"></a>3. 为什么请求解析层不直接校验 JWT？</h2><p>标准答案：</p>
+<blockquote>
+<p>我把 Token 提取和 Token 校验分成了两个职责。</p>
+<p>这样 <code>infra/request</code> 不需要依赖密钥和认证配置，可以降低耦合，也避免 HTTP 和 gRPC 重复实现 JWT 校验。</p>
+<p>还有一个重要点是，UserID 和 Role 不能直接信任客户端 Header，而应该在 Token 校验成功后，使用认证结果写入 Request，保证身份信息来自可信链路。</p>
+</blockquote>
+<h2 id="4-为什么请求头必须使用白名单，不能全部透传？"><a href="#4-为什么请求头必须使用白名单，不能全部透传？" class="headerlink" title="4. 为什么请求头必须使用白名单，不能全部透传？"></a>4. 为什么请求头必须使用白名单，不能全部透传？</h2><p>标准答案：</p>
+<blockquote>
+<p>HTTP Header 中可能包含 Cookie、Session、内部鉴权信息和代理字段。如果全部保存并自动传给下游，会扩大敏感信息传播范围，也可能让客户端伪造内部 Header。</p>
+<p>因此我采用最小白名单，只保存业务明确需要的字段，向下游主要透传 Authorization 和 Request ID。UserID、Role 不从客户端 Header 透传，而是由下游重新验证 Token。</p>
+<p>对重复 Authorization，我选择直接拒绝。因为不同代理或框架可能分别取第一个、最后一个或合并值，导致各层校验的 Token 不一致。</p>
+<p>gRPC 写入 metadata 时使用 <code>Set</code> 而不是不断 <code>Append</code>，确保多次经过拦截器后也只有一个 Authorization。</p>
+</blockquote>
+<h1 id="memory包"><a href="#memory包" class="headerlink" title="memory包"></a>memory包</h1><h3 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h3><p>由于看许长勇写的那个被我接的issue，让我更通透的了解到了memory包，也许我可以在简历上说这个包是我开发的，嘻嘻</p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>负责推荐 Agent 的<strong>会话记忆模块</strong>设计与实现。解决 LLM 在多轮对话中无法感知历史上下文的痛点，设计接口-实现分离的记忆管理层，支持 Redis 分布式存储与进程内降级，并通过读写分离确保 LLM&#x2F;规则双链路在降级场景下的历史完整性。</p>
+<h3 id="为什么要这个包"><a href="#为什么要这个包" class="headerlink" title="为什么要这个包"></a>为什么要这个包</h3><p>用户与agent的对话需要上下文，不然用户第二轮对话说“把刚才那个键盘换成好一点的”，agent就不知道啥意思。</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>多轮对话</td>
+<td>LLM 需要通过历史理解指代、比较、替换等上下文依赖</td>
+</tr>
+<tr>
+<td>降级不丢历史</td>
+<td>LLM 失败走规则兜底后，下一轮 LLM 恢复了也要看到完整上下文</td>
+</tr>
+<tr>
+<td>跨请求持久化</td>
+<td>HTTP 是无状态的，同一用户两次请求间需要外部存储桥接</td>
+</tr>
+</tbody></table></div>
+<h3 id="怎么加进去（只加入LLM链路）"><a href="#怎么加进去（只加入LLM链路）" class="headerlink" title="怎么加进去（只加入LLM链路）"></a>怎么加进去（只加入LLM链路）</h3><h4 id="接口先行——只暴露三个方法"><a href="#接口先行——只暴露三个方法" class="headerlink" title="接口先行——只暴露三个方法"></a>接口先行——只暴露三个方法</h4><div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// memory/memory.go</span></span><br><span class="line"><span class="keyword">type</span> Manager <span class="keyword">interface</span> &#123;</span><br><span class="line">    Append(ctx, conversationID, msgs...)    <span class="comment">// 追加消息</span></span><br><span class="line">    History(ctx, conversationID, limit)     <span class="comment">// 读最近 N 条</span></span><br><span class="line">    Clear(ctx, conversationID)              <span class="comment">// 清空会话</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
+
+
+
+<p>刻意克制——不要会话元数据、不要按角色过滤、不要分页。推荐场景只需要”追加问答对、读取窗口、清空”，多一个方法都是过度设计。</p>
+<h4 id="双实现——生产-开发自动切换"><a href="#双实现——生产-开发自动切换" class="headerlink" title="双实现——生产&#x2F;开发自动切换"></a>双实现——生产&#x2F;开发自动切换</h4><p>Manager 接口实现(二选一)<br>├── InMemory  ← 没配 Redis 时用，进程内 map，重启丢失<br>└── Redis     ← 配了 Redis 用，跨实例共享，AOF 持久化，TTL 自动过期</p>
+<p>两个实现共享同一套 [encodeMessage](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;韩&#x2F;下载的软件&#x2F;vscode&#x2F;Microsoft VS Code&#x2F;e4c7e7b1d6&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-browser&#x2F;workbench&#x2F;workbench.html)&#x2F;[decodeMessage](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;韩&#x2F;下载的软件&#x2F;vscode&#x2F;Microsoft VS Code&#x2F;e4c7e7b1d6&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-browser&#x2F;workbench&#x2F;workbench.html)（JSON 编解码），所有行为用例在两个实现上交叉测试，保证语义一致。</p>
+<h4 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h4><p>在service_context中New一个Agent的时候，把memory加进去</p>
+<h3 id="简历具体写："><a href="#简历具体写：" class="headerlink" title="简历具体写："></a>简历具体写：</h3><p>• 设计多轮对话记忆管理模块，抽象 3 方法 Manager 接口，<br>  基于策略模式提供 Redis&#x2F;InMemory 双实现，支持配置驱动的自动降级</p>
+<p>• Redis 实现采用 Pipeline 原子写入（RPUSH + LTRIM + EXPIRE），<br>  保障消息追加、窗口截断、TTL 刷新的语义一致性；<br>  消息窗口强制对齐偶数，避免跨 QA 对截断</p>
+<p>• 采用读写分离架构：编排层统一写记忆，LLM Agent 单侧读历史，<br>  规则兜底链路不依赖记忆，确保降级路径历史无空洞</p>
+<p>• Key 设计为 userID + conversationID 复合维度，实现用户级数据隔离；<br>  编解码层通过 JSON 反序列化保证深拷贝语义，防止指针污染</p>
+<p>• 基于 miniredis 实现双实现交叉测试，所有行为用例跨 InMemory&#x2F;Redis 一致验证</p>
+<h4 id="问答"><a href="#问答" class="headerlink" title="问答"></a>问答</h4><div class="table-container"><table>
+<thead>
+<tr>
+<th>追问</th>
+<th>应答方向</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>为什么只有 3 个方法？</td>
+<td>推荐场景不需要分页、元数据、角色过滤，克制设计避免过度抽象</td>
+</tr>
+<tr>
+<td>History 失败了怎么办？</td>
+<td>返回空切片不报错——历史是增强信息，不是必需输入，降级为单轮推荐</td>
+</tr>
+<tr>
+<td>怎么保证降级不丢历史？</td>
+<td>写入在 Service 层（不在 Agent 内），无论 LLM 成功还是规则兜底都统一写入</td>
+</tr>
+<tr>
+<td>消息存了什么？</td>
+<td>只存原始 Query + 最终 Summary，工具调用细节不记忆，避免污染上下文窗口</td>
+</tr>
+<tr>
+<td>InMemory 和 Redis 行为不一致怎么办？</td>
+<td>同一套测试用例在两套实现上交叉跑，[miniredis](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;韩&#x2F;下载的软件&#x2F;vscode&#x2F;Microsoft VS Code&#x2F;e4c7e7b1d6&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-browser&#x2F;workbench&#x2F;workbench.html) 模拟真实 Redis 环境</td>
+</tr>
+</tbody></table></div>
 ]]></content>
       <categories>
         <category>开发</category>
@@ -1115,6 +1235,9 @@
 <div class="code-container" code-lang="Go"><div class="codebox"><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> _, str := <span class="keyword">range</span> strs&#123;</span><br><span class="line">        s := []<span class="type">byte</span>(str)</span><br><span class="line">        sort.Slice(s, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;<span class="keyword">return</span> s[i] &lt; s[j]&#125;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><div class="code-fold" title="Fold/Open"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 9l6 6l6 -6" /></svg></div><div class="code-copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg></div></div></div>
 
 <p>这段代码可以给str按ascii大小排序，例如把“eat”排序为“aet”，排序复杂度是nlogn（n为len(s)）</p>
+<h1 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h1><p>一般是一个左一个右，我们优先移动右边（外层循环）的，然后在内层循环中判断不符合条件的情况，进行左指针移动</p>
+<h1 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h1><p>就是双指针的一种运用，维护一个窗口，然后围绕这个窗口去思考即可</p>
+<h1 id="动态规划入门"><a href="#动态规划入门" class="headerlink" title="动态规划入门"></a>动态规划入门</h1><p>入门动态规划我感觉得从一个思考点入手，也就是要用一个f(i)来维持当前循环到第i个时的最优状态（例如当最优状态是nums[i]结尾时，最优状态为f(i)），然后用状态转移方程来更新状态（做取舍）</p>
 ]]></content>
       <categories>
         <category>就业</category>
@@ -1172,6 +1295,70 @@
         <tag>鉴权</tag>
         <tag>gin</tag>
         <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>元石科技面经</title>
+    <url>/2026/08/11/%E5%85%83%E7%9F%B3%E7%A7%91%E6%8A%80%E9%9D%A2%E7%BB%8F/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这也是一家小公司，但是规模感觉比深澜智远大一点点，因为有自己的模型，创立时间也长一点。</p>
+<p>面试也是零八股，问项目+算法题</p>
+<h1 id="Agent-的Manager接口如何设计的"><a href="#Agent-的Manager接口如何设计的" class="headerlink" title="Agent 的Manager接口如何设计的"></a>Agent 的Manager接口如何设计的</h1><p>从结构体出发，两个策略实现Manager接口，抽象出Append, History, Clear方法；并在消息传递时深拷贝；在每次写入消息时刷新TTL</p>
+<h1 id="Clear-是什么场景下要用到"><a href="#Clear-是什么场景下要用到" class="headerlink" title="Clear 是什么场景下要用到"></a>Clear 是什么场景下要用到</h1><p>用户购买结束删除，防止占用空间；想买别的</p>
+<h1 id="上下文窗口如何处理"><a href="#上下文窗口如何处理" class="headerlink" title="上下文窗口如何处理"></a>上下文窗口如何处理</h1><p>滑动窗口，还有其它方法比如摘要压缩</p>
+<h1 id="LLM能调用工具、MCP吗？"><a href="#LLM能调用工具、MCP吗？" class="headerlink" title="LLM能调用工具、MCP吗？"></a>LLM能调用工具、MCP吗？</h1><p>可以，react循环时自主调用</p>
+<h1 id="工具的返回结果存在哪里？历史会话中？"><a href="#工具的返回结果存在哪里？历史会话中？" class="headerlink" title="工具的返回结果存在哪里？历史会话中？"></a>工具的返回结果存在哪里？历史会话中？</h1><p>（我不知道）在session中，session是个结构体，里面存工具返回结果以及其它状态</p>
+<p>（这里回答的很乱，我自己都没法说成闭环）</p>
+<p>（中途还在某句话中问了是我自己开发的吗）</p>
+<h1 id="你平时编码是哪种语言"><a href="#你平时编码是哪种语言" class="headerlink" title="你平时编码是哪种语言"></a>你平时编码是哪种语言</h1><p>我说我现在学的go，之前学过python，写的第二个项目</p>
+<p>（估计不想管我第二个项目）</p>
+<p>（然后让我用熟悉的语言写算法题）</p>
+<h1 id="求字符串数组的最长公共前缀"><a href="#求字符串数组的最长公共前缀" class="headerlink" title="求字符串数组的最长公共前缀"></a>求字符串数组的最长公共前缀</h1><p>他说用暴力就行，我听了以为是一道很简单的题，实际上看着也很简单</p>
+<p>但我被他盯着码贼不自然，脑子半天都是宕机的，无法冷静思考</p>
+<p>也并不是简单到嵌套几层for循环就能做的，需要也需要好好思考一下的</p>
+<p><strong>我应该先想好思路，然后按照思路去码的</strong>，我上手就码导致思路很乱，然后码了又删，恶性循环让我更乱了</p>
+<h1 id="大概十分钟后我也没写出任何步骤，就让我等消息了"><a href="#大概十分钟后我也没写出任何步骤，就让我等消息了" class="headerlink" title="大概十分钟后我也没写出任何步骤，就让我等消息了"></a>大概十分钟后我也没写出任何步骤，就让我等消息了</h1><p>问了下佬们，说是g了</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>最大的败笔应该就是这么简单的算法题没写出来：</p>
+<p>一方面是紧张了，没冷静思考</p>
+<p>另一方面是编码能力不足，得多写写</p>
+]]></content>
+      <categories>
+        <category>实习</category>
+      </categories>
+      <tags>
+        <tag>面经</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深澜智远面经</title>
+    <url>/2026/08/10/%E6%B7%B1%E6%BE%9C%E6%99%BA%E8%BF%9C%E9%9D%A2%E7%BB%8F/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我真不能再等了，早点去早点干完早点回，总不能老异地吧。小公司也争取了，这家公司很小，ceo是04年的，创业的。（加粗为需要加强之处）</p>
+<h1 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h1><p>我说了两个项目与公司都很契合；学go俩月了</p>
+<h1 id="你对GO语言了解多少"><a href="#你对GO语言了解多少" class="headerlink" title="你对GO语言了解多少"></a>你对GO语言了解多少</h1><p>Go的优势；适配AGENT时代；</p>
+<p><strong>对于go本身，还可补充go的部署优势，不需要配环境、编译后很小，方便docker部署；</strong></p>
+<p><strong>对于agent来说，Eino框架愈发成熟，对于内部的多种工具调用有并发优势，减少工程耗时</strong></p>
+<h1 id="AI对话系统的架构"><a href="#AI对话系统的架构" class="headerlink" title="AI对话系统的架构"></a>AI对话系统的架构</h1><p>Websocket协议；双协程架构</p>
+<p><strong>说架构，应该从多方面来说：网关层说websocket、业务层说双协程、数据层说消息用redis存储、中间件层说log日志、基础设施层说rag和错误处理以及模型配置等</strong></p>
+<h1 id="面试时的首包延迟，即AI吐出第一个字是多久"><a href="#面试时的首包延迟，即AI吐出第一个字是多久" class="headerlink" title="面试时的首包延迟，即AI吐出第一个字是多久"></a>面试时的首包延迟，即AI吐出第一个字是多久</h1><p>一到两秒</p>
+<h1 id="面试官的题目怎么生成的"><a href="#面试官的题目怎么生成的" class="headerlink" title="面试官的题目怎么生成的"></a>面试官的题目怎么生成的</h1><p>设置系统提示此，通用大模型适配或者RAG增强</p>
+<h1 id="优配魔法中最难的工作，如何解决的"><a href="#优配魔法中最难的工作，如何解决的" class="headerlink" title="优配魔法中最难的工作，如何解决的"></a>优配魔法中最难的工作，如何解决的</h1><p>（我真不知道）说的memory的存储，然后历史消息加载深拷贝，说的逻辑不太清晰<br><strong>这里我打算去找找Agent模块中最难的部分，然后记下来，主要是要体现我的问题解决能力</strong></p>
+<h1 id="你平常用AI多吗？"><a href="#你平常用AI多吗？" class="headerlink" title="你平常用AI多吗？"></a>你平常用AI多吗？</h1><p>claude 、codex</p>
+<h1 id="codex用哪个模型？"><a href="#codex用哪个模型？" class="headerlink" title="codex用哪个模型？"></a>codex用哪个模型？</h1><p>充了plus，GPT5.6sol</p>
+<h1 id="介绍下获奖经历"><a href="#介绍下获奖经历" class="headerlink" title="介绍下获奖经历"></a>介绍下获奖经历</h1><p>面试系统是如何做成的</p>
+<h1 id="看下面试系统的成果，有上线吗"><a href="#看下面试系统的成果，有上线吗" class="headerlink" title="看下面试系统的成果，有上线吗"></a>看下面试系统的成果，有上线吗</h1><p>给它看了竞赛PPT</p>
+<h1 id="表情分析是怎么做的？"><a href="#表情分析是怎么做的？" class="headerlink" title="表情分析是怎么做的？"></a>表情分析是怎么做的？</h1><p>前端部署模型，端到端</p>
+<h1 id="是真正实现了的吗，有没有假前端"><a href="#是真正实现了的吗，有没有假前端" class="headerlink" title="是真正实现了的吗，有没有假前端"></a>是真正实现了的吗，有没有假前端</h1><p>有个小功能是假前端</p>
+<h1 id="优配魔方有什么可展示的"><a href="#优配魔方有什么可展示的" class="headerlink" title="优配魔方有什么可展示的"></a>优配魔方有什么可展示的</h1><p>开发中，看不了。。。</p>
+<h1 id="反问："><a href="#反问：" class="headerlink" title="反问："></a>反问：</h1><p>表现还行，项目工程实现上没那么复杂</p>
+<p>有导师制</p>
+<p>到岗时间</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>感觉自己说的太繁杂，不够精简而有逻辑链，然后项目深度还差点。</p>
+<p>然后如果被问到了不熟悉的的地方，就说是别人开发的，不要硬着头皮说</p>
+]]></content>
+      <categories>
+        <category>求职</category>
+      </categories>
+      <tags>
+        <tag>面经</tag>
       </tags>
   </entry>
 </search>
