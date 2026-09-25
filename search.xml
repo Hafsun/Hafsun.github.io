@@ -1760,4 +1760,27 @@
         <tag>面经</tag>
       </tags>
   </entry>
+  <entry>
+    <title>华顺信安-go后端-一面</title>
+    <url>/2026/09/25/%E5%8D%8E%E9%A1%BA%E4%BF%A1%E5%AE%89-go%E5%90%8E%E7%AB%AF-%E4%B8%80%E9%9D%A2/</url>
+    <content><![CDATA[<p>tips：</p>
+<p>问的很笼统，就是让我围绕一个技术名词一直讲，完全自己讲，要是没有系统的知识归纳，很容易讲乱而且很快就会没话说。</p>
+<p>我前一天准备的东西大部分都没问，二十分钟就结束了</p>
+<ol>
+<li>你对channel和goroutine编程有什么了解吗？</li>
+<li>讲讲你的实习项目</li>
+<li>你项目中的并发是怎么设计的，毕竟不可能只有一场面试</li>
+<li>你有对绕过安全注入恶性提示词做过防护吗？比如用户输入了不安全的输入</li>
+<li>上下文压缩这块做了什么</li>
+<li>你有对比过一些国内模型吗？</li>
+<li>讲讲你对ai coding的了解，比如你自己是否写过一些skill,agents.md等</li>
+</ol>
+]]></content>
+      <categories>
+        <category>求职</category>
+      </categories>
+      <tags>
+        <tag>面经</tag>
+      </tags>
+  </entry>
 </search>
